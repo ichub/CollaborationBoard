@@ -17,14 +17,14 @@ namespace CollaborationBoard
             random = new Random();
         }
 
-        public static BoardModel AddNewBoard()
+        public static NewBoardModel AddNewBoard()
         {
             var key = random.String(10);
             var newBoard = new Board();
 
             boards.Add(key, newBoard);
 
-            return new BoardModel(key);
+            return new NewBoardModel(key);
         }
     }
 }

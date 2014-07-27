@@ -7,6 +7,11 @@ namespace CollaborationBoard.Source
 {
     class Board
     {
-        private string Name { get; set; }
+        public string Name { get; set; }
+
+        public Board(string name = "Untitled")
+        {
+            this.Name = name;
+        }
     }
 }

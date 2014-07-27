@@ -18,5 +18,12 @@ namespace CollaborationBoard
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+
+        protected void Session_Start(object sender, EventArgs e)
+        {
+            // http://stackoverflow.com/questions/281881/sessionid-keeps-changing-in-asp-net-mvc-why
+
+            HttpContext.Current.Session.Add("__MyAppSession", string.Empty);
+        }
     }
 }
