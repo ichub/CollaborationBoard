@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CollaborationBoard.Source
 {
-    class Board
+    public class Board
     {
         public string Name { get; set; }
 

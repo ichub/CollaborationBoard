@@ -13,12 +13,19 @@ namespace CollaborationBoard.Controllers
             return View();
         }
 
-        [Route("Board/Id/{id}")]
+        [Route("Board/{id}")]
         public ActionResult Id(string id)
         {
             ViewBag.BoardId = id;
 
-            return View();
+            if (BoardManager.BoardExists(id))
+            {
+                return View("Board");
+            }
+
+            ViewBag.ErrorMessage = "No such board exists";
+
+            return View("BoardError");
         }
 
         [Route("Board/New")]

@@ -26,5 +26,20 @@ namespace CollaborationBoard
 
             return new NewBoardModel(key);
         }
+
+        public static bool BoardExists(string id)
+        {
+            return boards.ContainsKey(id);
+        }
+
+        public static Board GetBoard(string id)
+        {
+            if (BoardExists(id))
+            {
+                return boards[id];
+            }
+
+            return null;
+        }
     }
 }
