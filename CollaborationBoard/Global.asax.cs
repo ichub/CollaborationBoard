@@ -12,6 +12,7 @@ namespace CollaborationBoard
     {
         protected void Application_Start()
         {
+            ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

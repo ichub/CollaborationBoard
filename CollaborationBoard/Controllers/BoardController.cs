@@ -10,12 +10,23 @@ namespace CollaborationBoard.Controllers
     {
         public ActionResult Index()
         {
-            return View("NewBoard");
+            return View();
         }
 
-        public BoardModel CreateBoard()
+        [Route("Board/Id/{id}")]
+        public ActionResult Id(string id)
         {
-            return BoardManager.AddNewBoard();
+            ViewBag.BoardId = id;
+
+            return View();
+        }
+
+        [Route("Board/New")]
+        public JsonResult CreateBoard()
+        {
+            var result = BoardManager.AddNewBoard();
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }
