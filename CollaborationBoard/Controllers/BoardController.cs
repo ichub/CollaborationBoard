@@ -8,11 +8,6 @@ namespace CollaborationBoard.Controllers
 {
     public class BoardController : Controller
     {
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         [Route("Board/{id}")]
         public ActionResult Id(string id)
         {
