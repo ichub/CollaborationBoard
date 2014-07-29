@@ -29,9 +29,11 @@ namespace CollaborationBoard
 
             bundles.Add(new ScriptBundle("~/bundles/app_scripts").IncludeDirectory("~/Scripts/App/", "*.js"));
             bundles.Add(new ScriptBundle("~/bundles/common_scripts").IncludeDirectory("~/Scripts/Common/", "*.js"));
-            bundles.Add(new StyleBundle("~/bundles/app_styles")
-                .IncludeDirectory("~/Content/App/", "*.css")
-                .IncludeDirectory("~/Content/App/", "*.less"));
+
+            var lessBundle = new StyleBundle("~/bundles/app_styles").IncludeDirectory("~/Content/App/", "*.less");
+            lessBundle.Transforms.Add(new LessTransform());
+            lessBundle.Transforms.Add(new CssMinify());
+            bundles.Add(lessBundle);
 
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862
