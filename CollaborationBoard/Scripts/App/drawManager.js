@@ -6,6 +6,7 @@
     var drawManager = function (canvas) {
         this.canvas = canvas;
         this.jCanvas = $(canvas);
+        this.parent = this.jCanvas.parent();
 
 
         this.ctx = canvas.getContext("2d");
@@ -23,7 +24,7 @@
 
         this.state = {
             drag: {
-                enabled: true,
+                enabled: false,
                 x: 0, // coordinates when dragging starts
                 y: 0,
                 mouseX: 0,
@@ -52,7 +53,7 @@
             }
         });
 
-        this.jCanvas.mouseup(function (e) {
+        this.parent.mouseup(function (e) {
             that.updateMouseUp(e);
             if (that.state.drag.enabled) {
                 that.onDragEnd(e);
@@ -62,7 +63,7 @@
             }
         });
 
-        this.jCanvas.mousemove(function (e) {
+        this.parent.mousemove(function (e) {
             that.updateMousePosition(e);
             if (that.mouse.down) {
                 if (that.state.drag.enabled) {
