@@ -13,7 +13,7 @@
 
         this.width = 1600;
         this.height = 900;
-        
+
         this.jCanvas.css({
             width: this.width,
             height: this.height
@@ -29,6 +29,10 @@
                 y: 0,
                 mouseX: 0,
                 mouseY: 0,
+            },
+            sync: {
+                lines: [],
+                lastLine: null
             }
         };
 
@@ -163,19 +167,36 @@
     };
 
     drawManager.prototype.onDrawStart = function (e) {
-        var ms = this.mouse;
+        var lastLine = new Collab.Line([]);
+        this.state.sync.lastLine = lastLine;
 
+        this.state.sync.lastLine.Points.push(new Collab.Point(this.mouse.x, this.mouse.y));
     };
 
     drawManager.prototype.onDrawEnd = function (e) {
-        var ms = this.mouse;
-
+        this.state.sync.lastLine.Points.push(new Collab.Point(this.mouse.x, this.mouse.y));
+        this.state.sync.lines.push(this.state.sync.lastLine);
+        this.state.sync.lastLine = null;
     };
 
     drawManager.prototype.onDraw = function (e) {
         var ms = this.mouse;
 
+        this.state.sync.lastLine.Points.push(new Collab.Point(this.mouse.x, this.mouse.y));
         this.drawLine(ms.x, ms.y, ms.px, ms.py);
+    };
+
+    drawManager.prototype.flushPending = function () {
+        var lines = this.state.sync.lines;
+
+        if (this.state.sync.lastLine != null) {
+            lines.push(this.state.sync.lastLine);
+            this.state.sync.lastLine = new Collab.Line([]);
+        }
+
+        this.state.sync.lines = [];
+
+        return lines;
     };
 
     Collab.DrawManager = drawManager;

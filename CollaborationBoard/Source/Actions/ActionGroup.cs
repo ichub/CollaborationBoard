@@ -16,12 +16,12 @@ namespace CollaborationBoard
         public List<Message> Messages { get; set; }
 
         [DataMember(Name = "lines")]
-        public List<LineCollection> Lines { get; set; }
+        public List<Line> Lines { get; set; }
 
         public ActionGroup()
         {
             this.Messages = new List<Message>();
-            this.Lines = new List<LineCollection>();
+            this.Lines = new List<Line>();
         }
     }
 }

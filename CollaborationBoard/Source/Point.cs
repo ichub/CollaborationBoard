@@ -15,5 +15,7 @@ namespace CollaborationBoard
             this.X = x;
             this.Y = y;
         }
+
+        public Point() { }
     }
 }
