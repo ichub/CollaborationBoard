@@ -7,8 +7,26 @@
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
 
+        this.width = 1920;
+        this.height = 1080;
+        
+        $(canvas).css({
+            width: this.width,
+            height: this.height
+        });
+
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
+
+        this.state = {
+            drag: {
+                enabled: true,
+                x: 0, // coordinates when dragging starts
+                y: 0,
+                mouseX: 0,
+                mouseY: 0,
+            }
+        };
 
         this.mouse = {
             x: 0,
@@ -23,38 +41,37 @@
 
         $(canvas).mousedown(function (e) {
             that.updateMouseDown(e);
-            that.onMouseDown(e);
+            if (that.state.drag.enabled) {
+                that.onDragStart(e);
+            }
+            else {
+                that.onDrawStart(e);
+            }
         });
 
         $(canvas).mouseup(function (e) {
             that.updateMouseUp(e);
-            that.onMouseUp(e);
+            if (that.state.drag.enabled) {
+                that.onDragEnd(e);
+            }
+            else {
+                that.onDrawEnd(e);
+            }
         });
 
         $(canvas).mousemove(function (e) {
             that.updateMousePosition(e);
-            that.onDrag(e);
-        });
-
-        $(window).resize(function (e) {
-            var data = that.getData();
-
-            that.canvas.width = that.canvas.parentElement.clientWidth;
-            that.canvas.height = that.canvas.parentElement.clientHeight;
-
-            that.setData(data);
-            that.resetDrawingSettings();
+            if (that.mouse.down) {
+                if (that.state.drag.enabled) {
+                    that.onDrag(e);
+                }
+                else {
+                    that.onDraw(e);
+                }
+            }
         });
 
         this.resetDrawingSettings();
-    };
-
-    drawManager.prototype.getData = function () {
-        return this.ctx.getImageData(0, 0, this.canvas.clientWidth, this.canvas.clientHeight);
-    };
-
-    drawManager.prototype.setData = function (data) {
-        this.ctx.putImageData(data, 0, 0);
     };
 
     drawManager.prototype.resetDrawingSettings = function () {
@@ -65,9 +82,11 @@
     };
 
     drawManager.prototype.drawLine = function (x1, y1, x2, y2) {
+        var coords = $(this.canvas).position();
+
         this.ctx.beginPath();
-        this.ctx.moveTo(x1, y1);
-        this.ctx.lineTo(x2, y2);
+        this.ctx.moveTo(x1 - coords.left, y1 - coords.top);
+        this.ctx.lineTo(x2 - coords.left, y2 - coords.top);
         this.ctx.stroke();
     };
 
@@ -106,17 +125,49 @@
         }
     };
 
-    drawManager.prototype.onMouseDown = function (e) {
-        var ms = this.mouse;
-
-    };
-
-    drawManager.prototype.onMouseUp = function (e) {
-        var ms = this.mouse;
-
-    };
-
     drawManager.prototype.onDrag = function (e) {
+        var canvas = $(this.canvas);
+
+        var ms = this.mouse;
+        var drag = this.state.drag;
+
+        var newX = ms.x - drag.mouseX + drag.x;
+        var newY = ms.y - drag.mouseY + drag.y;
+
+        canvas.offset({
+            top: newY,
+            left: newX
+        })
+    };
+
+    drawManager.prototype.onDragStart = function (e) {
+        var canvas = $(this.canvas);
+
+        var drag = this.state.drag;
+        var ms = this.mouse;
+        var coords = canvas.position();
+
+        drag.x = coords.left;
+        drag.y = coords.top;
+        drag.mouseX = ms.x;
+        drag.mouseY = ms.y;
+    };
+
+    drawManager.prototype.onDragEnd = function (e) {
+        this.state.drag.enabled = false;
+    };
+
+    drawManager.prototype.onDrawStart = function (e) {
+        var ms = this.mouse;
+
+    };
+
+    drawManager.prototype.onDrawEnd = function (e) {
+        var ms = this.mouse;
+
+    };
+
+    drawManager.prototype.onDraw = function (e) {
         var ms = this.mouse;
 
         this.drawLine(ms.x, ms.y, ms.px, ms.py);

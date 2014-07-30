@@ -3,9 +3,9 @@
 
     window.Collab = window.Collab || new Object();
 
-    Collab.Instance = new Object();
+    Collab.instance = new Object();
 
-    var instance = Collab.Instance;
+    var instance = Collab.instance;
 
     window.onload = function () {
         var canvas = $("#drawCanvas");
