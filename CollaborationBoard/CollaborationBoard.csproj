@@ -170,12 +170,19 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\BoardModels.cs" />
+    <Compile Include="Models\NewBoardModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\SyncDownModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Scripts\App\sync.js" />
     <Compile Include="Source\Board.cs" />
+    <Compile Include="Source\BoardAction.cs" />
+    <Compile Include="Source\DrawAction.cs" />
     <Compile Include="Source\BoardManager.cs" />
     <Compile Include="Source\Extensions.cs" />
+    <Compile Include="Source\GenericServerError.cs" />
+    <Compile Include="Source\Line.cs" />
+    <Compile Include="Source\Point.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>

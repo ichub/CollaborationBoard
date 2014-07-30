@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using CollaborationBoard.Source;
+using CollaborationBoard;
 
 namespace CollaborationBoard
 {

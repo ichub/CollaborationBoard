@@ -7,5 +7,10 @@
     <canvas id="drawCanvas"></canvas>
 </div>
 
+<script>
+    window.Collab = window.Collab || new Object();
+
+    Collab.Id = "@Html.Raw(ViewBag.BoardId)";
+</script>
 @Scripts.Render("~/bundles/app_scripts")
 @Styles.Render("~/bundles/app_styles")

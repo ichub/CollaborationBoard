@@ -4,11 +4,12 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace CollaborationBoard.Controllers
+namespace CollaborationBoard
 {
     public class BoardController : Controller
     {
         [Route("Board/{id}")]
+        [HttpGet]
         public ActionResult Id(string id)
         {
             ViewBag.BoardId = id;
@@ -24,11 +25,28 @@ namespace CollaborationBoard.Controllers
         }
 
         [Route("Board/New")]
+        [HttpGet]
         public JsonResult CreateBoard()
         {
             var result = BoardManager.AddNewBoard();
 
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [Route("Board/Sync/{id}/{lastSync}")]
+        [HttpPost]
+        public JsonResult Sync(string id, int lastSync)
+        {
+            var board = BoardManager.GetBoard(id);
+
+            if (board != null)
+            {
+                var actions = board.GetActionsSince(lastSync);
+
+                return Json(new SyncDownModel(actions));
+            }
+
+            return Json(new GenericServerError("No such board exists"));
         }
     }
 }
