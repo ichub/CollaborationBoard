@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Text;
 
 namespace CollaborationBoard
 {
-	public class Line
-	{
-        public List<Point> Points { get; set; }
-	}
+    public class Message
+    {
+        public string Text { get; set; }
+    }
 }

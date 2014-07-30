@@ -37,15 +37,18 @@ namespace CollaborationBoard
         [HttpPost]
         public JsonResult Sync(string id, int lastSync)
         {
-            var syncUp = this.ReadFromRequest<SyncUpModel>();
+            var syncUp = this.ReadFromRequest<ActionGroup>();
+            syncUp.User = User.Identity.Name;
+
+            lastSync++;
 
             var board = BoardManager.GetBoard(id);
 
             if (board != null)
             {
-                var actions = board.GetActionsSince(lastSync);
+                var result = board.Sync(syncUp, lastSync);
 
-                return Json(new SyncDownModel(actions));
+                return Json(result);
             }
 
             return Json(new GenericServerError("No such board exists"));

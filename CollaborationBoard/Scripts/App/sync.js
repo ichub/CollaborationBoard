@@ -4,6 +4,7 @@
     window.Collab = window.Collab || new Object();
 
     var Sync = function () {
+        this.lastSync = 0;
         this.syncTimeOut = null;
     };
 
@@ -22,25 +23,27 @@
         });
     };
 
-    Sync.prototype.syncOnce = function (data, lastSync) {
-        return this.serverPost(data, format("/Board/Sync/%s/%s", Collab.Id, lastSync));
+    Sync.prototype.syncOnce = function (data) {
+        return this.serverPost(data, format("/Board/Sync/%s/%s", Collab.Id, this.lastSync));
     }
 
-    Sync.prototype.syncLoopStep = function (dataPopFn, lastSync, syncCallback) {
+    Sync.prototype.syncLoopStep = function (dataPopFn, syncCallback) {
         var that = this;
         this.syncTimeOut = setTimeout(function () {
             var data = dataPopFn();
 
-            that.syncOnce(data, lastSync).done(function (response) {
-                syncCallback(response);
+            that.syncOnce(data).done(function (response) {
+                that.lastSync = response.LastSync;
 
-                that.syncLoopStep(dataPopFn, lastSync, syncCallback);
+                syncCallback(response.Actions);
+
+                that.syncLoopStep(dataPopFn, syncCallback);
             });
         }, 1000);
     };
 
-    Sync.prototype.startSyncLoop = function (dataPopFn, lastSync, syncCallback) {
-        this.syncLoopStep(dataPopFn, lastSync, syncCallback);
+    Sync.prototype.startSyncLoop = function (dataPopFn, syncCallback) {
+        this.syncLoopStep(dataPopFn, syncCallback);
     };
 
     Sync.prototype.endSyncLoop = function () {
