@@ -21,6 +21,20 @@
         return format("/board/%s", id);
     };
 
-    window.Collab.CreateBoard = createBoard;
-    window.Collab.CreateBoardUrl = createBoardUrl;
+    Collab.extend = function () {
+        $.fn.center = function () {
+            var position = this.position();
+            var width = this.innerWidth();
+            var height = this.innerHeight();
+            var parentWidth = this.parent().width();
+            var parentHeight = this.parent().height();
+
+            this.offset({
+                left: parentWidth / 2 - width / 2,
+                top: parentHeight / 2 - height / 2
+            });
+        };
+        window.Collab.CreateBoard = createBoard;
+        window.Collab.CreateBoardUrl = createBoardUrl;
+    };
 })();

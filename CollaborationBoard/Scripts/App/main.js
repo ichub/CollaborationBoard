@@ -8,6 +8,8 @@
     var instance = Collab.instance;
 
     window.onload = function () {
+        Collab.extend();
+
         var canvas = $("#drawCanvas");
         instance.drawManager = new Collab.DrawManager(canvas[0]);
     };

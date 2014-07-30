@@ -1,4 +1,9 @@
-﻿body {
+﻿@backColor: #808080;
+@sideColor: #9fe4f7;
+@canvasColor: #ffffff;
+
+body {
+    background-color: @backColor;
     margin: 0;
     overflow: hidden;
 }
@@ -10,8 +15,22 @@
     width: 100vw;
     height: 100vh;
     overflow: hidden;
+    cursor: default;
 
     #drawCanvas {
-        background-color: red;
+        background-color: @canvasColor;
+        cursor: default;
+        box-shadow: 0px 0px 100px 0px rgba(0, 0, 0, 0.75);
     }
+}
+
+#sidebar {
+    display: none;
+    width: 200px;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: @sideColor;
+    z-index: 999;
 }

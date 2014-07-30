@@ -7,10 +7,11 @@
         this.canvas = canvas;
         this.jCanvas = $(canvas);
 
+
         this.ctx = canvas.getContext("2d");
 
-        this.width = 1920;
-        this.height = 1080;
+        this.width = 1600;
+        this.height = 900;
         
         this.jCanvas.css({
             width: this.width,
@@ -74,6 +75,7 @@
         });
 
         this.resetDrawingSettings();
+        this.jCanvas.center();
     };
 
     drawManager.prototype.resetDrawingSettings = function () {
