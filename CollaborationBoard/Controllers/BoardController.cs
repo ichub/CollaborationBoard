@@ -37,6 +37,8 @@ namespace CollaborationBoard
         [HttpPost]
         public JsonResult Sync(string id, int lastSync)
         {
+            var syncUp = this.ReadFromRequest<SyncUpModel>();
+
             var board = BoardManager.GetBoard(id);
 
             if (board != null)

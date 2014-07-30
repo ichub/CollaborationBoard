@@ -173,6 +173,7 @@
     <Compile Include="Models\NewBoardModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\SyncDownModel.cs" />
+    <Compile Include="Models\SyncUpModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Scripts\App\sync.js" />
     <Compile Include="Source\Board.cs" />
@@ -182,6 +183,7 @@
     <Compile Include="Source\Extensions.cs" />
     <Compile Include="Source\GenericServerError.cs" />
     <Compile Include="Source\Line.cs" />
+    <Compile Include="Source\MessageAction.cs" />
     <Compile Include="Source\Point.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

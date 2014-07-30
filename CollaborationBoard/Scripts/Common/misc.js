@@ -10,7 +10,7 @@
         return nw;
     };
 
-    Collab.createBoard = function () {
+    Collab.CreateBoard = function () {
         return $.ajax({
             url: "/board/new",
             type: "GET"

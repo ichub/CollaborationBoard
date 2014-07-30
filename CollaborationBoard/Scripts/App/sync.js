@@ -9,7 +9,7 @@
 
     Sync.prototype.serverPost = function (data, url) {
         return $.ajax({
-            data: data,
+            data: JSON.stringify(data),
             type: "POST",
             url: url,
         });
@@ -29,7 +29,9 @@
     Sync.prototype.syncLoopStep = function (dataPopFn, lastSync, syncCallback) {
         var that = this;
         this.syncTimeOut = setTimeout(function () {
-            that.syncOnce(dataPopFn(), lastSync).done(function (response) {
+            var data = dataPopFn();
+
+            that.syncOnce(data, lastSync).done(function (response) {
                 syncCallback(response);
 
                 that.syncLoopStep(dataPopFn, lastSync, syncCallback);
