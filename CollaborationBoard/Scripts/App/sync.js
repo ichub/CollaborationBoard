@@ -3,12 +3,22 @@
 
     window.Collab = window.Collab || new Object();
 
-    var Sync = function () {
+    var sync = function () {
         this.lastSync = -1; // must be -1 to load everything
         this.syncTimeOut = null;
+
+        var board = $.connection.boardHub;
+
+        board.client.ping = function (text) {
+            alert(text);
+        };
+
+        $.connection.hub.start().done(function () {
+            board.server.ping("asdf");
+        });
     };
 
-    Sync.prototype.serverPost = function (data, url) {
+    sync.prototype.serverPost = function (data, url) {
         return $.ajax({
             data: JSON.stringify(data),
             type: "POST",
@@ -16,18 +26,18 @@
         });
     };
 
-    Sync.prototype.serverGet = function (url) {
+    sync.prototype.serverGet = function (url) {
         return $.ajax({
             type: "GET",
             url: url,
         });
     };
 
-    Sync.prototype.syncOnce = function (data) {
+    sync.prototype.syncOnce = function (data) {
         return this.serverPost(data, format("/Board/Sync/%s/%s", Collab.Id, this.lastSync));
     }
 
-    Sync.prototype.syncLoopStep = function (dataPopFn, syncCallback) {
+    sync.prototype.syncLoopStep = function (dataPopFn, syncCallback) {
         var that = this;
 
         var data = dataPopFn();
@@ -41,15 +51,15 @@
 
             that.syncTimeOut = setTimeout(function () {
                 that.syncLoopStep(dataPopFn, syncCallback);
-            }, 100);
+            }, 0);
         });
     };
 
-    Sync.prototype.startSyncLoop = function (dataPopFn, syncCallback) {
+    sync.prototype.startSyncLoop = function (dataPopFn, syncCallback) {
         this.syncLoopStep(dataPopFn, syncCallback);
     };
 
-    Sync.prototype.endSyncLoop = function () {
+    sync.prototype.endSyncLoop = function () {
         if (this.syncTimeOut != null) {
             clearTimeout(this.syncTimeOut);
 
@@ -57,5 +67,5 @@
         }
     };
 
-    Collab.sync = new Sync();
+    Collab.Sync = sync;
 })();

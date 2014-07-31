@@ -21,7 +21,8 @@
     window.onload = function () {
         var canvas = $("#drawCanvas");
         instance.drawManager = new Collab.DrawManager(canvas[0]);
+        instance.sync = new Collab.Sync();
 
-        Collab.sync.startSyncLoop(popSyncData, onSync);
+        Collab.instance.sync.startSyncLoop(popSyncData, onSync);
     };
 })();
