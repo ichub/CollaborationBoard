@@ -39,7 +39,7 @@
 
                 that.syncLoopStep(dataPopFn, syncCallback);
             });
-        }, 1000);
+        }, 10000000);
     };
 
     Sync.prototype.startSyncLoop = function (dataPopFn, syncCallback) {

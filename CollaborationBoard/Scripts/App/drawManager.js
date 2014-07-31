@@ -199,5 +199,13 @@
         return lines;
     };
 
+    drawManager.prototype.updateLines = function (lines) {
+        for (var i = 0; i < lines.length; i++) {
+            for (var j = 0; j < lines[i].length - 1; j++) {
+                this.drawLine(lines[i].X, lines[i].Y, lines[j].X, lines[j].Y);
+            }
+        }
+    };
+
     Collab.DrawManager = drawManager;
 })();

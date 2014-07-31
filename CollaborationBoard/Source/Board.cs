@@ -18,11 +18,14 @@ namespace CollaborationBoard
 
         public SyncResponseModel Sync(ActionGroup group, int lastSync)
         {
-            var result = this.ActionGroups.Skip(lastSync);
+            lock (this)
+            {
+                var result = this.ActionGroups.Skip(lastSync);
 
-            this.ActionGroups.Add(group);
+                this.ActionGroups.Add(group);
 
-            return new SyncResponseModel(result.ToList(), this.ActionGroups.Count);
+                return new SyncResponseModel(result.ToList(), this.ActionGroups.Count);
+            }
         }
     }
 }

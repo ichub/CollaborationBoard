@@ -15,7 +15,9 @@
     };
 
     var onSync = function (actionGroups) {
-        Collab.logger.log(actionGroups.length);
+        for (var i = 0; i < actionGroups.length; i++) {
+            instance.drawManager.updateLines(actionGroups[0].Lines);
+        }
     };
 
     window.onload = function () {
