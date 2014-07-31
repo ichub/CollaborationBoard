@@ -8,9 +8,9 @@ namespace CollaborationBoard
 {
     public class BoardHub : Hub
     {
-        public void Ping(string text)
+        public void Draw(float x1, float y1, float x2, float y2)
         {
-            Clients.All.ping(text);
+            Clients.All.draw(Context.ConnectionId, x1, y1, x2, y2);
         }
     }
 }

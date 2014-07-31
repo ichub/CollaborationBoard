@@ -182,7 +182,6 @@
     <Compile Include="Hubs\BoardHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Scripts\App\actionGroup.js" />
-    <Content Include="Scripts\App\sync.js" />
     <Compile Include="Source\Actions\ActionGroup.cs" />
     <Compile Include="Source\Actions\Message.cs" />
     <Compile Include="Source\Board.cs" />

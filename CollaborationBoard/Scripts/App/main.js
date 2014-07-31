@@ -7,22 +7,9 @@
 
     var instance = Collab.instance;
 
-    var popSyncData = function () {
-        var lines = instance.drawManager.flushPending();
-        var messages = [];
-
-        return new Collab.ActionGroup(messages, lines);
-    };
-
-    var onSync = function (actionGroups) {
-        instance.drawManager.onSync(actionGroups);
-    };
-
     window.onload = function () {
         var canvas = $("#drawCanvas");
-        instance.drawManager = new Collab.DrawManager(canvas[0]);
-        instance.sync = new Collab.Sync();
 
-        Collab.instance.sync.startSyncLoop(popSyncData, onSync);
+        instance.drawManager = new Collab.DrawManager(canvas[0]);
     };
 })();

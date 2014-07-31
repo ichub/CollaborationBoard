@@ -6,8 +6,8 @@
     var drawManager = function (canvas) {
         this.canvas = canvas;
         this.jCanvas = $(canvas);
+        this.board = $.connection.boardHub;
         this.parent = this.jCanvas.parent();
-
 
         this.ctx = canvas.getContext("2d");
 
@@ -29,11 +29,6 @@
                 y: 0,
                 mouseX: 0,
                 mouseY: 0,
-            },
-            sync: {
-                lines: [],
-                lastLine: null,
-                prevSyncLast: null
             }
         };
 
@@ -86,6 +81,24 @@
 
         this.resetDrawingSettings();
         this.jCanvas.center();
+        this.initializeConnection();
+    };
+
+    drawManager.prototype.initializeConnection = function () {
+        var that = this;
+
+        this.board.client.draw = function (cid, x1, y1, x2, y2) {
+            if (cid != $.connection.id) {
+                that.drawLine(x1, y1, x2, y2);
+            }
+        };
+
+        $.connection.hub.start().done(function () {
+        });
+    };
+
+    drawManager.prototype.sendServerDraw = function (x1, y1, x2, y2) {
+        this.board.server.draw(x1, y1, x2, y2);
     };
 
     drawManager.prototype.resetDrawingSettings = function () {
@@ -184,50 +197,16 @@
     };
 
     drawManager.prototype.onDrawStart = function (e) {
-        var lastLine = new Collab.Line([]);
-        this.state.sync.lastLine = lastLine;
-
-        this.state.sync.lastLine.Points.push(new Collab.Point(this.mouse.x, this.mouse.y));
     };
 
     drawManager.prototype.onDrawEnd = function (e) {
-        this.state.sync.lastLine.Points.push(new Collab.Point(this.mouse.x, this.mouse.y));
-        this.state.sync.lines.push(this.state.sync.lastLine);
-        this.state.sync.lastLine = null;
     };
 
     drawManager.prototype.onDraw = function (e) {
         var ms = this.mouse;
 
-        this.state.sync.lastLine.Points.push(new Collab.Point(this.mouse.x, this.mouse.y));
         this.drawLine(ms.x, ms.y, ms.px, ms.py);
-    };
-
-    drawManager.prototype.flushPending = function () {
-        var lines = this.state.sync.lines;
-        var last = this.state.sync.lastLine;
-
-        if (last != null) {
-            lines.push(last);
-        }
-
-        this.state.sync.lines = [];
-
-        return lines;
-    };
-
-    drawManager.prototype.onSync = function (actionGroups) {
-        for (var i = 0; i < actionGroups.length; i++) {
-            this.updateLines(actionGroups[i]);
-        }
-    };
-
-    drawManager.prototype.updateLines = function (actionGroup) {
-        var lines = actionGroup.Lines;
-
-        for (var i = 0; i < lines.length; i++) {
-            this.drawLinePoints(lines[i].Points);
-        }
+        this.sendServerDraw(ms.x, ms.y, ms.px, ms.py);
     };
 
     Collab.DrawManager = drawManager;
