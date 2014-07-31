@@ -11,6 +11,14 @@ namespace CollaborationBoard
     {
         public List<ActionGroup> Actions { get; set; }
 
+        public bool Empty
+        {
+            get
+            {
+                return this.Actions.Count == 0;
+            }
+        }
+
         public int LastSync { get; set; }
 
         public SyncResponseModel(List<ActionGroup> actions, int lastSync)

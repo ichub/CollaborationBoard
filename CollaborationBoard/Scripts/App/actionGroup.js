@@ -11,16 +11,16 @@
     actionGroup.empty = new actionGroup([], []);
 
     var point = function (x, y) {
-        this.X = x;
-        this.Y = y;
+        this.X = x || 0;
+        this.Y = y || 0;
     };
 
     var line = function (points) {
-        this.Points = points;
+        this.Points = points || [];
     };
 
     var message = function (text) {
-        this.text = text;
+        this.text = text || "";
     };
 
     Collab.Point = point;

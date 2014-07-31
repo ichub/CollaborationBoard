@@ -11,8 +11,8 @@
 
         this.ctx = canvas.getContext("2d");
 
-        this.width = 1600;
-        this.height = 900;
+        this.width = 800;
+        this.height = 600;
 
         this.jCanvas.css({
             width: this.width,
@@ -32,7 +32,8 @@
             },
             sync: {
                 lines: [],
-                lastLine: null
+                lastLine: null,
+                prevSyncLast: null
             }
         };
 
@@ -79,6 +80,10 @@
             }
         });
 
+        $(window).resize(function (e) {
+            that.jCanvas.center();
+        });
+
         this.resetDrawingSettings();
         this.jCanvas.center();
     };
@@ -87,15 +92,26 @@
         this.ctx.strokeStyle = "#000";
         this.ctx.lineCap = "round";
         this.ctx.lineJoin = "round";
-        this.ctx.lineWidth = 3;
+        this.ctx.lineWidth = 10;
     };
 
     drawManager.prototype.drawLine = function (x1, y1, x2, y2) {
         var coords = this.jCanvas.position();
 
         this.ctx.beginPath();
-        this.ctx.moveTo(x1 - coords.left, y1 - coords.top);
-        this.ctx.lineTo(x2 - coords.left, y2 - coords.top);
+        this.ctx.moveTo(x1, y1);
+        this.ctx.lineTo(x2, y2);
+        this.ctx.stroke();
+    };
+
+    drawManager.prototype.drawLinePoints = function (points) {
+        this.ctx.beginPath();
+
+        for (var i = 0; i < points.length - 1; i++) {
+            this.ctx.moveTo(points[i].X, points[i].Y);
+            this.ctx.lineTo(points[i + 1].X, points[i + 1].Y);
+        }
+
         this.ctx.stroke();
     };
 
@@ -117,20 +133,21 @@
 
     drawManager.prototype.updateMousePosition = function (e) {
         var ms = this.mouse;
+        var coords = this.jCanvas.position();
 
         if (!ms.initialized || !ms.down) {
             ms.initialized = true;
 
-            ms.x = e.clientX;
-            ms.y = e.clientY;
+            ms.x = e.clientX - coords.left;
+            ms.y = e.clientY - coords.top;
             ms.px = ms.x;
             ms.py = ms.y;
         }
         else {
             ms.px = ms.x;
             ms.py = ms.y;
-            ms.x = e.clientX;
-            ms.y = e.clientY;
+            ms.x = e.clientX - coords.left;
+            ms.y = e.clientY - coords.top;
         }
     };
 
@@ -188,10 +205,10 @@
 
     drawManager.prototype.flushPending = function () {
         var lines = this.state.sync.lines;
+        var last = this.state.sync.lastLine;
 
-        if (this.state.sync.lastLine != null) {
-            lines.push(this.state.sync.lastLine);
-            this.state.sync.lastLine = new Collab.Line([]);
+        if (last != null) {
+            lines.push(last);
         }
 
         this.state.sync.lines = [];
@@ -199,14 +216,17 @@
         return lines;
     };
 
-    drawManager.prototype.updateLines = function (lines) {
-        for (var i = 0; i < lines.length; i++) {
-            for (var j = 0; j < lines[i].Points.length - 1; j++) {
-                var first = lines[i].Points[j];
-                var second = lines[i].Points[j + 1];
+    drawManager.prototype.onSync = function (actionGroups) {
+        for (var i = 0; i < actionGroups.length; i++) {
+            this.updateLines(actionGroups[i]);
+        }
+    };
 
-                this.drawLine(first.X, first.Y, second.X, second.Y);
-            }
+    drawManager.prototype.updateLines = function (actionGroup) {
+        var lines = actionGroup.Lines;
+
+        for (var i = 0; i < lines.length; i++) {
+            this.drawLinePoints(lines[i].Points);
         }
     };
 

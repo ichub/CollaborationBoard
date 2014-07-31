@@ -40,8 +40,6 @@ namespace CollaborationBoard
             var syncUp = this.ReadFromRequest<ActionGroup>();
             syncUp.User = User.Identity.Name;
 
-            lastSync++;
-
             var board = BoardManager.GetBoard(id);
 
             if (board != null)

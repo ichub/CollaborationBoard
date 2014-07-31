@@ -10,6 +10,8 @@ namespace CollaborationBoard
         public string Name { get; set; }
         public List<ActionGroup> ActionGroups { get; set; }
 
+        private object locker = new object();
+
         public Board(string name = "Untitled")
         {
             this.ActionGroups = new List<ActionGroup>();
@@ -18,11 +20,14 @@ namespace CollaborationBoard
 
         public SyncResponseModel Sync(ActionGroup group, int lastSync)
         {
-            lock (this)
+            lock (locker)
             {
                 var result = this.ActionGroups.Skip(lastSync);
 
-                this.ActionGroups.Add(group);
+                if (!group.Empty)
+                {
+                    this.ActionGroups.Add(group);
+                }
 
                 return new SyncResponseModel(result.ToList(), this.ActionGroups.Count);
             }

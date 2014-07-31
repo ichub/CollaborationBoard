@@ -18,6 +18,14 @@ namespace CollaborationBoard
         [DataMember(Name = "lines")]
         public List<Line> Lines { get; set; }
 
+        public bool Empty
+        {
+            get
+            {
+                return this.Messages.Count == 0 && this.Lines.Count == 0;
+            }
+        }
+
         public ActionGroup()
         {
             this.Messages = new List<Message>();

@@ -15,9 +15,7 @@
     };
 
     var onSync = function (actionGroups) {
-        for (var i = 0; i < actionGroups.length; i++) {
-            instance.drawManager.updateLines(actionGroups[i].Lines);
-        }
+        instance.drawManager.onSync(actionGroups);
     };
 
     window.onload = function () {

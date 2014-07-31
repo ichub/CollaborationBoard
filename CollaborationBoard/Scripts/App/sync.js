@@ -32,12 +32,14 @@
 
         var data = dataPopFn();
 
-        that.syncOnce(data).done(function (response) {
-            this.lastSync = response.LastSync;
+        this.syncOnce(data).done(function (response) {
+            that.lastSync = response.LastSync;
+
+            Collab.logger.log(that.lastSync);
 
             syncCallback(response.Actions);
 
-            this.syncTimeOut = setTimeout(function () {
+            that.syncTimeOut = setTimeout(function () {
                 that.syncLoopStep(dataPopFn, syncCallback);
             }, 100);
         });
