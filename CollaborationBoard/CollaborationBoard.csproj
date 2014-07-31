@@ -178,18 +178,13 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\NewBoardModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\SyncResponseModel.cs" />
     <Compile Include="Hubs\BoardHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Scripts\App\actionGroup.js" />
-    <Compile Include="Source\Actions\ActionGroup.cs" />
-    <Compile Include="Source\Actions\Message.cs" />
     <Compile Include="Source\Board.cs" />
     <Compile Include="Source\BoardManager.cs" />
     <Compile Include="Source\Extensions.cs" />
     <Compile Include="Source\GenericServerError.cs" />
-    <Compile Include="Source\Line.cs" />
-    <Compile Include="Source\Point.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>

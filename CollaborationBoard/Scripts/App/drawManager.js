@@ -88,7 +88,7 @@
         var that = this;
 
         this.board.client.draw = function (cid, x1, y1, x2, y2) {
-            if (cid != $.connection.id) {
+            if (cid != $.connection.hub.id) {
                 that.drawLine(x1, y1, x2, y2);
             }
         };
@@ -105,7 +105,7 @@
         this.ctx.strokeStyle = "#000";
         this.ctx.lineCap = "round";
         this.ctx.lineJoin = "round";
-        this.ctx.lineWidth = 10;
+        this.ctx.lineWidth = 2;
     };
 
     drawManager.prototype.drawLine = function (x1, y1, x2, y2) {

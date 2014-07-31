@@ -37,8 +37,8 @@
         var parentHeight = this.parent().height();
 
         this.offset({
-            left: parentWidth / 2 - width / 2,
-            top: parentHeight / 2 - height / 2
+            left: Math.round(parentWidth / 2 - width / 2),
+            top: Math.round(parentHeight / 2 - height / 2)
         });
     };
 })();
