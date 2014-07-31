@@ -4,7 +4,7 @@
     window.Collab = window.Collab || new Object();
 
     var Sync = function () {
-        this.lastSync = 0;
+        this.lastSync = -1; // must be -1 to load everything
         this.syncTimeOut = null;
     };
 
@@ -29,17 +29,18 @@
 
     Sync.prototype.syncLoopStep = function (dataPopFn, syncCallback) {
         var that = this;
-        this.syncTimeOut = setTimeout(function () {
-            var data = dataPopFn();
 
-            that.syncOnce(data).done(function (response) {
-                that.lastSync = response.LastSync;
+        var data = dataPopFn();
 
-                syncCallback(response.Actions);
+        that.syncOnce(data).done(function (response) {
+            this.lastSync = response.LastSync;
 
+            syncCallback(response.Actions);
+
+            this.syncTimeOut = setTimeout(function () {
                 that.syncLoopStep(dataPopFn, syncCallback);
-            });
-        }, 10000000);
+            }, 100);
+        });
     };
 
     Sync.prototype.startSyncLoop = function (dataPopFn, syncCallback) {

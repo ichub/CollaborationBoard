@@ -16,7 +16,7 @@
 
     var onSync = function (actionGroups) {
         for (var i = 0; i < actionGroups.length; i++) {
-            instance.drawManager.updateLines(actionGroups[0].Lines);
+            instance.drawManager.updateLines(actionGroups[i].Lines);
         }
     };
 
