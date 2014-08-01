@@ -1,23 +1,65 @@
-﻿var Point = (function () {
-    function Point(x, y) {
+﻿interface SignalR {
+    boardHub: HubProxy;
+}
+
+interface HubProxy {
+    client: BoardClient;
+    server: BoardServer;
+}
+
+interface BoardClient {
+    draw(cid: string, x1: number, y1: number, x2: number, y2: number);
+}
+
+interface BoardServer {
+    draw(x1: number, y1: number, x2: number, y2: number);
+}
+
+class Point {
+    x: number;
+    y: number;
+
+    constructor(x: number, y: number) {
         this.x = x;
         this.y = y;
     }
-    return Point;
-})();
+}
 
-var ManagerState;
-(function (ManagerState) {
-    ManagerState[ManagerState["Drawing"] = 0] = "Drawing";
-    ManagerState[ManagerState["Dragging"] = 1] = "Dragging";
-})(ManagerState || (ManagerState = {}));
+interface MouseState {
+    pos: Point;
+    lastPos: Point;
+    down: boolean;
+    initialized: boolean;
+}
 
-var DrawManager = (function () {
-    function DrawManager($canvas) {
+interface DragState {
+    x: number;
+    y: number;
+    mx: number;
+    my: number;
+}
+
+enum ManagerState {
+    Drawing,
+    Dragging
+}
+
+class DrawManager {
+    $canvas: JQuery;
+    $parent: JQuery;
+    context: CanvasRenderingContext2D;
+    board: HubProxy;
+    ms: MouseState;
+    drag: DragState;
+    state: ManagerState;
+    width: number;
+    height: number;
+
+    constructor($canvas: JQuery) {
         this.width = 800;
         this.height = 600;
 
-        var canvas = $canvas.get(0);
+        var canvas = <HTMLCanvasElement> $canvas.get(0);
 
         this.$canvas = $canvas;
         this.$parent = $canvas.parent();
@@ -38,7 +80,7 @@ var DrawManager = (function () {
             my: 0
         };
 
-        this.state = 0 /* Drawing */;
+        this.state = ManagerState.Drawing;
 
         this.$canvas.css({
             width: this.width,
@@ -52,76 +94,78 @@ var DrawManager = (function () {
         this.resetDrawingSettings();
         this.initializeConnection();
     }
-    DrawManager.prototype.addListeners = function () {
-        var _this = this;
-        $(window).mousedown(function (e) {
-            _this.updateMouseDown(e);
 
-            if (_this.state == 1 /* Dragging */) {
-                _this.onDragStart();
-            } else {
-                _this.onDrawStart();
+    addListeners() {
+        $(window).mousedown((e: JQueryEventObject) => {
+            this.updateMouseDown(e);
+
+            if (this.state == ManagerState.Dragging) {
+                this.onDragStart();
+            }
+            else {
+                this.onDrawStart();
             }
         });
 
-        $(window).mouseup(function (e) {
-            _this.updateMouseUp(e);
+        $(window).mouseup((e: JQueryEventObject) => {
+            this.updateMouseUp(e);
 
-            if (_this.state == 1 /* Dragging */) {
-                _this.onDragEnd();
-            } else {
-                _this.onDrawEnd();
+            if (this.state == ManagerState.Dragging) {
+                this.onDragEnd();
+            }
+            else {
+                this.onDrawEnd();
             }
         });
 
-        $(window).mousemove(function (e) {
-            _this.updateMousePosition(e);
+        $(window).mousemove((e: JQueryEventObject) => {
+            this.updateMousePosition(e);
 
-            if (_this.ms.down) {
-                if (_this.state == 1 /* Dragging */) {
-                    _this.onDrag();
-                } else {
-                    _this.onDraw();
+            if (this.ms.down) {
+                if (this.state == ManagerState.Dragging) {
+                    this.onDrag();
+                }
+                else {
+                    this.onDraw();
                 }
             }
         });
-    };
+    }
 
-    DrawManager.prototype.resetDrawingSettings = function () {
+    resetDrawingSettings() {
         this.context.strokeStyle = "#000";
         this.context.lineCap = "round";
         this.context.lineJoin = "round";
         this.context.lineWidth = 10;
-    };
+    }
 
-    DrawManager.prototype.initializeConnection = function () {
-        var _this = this;
+    initializeConnection() {
         var that = this;
 
-        this.board.client.draw = function (cid, x1, y1, x2, y2) {
+        this.board.client.draw = (cid: string, x1: number, y1: number, x2: number, y2: number) => {
             if (cid != $.connection.id) {
-                _this.drawLine(new Point(x1, y1), new Point(x2, y2));
+                this.drawLine(new Point(x1, y1), new Point(x2, y2));
             }
         };
 
         $.connection.hub.start().done(function () {
             alert();
         });
-    };
+    }
 
-    DrawManager.prototype.updateMouseDown = function (e) {
+    updateMouseDown(e: JQueryEventObject) {
         if (e.button == 0) {
             this.ms.down = true;
         }
-    };
+    }
 
-    DrawManager.prototype.updateMouseUp = function (e) {
+    updateMouseUp(e: JQueryEventObject) {
         if (e.button == 0) {
             this.ms.down = false;
         }
-    };
+    }
 
-    DrawManager.prototype.updateMousePosition = function (e) {
+    updateMousePosition(e: JQueryEventObject) {
         var coords = this.$canvas.position();
 
         if (!this.ms.initialized) {
@@ -131,61 +175,60 @@ var DrawManager = (function () {
             this.ms.pos.y = e.clientY - coords.top;
             this.ms.lastPos.x = this.ms.pos.x;
             this.ms.lastPos.y = this.ms.pos.y;
-        } else {
+        }
+        else {
             this.ms.lastPos.x = this.ms.pos.x;
             this.ms.lastPos.y = this.ms.pos.y;
             this.ms.pos.x = e.clientX - coords.left;
             this.ms.pos.y = e.clientY - coords.top;
         }
-    };
+    }
 
-    DrawManager.prototype.onDrag = function () {
+    onDrag() {
         var newX = this.ms.pos.x - this.drag.mx + this.drag.x;
         var newY = this.ms.pos.y - this.drag.mx + this.drag.y;
 
         this.$canvas.offset({
             top: newY,
             left: newX
-        });
-    };
+        })
+    }
 
-    DrawManager.prototype.onDragStart = function () {
+    onDragStart() {
         var coords = this.$canvas.position();
 
         this.drag.x = coords.left;
         this.drag.y = coords.top;
         this.drag.mx = this.ms.pos.x;
         this.drag.my = this.ms.pos.y;
-    };
+    }
 
-    DrawManager.prototype.onDragEnd = function () {
-    };
+    onDragEnd() {
+    }
 
-    DrawManager.prototype.onDraw = function () {
+    onDraw() {
         this.drawLine(this.ms.pos, this.ms.lastPos);
         this.sendServerDraw(this.ms.pos, this.ms.lastPos);
-    };
+    }
 
-    DrawManager.prototype.onDrawStart = function () {
-    };
+    onDrawStart() {
+    }
 
-    DrawManager.prototype.onDrawEnd = function () {
-    };
+    onDrawEnd() {
+    }
 
-    DrawManager.prototype.drawLine = function (from, to) {
+    drawLine(from: Point, to: Point) {
         this.context.beginPath();
         this.context.moveTo(from.x, from.y);
         this.context.lineTo(to.x, to.y);
         this.context.stroke();
-    };
+    }
 
-    DrawManager.prototype.sendServerDraw = function (from, to) {
+    sendServerDraw(from: Point, to: Point) {
         this.board.server.draw(from.x, from.y, to.x, to.y);
-    };
-    return DrawManager;
-})();
+    }
+}
 
-onload = function () {
+onload = () => {
     var manager = new DrawManager($("#drawCanvas"));
-};
-//# sourceMappingURL=drawManager.js.map
+}
