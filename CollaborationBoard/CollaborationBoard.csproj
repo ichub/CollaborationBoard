@@ -197,10 +197,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Scripts\App\drawManager_old.js" />
+    <Content Include="Scripts\App\boardManager.js" />
     <Content Include="Scripts\Common\logger.js" />
     <Content Include="Scripts\Common\misc.js" />
-    <Content Include="Scripts\App\main.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\App\drawManager.js" />
@@ -263,6 +262,7 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Scripts\App\boardManager.ts" />
     <TypeScriptCompile Include="Scripts\App\drawManager.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\signalr\signalr.d.ts" />

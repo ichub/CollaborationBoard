@@ -27,6 +27,11 @@ namespace CollaborationBoard
             Clients.Caller.onRegister(board);
         }
 
+        public void RegisterId()
+        {
+            Clients.Caller.recieveId(Context.ConnectionId);
+        }
+
         public override Task OnDisconnected(bool stopCalled)
         {
             SocketUser user;

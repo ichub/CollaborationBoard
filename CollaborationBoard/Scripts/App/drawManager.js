@@ -13,7 +13,9 @@ var ManagerState;
 })(ManagerState || (ManagerState = {}));
 
 var DrawManager = (function () {
-    function DrawManager($canvas) {
+    function DrawManager(manager, $canvas) {
+        this.manager = manager;
+
         this.width = 800;
         this.height = 600;
 
@@ -22,7 +24,6 @@ var DrawManager = (function () {
         this.$canvas = $canvas;
         this.$parent = $canvas.parent();
         this.context = canvas.getContext("2d");
-        this.board = $.connection.boardHub;
 
         this.ms = {
             pos: new Point(0, 0),
@@ -47,11 +48,22 @@ var DrawManager = (function () {
 
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
-
+        this.initializeNetwork();
+    }
+    DrawManager.prototype.enable = function () {
         this.addListeners();
         this.resetDrawingSettings();
-        this.initializeConnection();
-    }
+    };
+
+    DrawManager.prototype.initializeNetwork = function () {
+        var _this = this;
+        this.manager.board.client.draw = function (cid, x1, y1, x2, y2) {
+            if (cid != _this.manager.clientId) {
+                _this.drawLine(new Point(x1, y1), new Point(x2, y2));
+            }
+        };
+    };
+
     DrawManager.prototype.addListeners = function () {
         var _this = this;
         $(window).mousedown(function (e) {
@@ -92,21 +104,6 @@ var DrawManager = (function () {
         this.context.lineCap = "round";
         this.context.lineJoin = "round";
         this.context.lineWidth = 10;
-    };
-
-    DrawManager.prototype.initializeConnection = function () {
-        var _this = this;
-        var that = this;
-
-        this.board.client.draw = function (cid, x1, y1, x2, y2) {
-            if (cid != $.connection.id) {
-                _this.drawLine(new Point(x1, y1), new Point(x2, y2));
-            }
-        };
-
-        $.connection.hub.start().done(function () {
-            alert();
-        });
     };
 
     DrawManager.prototype.updateMouseDown = function (e) {
@@ -163,7 +160,7 @@ var DrawManager = (function () {
 
     DrawManager.prototype.onDraw = function () {
         this.drawLine(this.ms.pos, this.ms.lastPos);
-        this.sendServerDraw(this.ms.pos, this.ms.lastPos);
+        this.manager.sendServerDraw(this.ms.pos, this.ms.lastPos);
     };
 
     DrawManager.prototype.onDrawStart = function () {
@@ -178,14 +175,10 @@ var DrawManager = (function () {
         this.context.lineTo(to.x, to.y);
         this.context.stroke();
     };
-
-    DrawManager.prototype.sendServerDraw = function (from, to) {
-        this.board.server.draw(from.x, from.y, to.x, to.y);
-    };
     return DrawManager;
 })();
 
 onload = function () {
-    var manager = new DrawManager($("#drawCanvas"));
+    var manager = new BoardManager();
 };
 //# sourceMappingURL=drawManager.js.map

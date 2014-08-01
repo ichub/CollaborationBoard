@@ -1,21 +1,4 @@
-﻿interface SignalR {
-    boardHub: HubProxy;
-}
-
-interface HubProxy {
-    client: BoardClient;
-    server: BoardServer;
-}
-
-interface BoardClient {
-    draw(cid: string, x1: number, y1: number, x2: number, y2: number);
-}
-
-interface BoardServer {
-    draw(x1: number, y1: number, x2: number, y2: number);
-}
-
-class Point {
+﻿class Point {
     x: number;
     y: number;
 
@@ -45,17 +28,19 @@ enum ManagerState {
 }
 
 class DrawManager {
+    manager: BoardManager;
     $canvas: JQuery;
     $parent: JQuery;
     context: CanvasRenderingContext2D;
-    board: HubProxy;
     ms: MouseState;
     drag: DragState;
     state: ManagerState;
     width: number;
     height: number;
 
-    constructor($canvas: JQuery) {
+    constructor(manager: BoardManager, $canvas: JQuery) {
+        this.manager = manager;
+
         this.width = 800;
         this.height = 600;
 
@@ -64,7 +49,6 @@ class DrawManager {
         this.$canvas = $canvas;
         this.$parent = $canvas.parent();
         this.context = canvas.getContext("2d");
-        this.board = $.connection.boardHub;
 
         this.ms = {
             pos: new Point(0, 0),
@@ -89,10 +73,20 @@ class DrawManager {
 
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
+        this.initializeNetwork();
+    }
 
+    enable() {
         this.addListeners();
         this.resetDrawingSettings();
-        this.initializeConnection();
+    }
+
+    initializeNetwork() {
+        this.manager.board.client.draw = (cid: string, x1: number, y1: number, x2: number, y2: number) => {
+            if (cid != this.manager.clientId) {
+                this.drawLine(new Point(x1, y1), new Point(x2, y2));
+            }
+        };
     }
 
     addListeners() {
@@ -137,20 +131,6 @@ class DrawManager {
         this.context.lineCap = "round";
         this.context.lineJoin = "round";
         this.context.lineWidth = 10;
-    }
-
-    initializeConnection() {
-        var that = this;
-
-        this.board.client.draw = (cid: string, x1: number, y1: number, x2: number, y2: number) => {
-            if (cid != $.connection.id) {
-                this.drawLine(new Point(x1, y1), new Point(x2, y2));
-            }
-        };
-
-        $.connection.hub.start().done(function () {
-            alert();
-        });
     }
 
     updateMouseDown(e: JQueryEventObject) {
@@ -208,7 +188,7 @@ class DrawManager {
 
     onDraw() {
         this.drawLine(this.ms.pos, this.ms.lastPos);
-        this.sendServerDraw(this.ms.pos, this.ms.lastPos);
+        this.manager.sendServerDraw(this.ms.pos, this.ms.lastPos);
     }
 
     onDrawStart() {
@@ -223,12 +203,8 @@ class DrawManager {
         this.context.lineTo(to.x, to.y);
         this.context.stroke();
     }
-
-    sendServerDraw(from: Point, to: Point) {
-        this.board.server.draw(from.x, from.y, to.x, to.y);
-    }
 }
 
 onload = () => {
-    var manager = new DrawManager($("#drawCanvas"));
+    var manager = new BoardManager();
 }
