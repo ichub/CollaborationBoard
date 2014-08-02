@@ -76,12 +76,12 @@ class DrawManager {
         this.initializeNetwork();
     }
 
-    enable() {
+    enable(): void {
         this.addListeners();
         this.resetDrawingSettings();
     }
 
-    initializeNetwork() {
+    initializeNetwork(): void {
         this.manager.board.client.draw = (cid: string, x1: number, y1: number, x2: number, y2: number) => {
             if (cid != this.manager.clientId) {
                 this.drawLine(new Point(x1, y1), new Point(x2, y2));
@@ -89,8 +89,8 @@ class DrawManager {
         };
     }
 
-    addListeners() {
-        $(window).mousedown((e: JQueryEventObject) => {
+    addListeners(): void {
+        $(window).mousedown((e: JQueryEventObject): void => {
             this.updateMouseDown(e);
 
             if (this.state == ManagerState.Dragging) {
@@ -101,7 +101,7 @@ class DrawManager {
             }
         });
 
-        $(window).mouseup((e: JQueryEventObject) => {
+        $(window).mouseup((e: JQueryEventObject): void => {
             this.updateMouseUp(e);
 
             if (this.state == ManagerState.Dragging) {
@@ -112,7 +112,7 @@ class DrawManager {
             }
         });
 
-        $(window).mousemove((e: JQueryEventObject) => {
+        $(window).mousemove((e: JQueryEventObject): void => {
             this.updateMousePosition(e);
 
             if (this.ms.down) {
@@ -126,26 +126,26 @@ class DrawManager {
         });
     }
 
-    resetDrawingSettings() {
+    resetDrawingSettings(): void {
         this.context.strokeStyle = "#000";
         this.context.lineCap = "round";
         this.context.lineJoin = "round";
         this.context.lineWidth = 10;
     }
 
-    updateMouseDown(e: JQueryEventObject) {
+    updateMouseDown(e: JQueryEventObject): void {
         if (e.button == 0) {
             this.ms.down = true;
         }
     }
 
-    updateMouseUp(e: JQueryEventObject) {
+    updateMouseUp(e: JQueryEventObject): void {
         if (e.button == 0) {
             this.ms.down = false;
         }
     }
 
-    updateMousePosition(e: JQueryEventObject) {
+    updateMousePosition(e: JQueryEventObject): void {
         var coords = this.$canvas.position();
 
         if (!this.ms.initialized) {
@@ -164,7 +164,7 @@ class DrawManager {
         }
     }
 
-    onDrag() {
+    onDrag(): void {
         var newX = this.ms.pos.x - this.drag.mx + this.drag.x;
         var newY = this.ms.pos.y - this.drag.mx + this.drag.y;
 
@@ -174,7 +174,7 @@ class DrawManager {
         })
     }
 
-    onDragStart() {
+    onDragStart(): void {
         var coords = this.$canvas.position();
 
         this.drag.x = coords.left;
@@ -183,21 +183,21 @@ class DrawManager {
         this.drag.my = this.ms.pos.y;
     }
 
-    onDragEnd() {
+    onDragEnd(): void {
     }
 
-    onDraw() {
+    onDraw(): void {
         this.drawLine(this.ms.pos, this.ms.lastPos);
         this.manager.sendServerDraw(this.ms.pos, this.ms.lastPos);
     }
 
-    onDrawStart() {
+    onDrawStart(): void {
     }
 
-    onDrawEnd() {
+    onDrawEnd(): void {
     }
 
-    drawLine(from: Point, to: Point) {
+    drawLine(from: Point, to: Point): void {
         this.context.beginPath();
         this.context.moveTo(from.x, from.y);
         this.context.lineTo(to.x, to.y);
@@ -205,6 +205,6 @@ class DrawManager {
     }
 }
 
-onload = () => {
+onload = (): void=> {
     var manager = new BoardManager();
 }
