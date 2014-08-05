@@ -1,38 +1,39 @@
-﻿var _this = this;
-var format = function (formatString) {
-    var params = [];
-    for (var _i = 0; _i < (arguments.length - 1); _i++) {
-        params[_i] = arguments[_i + 1];
-    }
+﻿interface Array<T> {
+    first(): T;
+    last(): T;
+}
+
+var format = (formatString, ...params: any[]): string => {
     var i = 0;
 
     while (/%s/.test(formatString)) {
-        formatString = formatString.replace('%s', arguments[++i]);
-    }
+        formatString = formatString.replace('%s', arguments[++i])
+
+}
     return formatString;
 };
 
-Array.prototype.last = function () {
-    return _this[_this.length - 1];
+Array.prototype.last = () => {
+    return this[this.length - 1];
 };
 
-Array.prototype.first = function () {
-    return _this[0];
+Array.prototype.first = () => {
+    return this[0];
 };
 
-var CreateBoard = function () {
+var CreateBoard = (): JQueryXHR => {
     return $.ajax({
         url: "/board/new",
         type: "GET"
     });
 };
 
-var CreateBoardUrl = function (id) {
+var CreateBoardUrl = (id: string) => {
     return format("/board/%s", id);
 };
 
-var ExtendJQuery = function () {
-    $.fn.center = function () {
+var ExtendJQuery = () => {
+    $.fn.center = function() {
         var position = this.position();
         var width = this.innerWidth();
         var height = this.innerHeight();
@@ -47,4 +48,3 @@ var ExtendJQuery = function () {
         return this;
     };
 };
-//# sourceMappingURL=misc.js.map

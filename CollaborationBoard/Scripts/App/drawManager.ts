@@ -8,6 +8,10 @@
     }
 }
 
+interface JQuery {
+    center(): JQuery;
+}
+
 interface MouseState {
     pos: Point;
     lastPos: Point;
@@ -70,6 +74,8 @@ class DrawManager {
             width: this.width,
             height: this.height
         });
+
+        this.$canvas.center();
 
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
@@ -203,8 +209,4 @@ class DrawManager {
         this.context.lineTo(to.x, to.y);
         this.context.stroke();
     }
-}
-
-onload = (): void=> {
-    var manager = new BoardManager();
 }

@@ -19,4 +19,9 @@
     };
     return BoardManager;
 })();
+
+onload = function () {
+    ExtendJQuery();
+    var manager = new BoardManager();
+};
 //# sourceMappingURL=boardManager.js.map

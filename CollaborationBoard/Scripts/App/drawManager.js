@@ -46,6 +46,8 @@ var DrawManager = (function () {
             height: this.height
         });
 
+        this.$canvas.center();
+
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
         this.initializeNetwork();
@@ -177,8 +179,4 @@ var DrawManager = (function () {
     };
     return DrawManager;
 })();
-
-onload = function () {
-    var manager = new BoardManager();
-};
 //# sourceMappingURL=drawManager.js.map

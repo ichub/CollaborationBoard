@@ -10,11 +10,11 @@
 
 <script>
     window.onload = function () {
-        $("#newBoard").click(function (e) {
-            Collab.CreateBoard().done(function (data) {
-                var id = data.Id;
+        ExtendJQuery();
 
-                window.location = Collab.CreateBoardUrl(id);
+        $("#newBoard").click(function (e) {
+            CreateBoard().done(function (result) {
+                window.location = CreateBoardUrl(result.Id);
             });
         });
     }

@@ -42,3 +42,8 @@ class BoardManager {
         this.board.server.draw(from.x, from.y, to.x, to.y);
     }
 } 
+
+onload = function () {
+    ExtendJQuery();
+    var manager = new BoardManager();
+};
