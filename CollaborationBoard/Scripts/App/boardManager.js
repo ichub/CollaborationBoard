@@ -15,6 +15,10 @@
     BoardManager.prototype.sendServerDraw = function (from, to) {
         this.board.server.draw(from.x, from.y, to.x, to.y);
     };
+
+    BoardManager.prototype.getDrawState = function () {
+        this.board.server.getState();
+    };
     return BoardManager;
 })();
 

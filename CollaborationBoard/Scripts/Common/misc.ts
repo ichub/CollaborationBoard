@@ -3,13 +3,14 @@
     last(): T;
 }
 
+// usage: format("first: %s, second: %s, "first", "second");
 var format = (formatString, ...params: any[]): string => {
     var i = 0;
 
     while (/%s/.test(formatString)) {
         formatString = formatString.replace('%s', arguments[++i])
 
-}
+    }
     return formatString;
 };
 

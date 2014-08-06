@@ -16,6 +16,11 @@ namespace CollaborationBoard
             IEnumerable<string> onSameBoard = UserManager.GetBoardUserIdsExcept(current.BoardId, Context.ConnectionId);
 
             var clients = Clients.Clients(onSameBoard.ToList());
+
+            Board board = BoardManager.GetBoard(current.BoardId);
+
+            board.DrawState.AddLine(new Line(new Point(x1, y1), new Point(x2, y2)));
+
             clients.draw(Context.ConnectionId, x1, y1, x2, y2);
         }
 
@@ -26,6 +31,15 @@ namespace CollaborationBoard
             UserManager.AddUser(boardId, newUser);
 
             Clients.Caller.handshake();
+        }
+
+        public void GetState()
+        {
+            User user = UserManager.GetUser(Context.ConnectionId);
+
+            Board board = BoardManager.GetBoard(user.BoardId);
+
+            Clients.Caller.state(board.DrawState);
         }
 
         public override Task OnDisconnected(bool stopCalled)

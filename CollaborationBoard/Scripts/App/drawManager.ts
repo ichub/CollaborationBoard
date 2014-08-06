@@ -77,6 +77,10 @@ class DrawManager {
 
         this.$canvas.center();
 
+        $(window).resize(() => {
+            this.$canvas.center();
+        });
+
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
         this.initializeNetwork();
@@ -90,6 +94,10 @@ class DrawManager {
     initializeNetwork(): void {
         this.manager.board.client.draw = (cid: string, x1: number, y1: number, x2: number, y2: number) => {
             this.drawLine(new Point(x1, y1), new Point(x2, y2));
+        };
+
+        this.manager.board.client.state = (state) => {
+            console.log(state);
         };
     }
 

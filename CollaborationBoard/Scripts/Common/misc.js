@@ -1,4 +1,5 @@
 ﻿var _this = this;
+// usage: format("first: %s, second: %s, "first", "second");
 var format = function (formatString) {
     var params = [];
     for (var _i = 0; _i < (arguments.length - 1); _i++) {

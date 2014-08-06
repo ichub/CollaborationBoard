@@ -14,6 +14,7 @@ var ManagerState;
 
 var DrawManager = (function () {
     function DrawManager(manager, $canvas) {
+        var _this = this;
         this.manager = manager;
 
         this.width = 800;
@@ -48,6 +49,10 @@ var DrawManager = (function () {
 
         this.$canvas.center();
 
+        $(window).resize(function () {
+            _this.$canvas.center();
+        });
+
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
         this.initializeNetwork();
@@ -61,6 +66,10 @@ var DrawManager = (function () {
         var _this = this;
         this.manager.board.client.draw = function (cid, x1, y1, x2, y2) {
             _this.drawLine(new Point(x1, y1), new Point(x2, y2));
+        };
+
+        this.manager.board.client.state = function (state) {
+            console.log(state);
         };
     };
 

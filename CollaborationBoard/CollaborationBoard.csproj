@@ -184,6 +184,9 @@
     <Compile Include="Source\BoardHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source\BoardManager.cs" />
+    <Compile Include="Source\DrawState.cs" />
+    <Compile Include="Source\Draw\Line.cs" />
+    <Compile Include="Source\Draw\Point.cs" />
     <Compile Include="Source\Extensions.cs" />
     <Compile Include="Source\GenericServerError.cs" />
     <Compile Include="Source\User.cs" />
