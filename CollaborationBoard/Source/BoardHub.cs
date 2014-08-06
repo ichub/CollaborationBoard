@@ -10,7 +10,7 @@ namespace CollaborationBoard
 {
     public class BoardHub : Hub
     {
-        public void Draw(float x1, float y1, float x2, float y2)
+        public void Draw(Point first, Point second)
         {
             User current = UserManager.GetUser(Context.ConnectionId);
             IEnumerable<string> onSameBoard = UserManager.GetBoardUserIdsExcept(current.BoardId, Context.ConnectionId);
@@ -19,9 +19,9 @@ namespace CollaborationBoard
 
             Board board = BoardManager.GetBoard(current.BoardId);
 
-            board.DrawState.AddLine(new Line(new Point(x1, y1), new Point(x2, y2)));
+            board.DrawState.AddLine(new Line(first, second));
 
-            clients.draw(Context.ConnectionId, x1, y1, x2, y2);
+            clients.draw(first, second);
         }
 
         public void Handshake(string boardId)

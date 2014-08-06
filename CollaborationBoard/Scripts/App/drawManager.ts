@@ -1,10 +1,10 @@
 ﻿interface BoardServer {
-    draw(x1: number, y1: number, x2: number, y2: number): void;
+    draw(first: Point, second: Point): void;
     getState(): void;
 }
 
 interface BoardClient {
-    draw(cid: string, x1: number, y1: number, x2: number, y2: number): void;
+    draw(first: Point, second: Point): void;
     state(state): void;
 }
 
@@ -116,8 +116,8 @@ class DrawManager {
     }
 
     initializeNetwork(): void {
-        this.manager.board.client.draw = (cid: string, x1: number, y1: number, x2: number, y2: number) => {
-            this.drawLine(new Point(x1, y1), new Point(x2, y2));
+        this.manager.board.client.draw = (first: Point, second: Point) => {
+            this.drawLine(first, second);
         };
 
         this.manager.board.client.state = (state) => {
@@ -248,7 +248,7 @@ class DrawManager {
     }
 
     sendServerDraw(from: Point, to: Point): void {
-        this.manager.board.server.draw(from.x, from.y, to.x, to.y);
+        this.manager.board.server.draw(from, to);
     }
 
     getDrawState(): void {

@@ -72,8 +72,8 @@ var DrawManager = (function () {
 
     DrawManager.prototype.initializeNetwork = function () {
         var _this = this;
-        this.manager.board.client.draw = function (cid, x1, y1, x2, y2) {
-            _this.drawLine(new Point(x1, y1), new Point(x2, y2));
+        this.manager.board.client.draw = function (first, second) {
+            _this.drawLine(first, second);
         };
 
         this.manager.board.client.state = function (state) {
@@ -201,7 +201,7 @@ var DrawManager = (function () {
     };
 
     DrawManager.prototype.sendServerDraw = function (from, to) {
-        this.manager.board.server.draw(from.x, from.y, to.x, to.y);
+        this.manager.board.server.draw(from, to);
     };
 
     DrawManager.prototype.getDrawState = function () {
