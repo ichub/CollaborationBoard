@@ -41,9 +41,9 @@ var ExtendJQuery = () => {
         var parentWidth = this.parent().width();
         var parentHeight = this.parent().height();
 
-        this.offset({
-            left: Math.round(parentWidth / 2 - width / 2),
-            top: Math.round(parentHeight / 2 - height / 2)
+        this.css({
+            left: Math.round(parentWidth / 2 - width / 2) + "px",
+            top: Math.round(parentHeight / 2 - height / 2) + "px"
         });
 
         return this;
