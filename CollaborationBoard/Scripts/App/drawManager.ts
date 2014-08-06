@@ -1,10 +1,12 @@
 ﻿interface BoardServer {
-    draw(first: Point, second: Point): void;
+    drawLine(first: Point, second: Point): void;
+    drawCircle(position: Point, radius: number): void;
     getState(): void;
 }
 
 interface BoardClient {
-    draw(first: Point, second: Point): void;
+    drawLine(first: Point, second: Point): void;
+    drawCircle(position: Point, radius: number): void;
     state(state): void;
 }
 
@@ -116,11 +118,15 @@ class DrawManager {
     }
 
     initializeNetwork(): void {
-        this.manager.board.client.draw = (first: Point, second: Point) => {
+        this.manager.board.client.drawLine = (first: Point, second: Point): void=> {
             this.drawLine(first, second);
         };
 
-        this.manager.board.client.state = (state) => {
+        this.manager.board.client.drawCircle = (position: Point, radius: number) => {
+            this.drawCircle(position, radius);
+        };
+
+        this.manager.board.client.state = (state): void => {
             this.updateState(state);
             this.enable();
         };
@@ -225,13 +231,22 @@ class DrawManager {
 
     onDraw(): void {
         this.drawLine(this.ms.pos, this.ms.lastPos);
-        this.sendServerDraw(this.ms.pos, this.ms.lastPos);
+        this.sendServerDrawLine(this.ms.pos, this.ms.lastPos);
     }
 
     onDrawStart(): void {
+        this.drawCircle(this.ms.pos);
+        this.sendServerDrawCircle(this.ms.pos, this.context.lineWidth / 2);
+
     }
 
     onDrawEnd(): void {
+    }
+
+    drawCircle(at: Point, radius = this.context.lineWidth / 2): void {
+        this.context.beginPath();
+        this.context.arc(at.x, at.y, radius, 0, 2 * Math.PI);
+        this.context.fill();
     }
 
     drawLine(from: Point, to: Point): void {
@@ -241,14 +256,18 @@ class DrawManager {
         this.context.stroke();
     }
 
-    updateState(state : DrawState): void {
+    updateState(state: DrawState): void {
         for (var i = 0; i < state.lines.length; i++) {
             this.drawLine(state.lines[i].first, state.lines[i].second);
         }
     }
 
-    sendServerDraw(from: Point, to: Point): void {
-        this.manager.board.server.draw(from, to);
+    sendServerDrawLine(from: Point, to: Point): void {
+        this.manager.board.server.drawLine(from, to);
+    }
+
+    sendServerDrawCircle(position: Point, radius: number) {
+        this.manager.board.server.drawCircle(position, radius);
     }
 
     getDrawState(): void {

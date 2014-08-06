@@ -10,18 +10,23 @@ namespace CollaborationBoard
 {
     public class BoardHub : Hub
     {
-        public void Draw(Point first, Point second)
+        public void DrawLine(Point first, Point second)
         {
-            User current = UserManager.GetUser(Context.ConnectionId);
-            IEnumerable<string> onSameBoard = UserManager.GetBoardUserIdsExcept(current.BoardId, Context.ConnectionId);
+            var context = new RequestContext(this);
+            var clients = Clients.Clients(context.NeighborIds);
 
-            var clients = Clients.Clients(onSameBoard.ToList());
+            context.Board.DrawState.AddLine(new Line(first, second));
 
-            Board board = BoardManager.GetBoard(current.BoardId);
+            clients.drawLine(first, second);
+        }
 
-            board.DrawState.AddLine(new Line(first, second));
+        public void DrawCircle(Point position, double radius)
+        {
+            var context = new RequestContext(this);
+            var clients = Clients.Clients(context.NeighborIds);
 
-            clients.draw(first, second);
+            context.Board.DrawState.AddCircle(new Circle(position, radius));
+            clients.drawCircle(position, radius);
         }
 
         public void Handshake(string boardId)

@@ -12,14 +12,23 @@ namespace CollaborationBoard
         [DataMember(Name="lines")]
         public List<Line> Lines { get; private set; }
 
+        [DataMember(Name = "circles")]
+        public List<Circle> Circles { get; private set; }
+
         public DrawState()
         {
             this.Lines = new List<Line>();
+            this.Circles = new List<Circle>();
         }
 
         public void AddLine(Line line)
         {
             this.Lines.Add(line);
+        }
+
+        internal void AddCircle(Circle circle)
+        {
+            this.Circles.Add(circle);
         }
     }
 }

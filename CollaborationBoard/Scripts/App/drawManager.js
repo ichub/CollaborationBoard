@@ -72,8 +72,12 @@ var DrawManager = (function () {
 
     DrawManager.prototype.initializeNetwork = function () {
         var _this = this;
-        this.manager.board.client.draw = function (first, second) {
+        this.manager.board.client.drawLine = function (first, second) {
             _this.drawLine(first, second);
+        };
+
+        this.manager.board.client.drawCircle = function (position, radius) {
+            _this.drawCircle(position, radius);
         };
 
         this.manager.board.client.state = function (state) {
@@ -178,13 +182,22 @@ var DrawManager = (function () {
 
     DrawManager.prototype.onDraw = function () {
         this.drawLine(this.ms.pos, this.ms.lastPos);
-        this.sendServerDraw(this.ms.pos, this.ms.lastPos);
+        this.sendServerDrawLine(this.ms.pos, this.ms.lastPos);
     };
 
     DrawManager.prototype.onDrawStart = function () {
+        this.drawCircle(this.ms.pos);
+        this.sendServerDrawCircle(this.ms.pos, this.context.lineWidth / 2);
     };
 
     DrawManager.prototype.onDrawEnd = function () {
+    };
+
+    DrawManager.prototype.drawCircle = function (at, radius) {
+        if (typeof radius === "undefined") { radius = this.context.lineWidth / 2; }
+        this.context.beginPath();
+        this.context.arc(at.x, at.y, radius, 0, 2 * Math.PI);
+        this.context.fill();
     };
 
     DrawManager.prototype.drawLine = function (from, to) {
@@ -200,8 +213,12 @@ var DrawManager = (function () {
         }
     };
 
-    DrawManager.prototype.sendServerDraw = function (from, to) {
-        this.manager.board.server.draw(from, to);
+    DrawManager.prototype.sendServerDrawLine = function (from, to) {
+        this.manager.board.server.drawLine(from, to);
+    };
+
+    DrawManager.prototype.sendServerDrawCircle = function (position, radius) {
+        this.manager.board.server.drawCircle(position, radius);
     };
 
     DrawManager.prototype.getDrawState = function () {
