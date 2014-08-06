@@ -7,34 +7,33 @@ interface HubProxy {
     server: BoardServer;
 }
 
+declare var boardId;
+
 interface BoardClient {
     draw(cid: string, x1: number, y1: number, x2: number, y2: number): void;
-    recieveId(cid: string): void;
+    handshake(cid: string): void;
 }
 
 interface BoardServer {
     draw(x1: number, y1: number, x2: number, y2: number): void;
-    registerId(): string;
+    handshake(boardId: string): void;
 }
 
 class BoardManager {
     draw: DrawManager;
     boardId: string;
-    clientId: string;
     board: HubProxy;
 
     constructor() {
         this.board = $.connection.boardHub;
         this.draw = new DrawManager(this, $("#drawCanvas"));
 
-        this.board.client.recieveId = (cid: string): void => {
-            this.clientId = cid;
-
+        this.board.client.handshake = (): void => {
             this.draw.enable();
         };
 
         $.connection.hub.start().done((): void => {
-            this.board.server.registerId();
+            this.board.server.handshake(boardId);
         });
     }
 

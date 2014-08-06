@@ -30,5 +30,18 @@ namespace CollaborationBoard
                 return new JavaScriptSerializer().Deserialize<T>(request);
             }
         }
+
+        public static bool Remove<T>(this List<T> list, Predicate<T> predicate)
+        {
+            int index = list.FindIndex(predicate);
+
+            if (index >= 0)
+            {
+                list.RemoveAt(index);
+                return true;
+            }
+
+            return false;
+        }
     }
 }

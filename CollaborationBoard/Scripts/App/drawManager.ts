@@ -89,9 +89,7 @@ class DrawManager {
 
     initializeNetwork(): void {
         this.manager.board.client.draw = (cid: string, x1: number, y1: number, x2: number, y2: number) => {
-            if (cid != this.manager.clientId) {
-                this.drawLine(new Point(x1, y1), new Point(x2, y2));
-            }
+            this.drawLine(new Point(x1, y1), new Point(x2, y2));
         };
     }
 

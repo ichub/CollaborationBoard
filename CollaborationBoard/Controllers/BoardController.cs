@@ -14,6 +14,11 @@ namespace CollaborationBoard
         {
             ViewBag.BoardId = id;
 
+            if (BoardManager.BoardExists(id))
+            {
+                return View("Board");
+            }
+
             ViewBag.ErrorMessage = "No such board exists";
 
             return View("BoardError");
@@ -23,7 +28,9 @@ namespace CollaborationBoard
         [HttpGet]
         public JsonResult CreateBoard()
         {
-            return Json("asdf", JsonRequestBehavior.AllowGet);
+            string id = BoardManager.CreateBoard();
+
+            return Json(new NewBoardModel(id), JsonRequestBehavior.AllowGet);
         }
     }
 }

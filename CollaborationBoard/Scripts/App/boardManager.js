@@ -4,14 +4,12 @@
         this.board = $.connection.boardHub;
         this.draw = new DrawManager(this, $("#drawCanvas"));
 
-        this.board.client.recieveId = function (cid) {
-            _this.clientId = cid;
-
+        this.board.client.handshake = function () {
             _this.draw.enable();
         };
 
         $.connection.hub.start().done(function () {
-            _this.board.server.registerId();
+            _this.board.server.handshake(boardId);
         });
     }
     BoardManager.prototype.sendServerDraw = function (from, to) {
