@@ -1,10 +1,34 @@
-﻿class Point {
+﻿interface BoardServer {
+    draw(x1: number, y1: number, x2: number, y2: number): void;
+    getState(): void;
+}
+
+interface BoardClient {
+    draw(cid: string, x1: number, y1: number, x2: number, y2: number): void;
+    state(state): void;
+}
+
+interface DrawState {
+    lines: Array<Line>;
+}
+
+class Point {
     x: number;
     y: number;
 
     constructor(x: number, y: number) {
         this.x = x;
         this.y = y;
+    }
+}
+
+class Line {
+    first: Point;
+    second: Point;
+
+    constructor(first: Point, second: Point) {
+        this.first = first;
+        this.second = second;
     }
 }
 
@@ -83,12 +107,12 @@ class DrawManager {
 
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
+        this.resetDrawingSettings();
         this.initializeNetwork();
     }
 
     enable(): void {
         this.addListeners();
-        this.resetDrawingSettings();
     }
 
     initializeNetwork(): void {
@@ -97,7 +121,8 @@ class DrawManager {
         };
 
         this.manager.board.client.state = (state) => {
-            console.log(state);
+            this.updateState(state);
+            this.enable();
         };
     }
 
@@ -200,7 +225,7 @@ class DrawManager {
 
     onDraw(): void {
         this.drawLine(this.ms.pos, this.ms.lastPos);
-        this.manager.sendServerDraw(this.ms.pos, this.ms.lastPos);
+        this.sendServerDraw(this.ms.pos, this.ms.lastPos);
     }
 
     onDrawStart(): void {
@@ -214,5 +239,19 @@ class DrawManager {
         this.context.moveTo(from.x, from.y);
         this.context.lineTo(to.x, to.y);
         this.context.stroke();
+    }
+
+    updateState(state : DrawState): void {
+        for (var i = 0; i < state.lines.length; i++) {
+            this.drawLine(state.lines[i].first, state.lines[i].second);
+        }
+    }
+
+    sendServerDraw(from: Point, to: Point): void {
+        this.manager.board.server.draw(from.x, from.y, to.x, to.y);
+    }
+
+    getDrawState(): void {
+        this.manager.board.server.getState();
     }
 }

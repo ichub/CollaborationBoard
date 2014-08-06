@@ -6,6 +6,14 @@
     return Point;
 })();
 
+var Line = (function () {
+    function Line(first, second) {
+        this.first = first;
+        this.second = second;
+    }
+    return Line;
+})();
+
 var ManagerState;
 (function (ManagerState) {
     ManagerState[ManagerState["Drawing"] = 0] = "Drawing";
@@ -55,11 +63,11 @@ var DrawManager = (function () {
 
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
+        this.resetDrawingSettings();
         this.initializeNetwork();
     }
     DrawManager.prototype.enable = function () {
         this.addListeners();
-        this.resetDrawingSettings();
     };
 
     DrawManager.prototype.initializeNetwork = function () {
@@ -69,7 +77,8 @@ var DrawManager = (function () {
         };
 
         this.manager.board.client.state = function (state) {
-            console.log(state);
+            _this.updateState(state);
+            _this.enable();
         };
     };
 
@@ -169,7 +178,7 @@ var DrawManager = (function () {
 
     DrawManager.prototype.onDraw = function () {
         this.drawLine(this.ms.pos, this.ms.lastPos);
-        this.manager.sendServerDraw(this.ms.pos, this.ms.lastPos);
+        this.sendServerDraw(this.ms.pos, this.ms.lastPos);
     };
 
     DrawManager.prototype.onDrawStart = function () {
@@ -183,6 +192,20 @@ var DrawManager = (function () {
         this.context.moveTo(from.x, from.y);
         this.context.lineTo(to.x, to.y);
         this.context.stroke();
+    };
+
+    DrawManager.prototype.updateState = function (state) {
+        for (var i = 0; i < state.lines.length; i++) {
+            this.drawLine(state.lines[i].first, state.lines[i].second);
+        }
+    };
+
+    DrawManager.prototype.sendServerDraw = function (from, to) {
+        this.manager.board.server.draw(from.x, from.y, to.x, to.y);
+    };
+
+    DrawManager.prototype.getDrawState = function () {
+        this.manager.board.server.getState();
     };
     return DrawManager;
 })();
