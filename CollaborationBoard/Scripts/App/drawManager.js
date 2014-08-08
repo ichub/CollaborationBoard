@@ -1,14 +1,15 @@
 ﻿var DrawManager = (function () {
     function DrawManager(manager, canvasId) {
-        this.manager = manager;
         this.$canvas = $("#" + canvasId);
+        this.manager = manager;
+        this.cursors = new Object();
         this.userPaths = new Object();
 
         paper.setup(canvasId);
-
         this.tool = this.createTool();
 
         this.initializeNetwork();
+        this.addListeners();
     }
     DrawManager.prototype.enableDrawing = function () {
     };
@@ -36,6 +37,14 @@
         this.manager.board.client.onMouseUp = function (cid, x, y) {
             _this.tool.onMouseUp(_this.spoofEvent(x, y), cid, false);
             paper.view.draw();
+        };
+
+        this.manager.board.client.onMouseMove = function (cid, x, y) {
+            if (!_this.cursors[cid]) {
+                _this.cursors[cid] = new Cursor();
+            }
+
+            _this.cursors[cid].setPosition(x, y);
         };
     };
 
@@ -85,6 +94,13 @@
         return tool;
     };
 
+    DrawManager.prototype.addListeners = function () {
+        var _this = this;
+        this.$canvas.mousemove(function (e) {
+            _this.sendMouseMove(e.clientX, e.clientY);
+        });
+    };
+
     DrawManager.prototype.sendMouseDown = function (event) {
         this.manager.board.server.onMouseDown(event.point.x, event.point.y);
     };
@@ -97,8 +113,12 @@
         this.manager.board.server.onMouseUp(event.point.x, event.point.y);
     };
 
+    DrawManager.prototype.sendMouseMove = function (x, y) {
+        this.manager.board.server.onMouseMove(x, y);
+    };
+
     DrawManager.prototype.onUserConnect = function (cid) {
-        console.log(cid);
+        console.log(format("user %s connected", cid));
     };
     return DrawManager;
 })();

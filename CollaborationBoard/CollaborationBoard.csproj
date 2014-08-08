@@ -202,7 +202,9 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\App\boardManager.js" />
+    <TypeScriptCompile Include="Scripts\App\cursor.ts" />
     <TypeScriptCompile Include="Scripts\Common\misc.ts" />
+    <Content Include="Scripts\App\cursor.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\App\drawManager.js" />

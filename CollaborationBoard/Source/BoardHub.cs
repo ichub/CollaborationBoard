@@ -34,6 +34,14 @@ namespace CollaborationBoard
             clients.onMouseUp(context.Caller.ConnectionId, x, y);
         }
 
+        public void OnMouseMove(double x, double y)
+        {
+            var context = new RequestContext(this);
+            var clients = Clients.Clients(context.NeighborIds);
+
+            clients.onMouseMove(context.Caller.ConnectionId, x, y);
+        }
+
         public void Handshake(string boardId)
         {
             var newUser = new User(Context.ConnectionId, boardId);
