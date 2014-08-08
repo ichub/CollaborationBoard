@@ -111,7 +111,6 @@ class DrawManager {
         this.manager.board.server.onMouseUp(event.point.x, event.point.y);
     }
 
-
     onUserConnect(cid: string) {
         console.log(cid);
     }

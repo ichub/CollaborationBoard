@@ -38,6 +38,8 @@ namespace CollaborationBoard
             lessBundle.Transforms.Add(new CssMinify());
             bundles.Add(lessBundle);
 
+            bundles.Add(new StyleBundle("~/bundles/font_awesome").Include("~/Content/font-awesome.css"));
+
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862
             BundleTable.EnableOptimizations = false;
