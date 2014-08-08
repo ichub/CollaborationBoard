@@ -88,38 +88,47 @@ class DrawManager {
 
         this.userPaths.own = new paper.Path();
 
-        tool.onMouseDown = (event: any, userId= this.userPaths.own, send = true) => {
+        tool.onMouseDown = (event: any, userId= this.userPaths.own, isLocalChange = true) => {
             if (this.enabled) {
                 var path = (this.userPaths[userId] = new paper.Path());
+                path.strokeWidth = 0;
+                if (isLocalChange) {
+                    path.strokeCap = "round";
+                    path.strokeColor = "black";
+                    path.fullySelected = true;
+                }
 
-                path.strokeColor = 'black';
                 path.add(event.point);
 
-                if (send) {
+                if (isLocalChange) {
                     this.sendDrawEvent(DrawEventType.MouseDown, event);
                 }
             }
         };
 
-        tool.onMouseDrag = (event: any, userId= this.userPaths.own, send = true) => {
+        tool.onMouseDrag = (event: any, userId= this.userPaths.own, isLocalChange = true) => {
             if (this.enabled) {
                 var path = this.userPaths[userId];
 
                 path.add(event.point);
 
-                if (send) {
+                if (isLocalChange) {
                     this.sendDrawEvent(DrawEventType.MouseDrag, event);
                 }
             }
         };
 
-        tool.onMouseUp = (event: any, userId= this.userPaths.own, send = true) => {
+        tool.onMouseUp = (event: any, userId= this.userPaths.own, isLocalChange = true) => {
             if (this.enabled) {
                 var path = this.userPaths[userId];
 
                 path.simplify(10);
+                path.strokeWidth = 5;
+                path.fullySelected = false;
+                path.strokeColor = "black";
+                path.strokeCap = "round";
 
-                if (send) {
+                if (isLocalChange) {
                     this.sendDrawEvent(DrawEventType.MouseUp, event);
                 }
             }

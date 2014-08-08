@@ -71,44 +71,53 @@ var DrawManager = (function () {
 
         this.userPaths.own = new paper.Path();
 
-        tool.onMouseDown = function (event, userId, send) {
+        tool.onMouseDown = function (event, userId, isLocalChange) {
             if (typeof userId === "undefined") { userId = _this.userPaths.own; }
-            if (typeof send === "undefined") { send = true; }
+            if (typeof isLocalChange === "undefined") { isLocalChange = true; }
             if (_this.enabled) {
                 var path = (_this.userPaths[userId] = new paper.Path());
+                path.strokeWidth = 0;
+                if (isLocalChange) {
+                    path.strokeCap = "round";
+                    path.strokeColor = "black";
+                    path.fullySelected = true;
+                }
 
-                path.strokeColor = 'black';
                 path.add(event.point);
 
-                if (send) {
+                if (isLocalChange) {
                     _this.sendDrawEvent(0 /* MouseDown */, event);
                 }
             }
         };
 
-        tool.onMouseDrag = function (event, userId, send) {
+        tool.onMouseDrag = function (event, userId, isLocalChange) {
             if (typeof userId === "undefined") { userId = _this.userPaths.own; }
-            if (typeof send === "undefined") { send = true; }
+            if (typeof isLocalChange === "undefined") { isLocalChange = true; }
             if (_this.enabled) {
                 var path = _this.userPaths[userId];
 
                 path.add(event.point);
 
-                if (send) {
+                if (isLocalChange) {
                     _this.sendDrawEvent(1 /* MouseDrag */, event);
                 }
             }
         };
 
-        tool.onMouseUp = function (event, userId, send) {
+        tool.onMouseUp = function (event, userId, isLocalChange) {
             if (typeof userId === "undefined") { userId = _this.userPaths.own; }
-            if (typeof send === "undefined") { send = true; }
+            if (typeof isLocalChange === "undefined") { isLocalChange = true; }
             if (_this.enabled) {
                 var path = _this.userPaths[userId];
 
                 path.simplify(10);
+                path.strokeWidth = 5;
+                path.fullySelected = false;
+                path.strokeColor = "black";
+                path.strokeCap = "round";
 
-                if (send) {
+                if (isLocalChange) {
                     _this.sendDrawEvent(2 /* MouseUp */, event);
                 }
             }
