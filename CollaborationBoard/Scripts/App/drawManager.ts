@@ -71,23 +71,7 @@ class DrawManager {
 
     private initializeNetwork() {
         this.manager.hub.client.onDrawEvent = (event : DrawEvent) => {
-            var x = event.x;
-            var y = event.y;
-            var cid = event.cid;
-
-            switch (event.type) {
-                case DrawEventType.MouseDown:
-                    this.tool.onMouseDown(this.spoofEvent(x, y), cid, false);
-                    break;
-                case DrawEventType.MouseDrag:
-                    this.tool.onMouseDrag(this.spoofEvent(x, y), cid, false);
-                    break;
-                case DrawEventType.MouseUp:
-                    this.tool.onMouseUp(this.spoofEvent(x, y), cid, false);
-                    break;
-            }
-
-            paper.view.draw();
+            this.processDrawEvent(event);
         };
 
         this.manager.hub.client.onMouseMove = (cid: string, x: number, y: number) => {
@@ -156,6 +140,32 @@ class DrawManager {
 
     private sendMouseMove(x: number, y: number) {
         this.manager.hub.server.onMouseMove(x, y);
+    }
+
+    private processDrawEvent(event: DrawEvent) {
+        var x = event.x;
+        var y = event.y;
+        var cid = event.cid;
+
+        switch (event.type) {
+            case DrawEventType.MouseDown:
+                this.tool.onMouseDown(this.spoofEvent(x, y), cid, false);
+                break;
+            case DrawEventType.MouseDrag:
+                this.tool.onMouseDrag(this.spoofEvent(x, y), cid, false);
+                break;
+            case DrawEventType.MouseUp:
+                this.tool.onMouseUp(this.spoofEvent(x, y), cid, false);
+                break;
+        }
+
+        paper.view.draw();
+    }
+
+    public processLoadEvents(events: Array<DrawEvent>) {
+        for (var i = 0; i < events.length; i++) {
+            this.processDrawEvent(events[i]);
+        }
     }
 
     public onUserConnect(cid: string) {

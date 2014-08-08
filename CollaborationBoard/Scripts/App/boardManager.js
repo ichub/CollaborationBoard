@@ -4,8 +4,9 @@
         this.hub = $.connection.boardHub;
         this.draw = new DrawManager(this, "drawCanvas");
 
-        this.hub.client.handshake = function (neighbors) {
+        this.hub.client.handshake = function (neighbors, actions) {
             _this.draw.enabled = true;
+            _this.draw.processLoadEvents(actions);
         };
 
         this.hub.client.connect = function (cid) {

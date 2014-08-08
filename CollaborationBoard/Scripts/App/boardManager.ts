@@ -10,7 +10,7 @@ interface HubProxy {
 declare var boardId;
 
 interface BoardClient {
-    handshake(neighbor: Array<string>): void;
+    handshake(neighbor: Array<string>, actions: Array<DrawEvent>): void;
     connect(cid: string): void;
     disconnect(cid: string): void;
 }
@@ -28,8 +28,9 @@ class BoardManager {
         this.hub = $.connection.boardHub;
         this.draw = new DrawManager(this, "drawCanvas");
 
-        this.hub.client.handshake = (neighbors: Array<string>): void => {
+        this.hub.client.handshake = (neighbors: Array<string>, actions: Array<DrawEvent>): void => {
             this.draw.enabled = true;
+            this.draw.processLoadEvents(actions);
         };
 
         this.hub.client.connect = (cid) => {

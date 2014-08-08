@@ -53,23 +53,7 @@ var DrawManager = (function () {
     DrawManager.prototype.initializeNetwork = function () {
         var _this = this;
         this.manager.hub.client.onDrawEvent = function (event) {
-            var x = event.x;
-            var y = event.y;
-            var cid = event.cid;
-
-            switch (event.type) {
-                case 0 /* MouseDown */:
-                    _this.tool.onMouseDown(_this.spoofEvent(x, y), cid, false);
-                    break;
-                case 1 /* MouseDrag */:
-                    _this.tool.onMouseDrag(_this.spoofEvent(x, y), cid, false);
-                    break;
-                case 2 /* MouseUp */:
-                    _this.tool.onMouseUp(_this.spoofEvent(x, y), cid, false);
-                    break;
-            }
-
-            paper.view.draw();
+            _this.processDrawEvent(event);
         };
 
         this.manager.hub.client.onMouseMove = function (cid, x, y) {
@@ -146,6 +130,32 @@ var DrawManager = (function () {
 
     DrawManager.prototype.sendMouseMove = function (x, y) {
         this.manager.hub.server.onMouseMove(x, y);
+    };
+
+    DrawManager.prototype.processDrawEvent = function (event) {
+        var x = event.x;
+        var y = event.y;
+        var cid = event.cid;
+
+        switch (event.type) {
+            case 0 /* MouseDown */:
+                this.tool.onMouseDown(this.spoofEvent(x, y), cid, false);
+                break;
+            case 1 /* MouseDrag */:
+                this.tool.onMouseDrag(this.spoofEvent(x, y), cid, false);
+                break;
+            case 2 /* MouseUp */:
+                this.tool.onMouseUp(this.spoofEvent(x, y), cid, false);
+                break;
+        }
+
+        paper.view.draw();
+    };
+
+    DrawManager.prototype.processLoadEvents = function (events) {
+        for (var i = 0; i < events.length; i++) {
+            this.processDrawEvent(events[i]);
+        }
     };
 
     DrawManager.prototype.onUserConnect = function (cid) {

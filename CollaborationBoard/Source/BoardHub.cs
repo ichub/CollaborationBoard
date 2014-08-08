@@ -13,6 +13,7 @@ namespace CollaborationBoard
         public void OnDrawEvent(ClientDrawEvent e)
         {
             var context = new RequestContext(this, Clients);
+            context.Board.AppendEvent(e);
 
             e.Sender = context.Caller.ConnectionId;
 
@@ -33,8 +34,9 @@ namespace CollaborationBoard
             UserManager.AddUser(boardId, newUser);
 
             var context = new RequestContext(this, Clients);
+            var actions = context.Board.Events;
 
-            Clients.Caller.handshake(context.NeighborIds);
+            Clients.Caller.handshake(context.NeighborIds, actions);
 
             context.NeighborClients.connect(newUser.ConnectionId);
         }
