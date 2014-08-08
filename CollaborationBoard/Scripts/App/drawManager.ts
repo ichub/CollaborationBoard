@@ -7,13 +7,27 @@ enum DrawEventType {
 }
 
 interface BoardClient {
-    onDrawEvent(cid: string, type: DrawEventType, x: number, y: number);
+    onDrawEvent(event: DrawEvent);
     onMouseMove(cid: string, x: number, y: number);
 }
 
 interface BoardServer {
-    onDrawEvent(type: DrawEventType, x: number, y: number);
+    onDrawEvent(event: DrawEvent);
     onMouseMove(x: number, y: number);
+}
+
+class DrawEvent {
+    public type: DrawEventType;
+    public cid: string;
+    public x: number;
+    public y: number;
+
+    constructor(type: DrawEventType, x: number, y: number, cid = undefined) {
+        this.type = type;
+        this.cid = cid;
+        this.x = x;
+        this.y = y;
+    }
 }
 
 class DrawManager {
@@ -56,8 +70,12 @@ class DrawManager {
 
 
     private initializeNetwork() {
-        this.manager.hub.client.onDrawEvent = (cid: string, type: DrawEventType, x: number, y: number) => {
-            switch (type) {
+        this.manager.hub.client.onDrawEvent = (event : DrawEvent) => {
+            var x = event.x;
+            var y = event.y;
+            var cid = event.cid;
+
+            switch (event.type) {
                 case DrawEventType.MouseDown:
                     this.tool.onMouseDown(this.spoofEvent(x, y), cid, false);
                     break;
@@ -106,7 +124,7 @@ class DrawManager {
                 path.add(event.point);
 
                 if (send) {
-                    this.sendDrawEvent(DrawEventType.MouseDrag , event);
+                    this.sendDrawEvent(DrawEventType.MouseDrag, event);
                 }
             }
         };
@@ -133,7 +151,7 @@ class DrawManager {
     }
 
     private sendDrawEvent(type: DrawEventType, event: any) {
-        this.manager.hub.server.onDrawEvent(type, event.point.x, event.point.y);
+        this.manager.hub.server.onDrawEvent(new DrawEvent(type, event.point.x, event.point.y));
     }
 
     private sendMouseMove(x: number, y: number) {

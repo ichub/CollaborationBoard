@@ -10,11 +10,13 @@ namespace CollaborationBoard
 {
     public class BoardHub : Hub
     {
-        public void OnDrawEvent(int type, double x, double y)
+        public void OnDrawEvent(ClientDrawEvent e)
         {
             var context = new RequestContext(this, Clients);
 
-            context.NeighborClients.onDrawEvent(context.Caller.ConnectionId, type, x, y);
+            e.Sender = context.Caller.ConnectionId;
+
+            context.NeighborClients.onDrawEvent(e);
         }
 
         public void OnMouseMove(double x, double y)

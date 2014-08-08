@@ -5,6 +5,17 @@
     DrawEventType[DrawEventType["MouseUp"] = 2] = "MouseUp";
 })(DrawEventType || (DrawEventType = {}));
 
+var DrawEvent = (function () {
+    function DrawEvent(type, x, y, cid) {
+        if (typeof cid === "undefined") { cid = undefined; }
+        this.type = type;
+        this.cid = cid;
+        this.x = x;
+        this.y = y;
+    }
+    return DrawEvent;
+})();
+
 var DrawManager = (function () {
     function DrawManager(manager, canvasId) {
         this.$canvas = $("#" + canvasId);
@@ -41,8 +52,12 @@ var DrawManager = (function () {
 
     DrawManager.prototype.initializeNetwork = function () {
         var _this = this;
-        this.manager.hub.client.onDrawEvent = function (cid, type, x, y) {
-            switch (type) {
+        this.manager.hub.client.onDrawEvent = function (event) {
+            var x = event.x;
+            var y = event.y;
+            var cid = event.cid;
+
+            switch (event.type) {
                 case 0 /* MouseDown */:
                     _this.tool.onMouseDown(_this.spoofEvent(x, y), cid, false);
                     break;
@@ -126,7 +141,7 @@ var DrawManager = (function () {
     };
 
     DrawManager.prototype.sendDrawEvent = function (type, event) {
-        this.manager.hub.server.onDrawEvent(type, event.point.x, event.point.y);
+        this.manager.hub.server.onDrawEvent(new DrawEvent(type, event.point.x, event.point.y));
     };
 
     DrawManager.prototype.sendMouseMove = function (x, y) {
