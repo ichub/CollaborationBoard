@@ -4,6 +4,7 @@
         this.manager = manager;
         this.cursors = new Object();
         this.userPaths = new Object();
+        this.enabled = false;
 
         paper.setup(canvasId);
         this.tool = this.createTool();
@@ -11,8 +12,17 @@
         this.initializeNetwork();
         this.addListeners();
     }
-    DrawManager.prototype.enableDrawing = function () {
-    };
+    Object.defineProperty(DrawManager.prototype, "enabled", {
+        get: function () {
+            return this._enabled;
+        },
+        set: function (value) {
+            this._enabled = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+
 
     DrawManager.prototype.spoofEvent = function (x, y) {
         var result = new paper.ToolEvent();
@@ -57,37 +67,43 @@
         tool.onMouseDown = function (event, userId, send) {
             if (typeof userId === "undefined") { userId = _this.userPaths.own; }
             if (typeof send === "undefined") { send = true; }
-            var path = (_this.userPaths[userId] = new paper.Path());
+            if (_this.enabled) {
+                var path = (_this.userPaths[userId] = new paper.Path());
 
-            path.strokeColor = 'black';
-            path.add(event.point);
+                path.strokeColor = 'black';
+                path.add(event.point);
 
-            if (send) {
-                _this.sendMouseDown(event);
+                if (send) {
+                    _this.sendMouseDown(event);
+                }
             }
         };
 
         tool.onMouseDrag = function (event, userId, send) {
             if (typeof userId === "undefined") { userId = _this.userPaths.own; }
             if (typeof send === "undefined") { send = true; }
-            var path = _this.userPaths[userId];
+            if (_this.enabled) {
+                var path = _this.userPaths[userId];
 
-            path.add(event.point);
+                path.add(event.point);
 
-            if (send) {
-                _this.sendMouseDrag(event);
+                if (send) {
+                    _this.sendMouseDrag(event);
+                }
             }
         };
 
         tool.onMouseUp = function (event, userId, send) {
             if (typeof userId === "undefined") { userId = _this.userPaths.own; }
             if (typeof send === "undefined") { send = true; }
-            var path = _this.userPaths[userId];
+            if (_this.enabled) {
+                var path = _this.userPaths[userId];
 
-            path.simplify(10);
+                path.simplify(10);
 
-            if (send) {
-                _this.sendMouseUp(event);
+                if (send) {
+                    _this.sendMouseUp(event);
+                }
             }
         };
 

@@ -19,16 +19,16 @@ interface BoardServer {
 }
 
 class BoardManager {
-    private  draw: DrawManager;
+    private draw: DrawManager;
     private boardId: string;
     public hub: HubProxy;
 
-    constructor() {
+    public constructor() {
         this.hub = $.connection.boardHub;
         this.draw = new DrawManager(this, "drawCanvas");
 
         this.hub.client.handshake = (neighbors: Array<string>): void => {
-            this.draw.enableDrawing();
+            this.draw.enabled = true;
         };
 
         this.hub.client.connect = (cid) => {

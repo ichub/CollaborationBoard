@@ -2,7 +2,7 @@
     private color: string;
     private element: JQuery;
 
-    constructor(color = "#000000") {
+    public constructor(color = "#000000") {
         this.color = color;
 
         this.element = $("<div></div>").addClass("cursorContainer");
@@ -14,7 +14,7 @@
         $(document.body).append(this.element);
     }
 
-    setPosition(x: number, y: number) {
+    public setPosition(x: number, y: number) {
         this.element.offset({
             top: y,
             left: x

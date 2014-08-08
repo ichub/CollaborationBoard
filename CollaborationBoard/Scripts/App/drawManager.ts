@@ -20,12 +20,14 @@ class DrawManager {
     private cursors: any;
     private userPaths: any;
     private tool: any;
+    private _enabled: boolean;
 
-    constructor(manager: BoardManager, canvasId: string) {
+    public constructor(manager: BoardManager, canvasId: string) {
         this.$canvas = $("#" + canvasId);
         this.manager = manager;
         this.cursors = new Object();
         this.userPaths = new Object();
+        this.enabled = false;
 
         paper.setup(canvasId);
         this.tool = this.createTool();
@@ -34,11 +36,15 @@ class DrawManager {
         this.addListeners();
     }
 
-    enableDrawing() {
-
+    public get enabled(): boolean {
+        return this._enabled;
     }
 
-    spoofEvent(x: number, y: number) {
+    public set enabled(value: boolean) {
+        this._enabled = value;
+    }
+
+    private spoofEvent(x: number, y: number) {
         var result = new paper.ToolEvent();
 
         result.point = new paper.Point(x, y);
@@ -47,7 +53,7 @@ class DrawManager {
     }
 
 
-    initializeNetwork() {
+    private initializeNetwork() {
         this.manager.hub.client.onMouseDown = (cid: string, x: number, y: number) => {
             this.tool.onMouseDown(this.spoofEvent(x, y), cid, false);
             paper.view.draw();
@@ -72,68 +78,74 @@ class DrawManager {
         };
     }
 
-    createTool() {
+    private createTool() {
         var tool = new paper.Tool();
 
         this.userPaths.own = new paper.Path();
 
         tool.onMouseDown = (event: any, userId= this.userPaths.own, send = true) => {
-            var path = (this.userPaths[userId] = new paper.Path());
+            if (this.enabled) {
+                var path = (this.userPaths[userId] = new paper.Path());
 
-            path.strokeColor = 'black';
-            path.add(event.point);
+                path.strokeColor = 'black';
+                path.add(event.point);
 
-            if (send) {
-                this.sendMouseDown(event);
+                if (send) {
+                    this.sendMouseDown(event);
+                }
             }
         };
 
         tool.onMouseDrag = (event: any, userId= this.userPaths.own, send = true) => {
-            var path = this.userPaths[userId];
+            if (this.enabled) {
+                var path = this.userPaths[userId];
 
-            path.add(event.point);
+                path.add(event.point);
 
-            if (send) {
-                this.sendMouseDrag(event);
+                if (send) {
+                    this.sendMouseDrag(event);
+                }
             }
         };
 
         tool.onMouseUp = (event: any, userId= this.userPaths.own, send = true) => {
-            var path = this.userPaths[userId];
+            if (this.enabled) {
+                var path = this.userPaths[userId];
 
-            path.simplify(10);
+                path.simplify(10);
 
-            if (send) {
-                this.sendMouseUp(event);
+                if (send) {
+                    this.sendMouseUp(event);
+                }
             }
         };
 
         return tool;
     }
 
-    addListeners() {
+    private addListeners() {
         this.$canvas.mousemove(e => {
             this.sendMouseMove(e.clientX, e.clientY);
         });
     }
 
-    sendMouseDown(event) {
+    private sendMouseDown(event) {
         this.manager.hub.server.onMouseDown(event.point.x, event.point.y);
     }
 
-    sendMouseDrag(event) {
+    private sendMouseDrag(event) {
         this.manager.hub.server.onMouseDrag(event.point.x, event.point.y);
     }
 
-    sendMouseUp(event) {
+    private sendMouseUp(event) {
         this.manager.hub.server.onMouseUp(event.point.x, event.point.y);
     }
 
-    sendMouseMove(x: number, y: number) {
+    private sendMouseMove(x: number, y: number) {
         this.manager.hub.server.onMouseMove(x, y);
     }
 
-    onUserConnect(cid: string) {
+    public onUserConnect(cid: string) {
         console.log(format("user %s connected", cid));
     }
 }
