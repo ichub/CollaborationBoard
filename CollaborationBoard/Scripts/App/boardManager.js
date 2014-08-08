@@ -12,6 +12,10 @@
             _this.draw.onUserConnect(cid);
         };
 
+        this.hub.client.disconnect = function (cid) {
+            _this.draw.onUserDisconnect(cid);
+        };
+
         $.connection.hub.start().done(function () {
             _this.hub.server.handshake(boardId);
         });

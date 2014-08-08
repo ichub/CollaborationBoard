@@ -161,4 +161,8 @@ class DrawManager {
     public onUserConnect(cid: string) {
         console.log(format("user %s connected", cid));
     }
+
+    public onUserDisconnect(cid: string) {
+        console.log(format("user %s disconnected", cid));
+    }
 }

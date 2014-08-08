@@ -151,6 +151,10 @@ var DrawManager = (function () {
     DrawManager.prototype.onUserConnect = function (cid) {
         console.log(format("user %s connected", cid));
     };
+
+    DrawManager.prototype.onUserDisconnect = function (cid) {
+        console.log(format("user %s disconnected", cid));
+    };
     return DrawManager;
 })();
 //# sourceMappingURL=drawManager.js.map

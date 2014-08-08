@@ -12,6 +12,7 @@ declare var boardId;
 interface BoardClient {
     handshake(neighbor: Array<string>): void;
     connect(cid: string): void;
+    disconnect(cid: string): void;
 }
 
 interface BoardServer {
@@ -33,6 +34,10 @@ class BoardManager {
 
         this.hub.client.connect = (cid) => {
             this.draw.onUserConnect(cid);
+        };
+
+        this.hub.client.disconnect = (cid) => {
+            this.draw.onUserDisconnect(cid);
         };
 
         $.connection.hub.start().done((): void => {
