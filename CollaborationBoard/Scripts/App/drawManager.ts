@@ -1,276 +1,118 @@
-﻿interface BoardServer {
-    drawLine(first: Point, second: Point): void;
-    drawCircle(position: Point, radius: number): void;
-    getState(): void;
-}
+﻿declare var paper;
 
 interface BoardClient {
-    drawLine(first: Point, second: Point): void;
-    drawCircle(position: Point, radius: number): void;
-    state(state): void;
+    onMouseDown(cid: string, x: number, y: number);
+    onMouseDrag(cid: string, x: number, y: number);
+    onMouseUp(cid: string, x: number, y: number);
 }
 
-interface DrawState {
-    lines: Array<Line>;
-}
-
-class Point {
-    x: number;
-    y: number;
-
-    constructor(x: number, y: number) {
-        this.x = x;
-        this.y = y;
-    }
-}
-
-class Line {
-    first: Point;
-    second: Point;
-
-    constructor(first: Point, second: Point) {
-        this.first = first;
-        this.second = second;
-    }
-}
-
-interface JQuery {
-    center(): JQuery;
-}
-
-interface MouseState {
-    pos: Point;
-    lastPos: Point;
-    down: boolean;
-    initialized: boolean;
-}
-
-interface DragState {
-    x: number;
-    y: number;
-    mx: number;
-    my: number;
-}
-
-enum ManagerState {
-    Drawing,
-    Dragging
+interface BoardServer {
+    onMouseDown(x: number, y: number);
+    onMouseDrag(x: number, y: number);
+    onMouseUp(x: number, y: number);
 }
 
 class DrawManager {
-    manager: BoardManager;
     $canvas: JQuery;
-    $parent: JQuery;
-    context: CanvasRenderingContext2D;
-    ms: MouseState;
-    drag: DragState;
-    state: ManagerState;
-    width: number;
-    height: number;
+    manager: BoardManager;
+    userPaths: any;
+    tool: any;
 
-    constructor(manager: BoardManager, $canvas: JQuery) {
+    constructor(manager: BoardManager, canvasId: string) {
         this.manager = manager;
+        this.$canvas = $("#" + canvasId);
+        this.userPaths = new Object();
 
-        this.width = 800;
-        this.height = 600;
+        paper.setup(canvasId);
 
-        var canvas = <HTMLCanvasElement> $canvas.get(0);
+        this.tool = this.createTool();
 
-        this.$canvas = $canvas;
-        this.$parent = $canvas.parent();
-        this.context = canvas.getContext("2d");
-
-        this.ms = {
-            pos: new Point(0, 0),
-            lastPos: new Point(0, 0),
-            down: false,
-            initialized: false
-        };
-
-        this.drag = {
-            x: 0,
-            y: 0,
-            mx: 0,
-            my: 0
-        };
-
-        this.state = ManagerState.Drawing;
-
-        this.$canvas.css({
-            width: this.width,
-            height: this.height
-        });
-
-        this.$canvas.center();
-
-        $(window).resize(() => {
-            this.$canvas.center();
-        });
-
-        canvas.width = canvas.clientWidth;
-        canvas.height = canvas.clientHeight;
-        this.resetDrawingSettings();
         this.initializeNetwork();
     }
 
-    enable(): void {
-        this.addListeners();
+    enableDrawing() {
+
     }
 
-    initializeNetwork(): void {
-        this.manager.board.client.drawLine = (first: Point, second: Point): void=> {
-            this.drawLine(first, second);
+    spoofEvent(x: number, y: number) {
+        var result = new paper.ToolEvent();
+
+        result.point = new paper.Point(x, y);
+        result.tool = this.tool;
+        return result;
+    }
+
+
+    initializeNetwork() {
+        this.manager.board.client.onMouseDown = (cid: string, x: number, y: number) => {
+            this.tool.onMouseDown(this.spoofEvent(x, y), cid, false);
+            paper.view.draw();
         };
 
-        this.manager.board.client.drawCircle = (position: Point, radius: number) => {
-            this.drawCircle(position, radius);
+        this.manager.board.client.onMouseDrag = (cid: string, x: number, y: number) => {
+            this.tool.onMouseDrag(this.spoofEvent(x, y), cid, false);
+            paper.view.draw();
         };
 
-        this.manager.board.client.state = (state): void => {
-            this.updateState(state);
-            this.enable();
+        this.manager.board.client.onMouseUp = (cid: string, x: number, y: number) => {
+            this.tool.onMouseUp(this.spoofEvent(x, y), cid, false);
+            paper.view.draw();
         };
     }
 
-    addListeners(): void {
-        $(window).mousedown((e: JQueryEventObject): void => {
-            this.updateMouseDown(e);
+    createTool() {
+        var tool = new paper.Tool();
 
-            if (this.state == ManagerState.Dragging) {
-                this.onDragStart();
+        this.userPaths.own = new paper.Path();
+
+        tool.onMouseDown = (event: any, userId= this.userPaths.own, send = true) => {
+            var path = (this.userPaths[userId] = new paper.Path());
+
+            path.strokeColor = 'black';
+            path.add(event.point);
+
+            if (send) {
+                this.sendMouseDown(event);
             }
-            else {
-                this.onDrawStart();
+        };
+
+        tool.onMouseDrag = (event: any, userId= this.userPaths.own, send = true) => {
+            var path = this.userPaths[userId];
+
+            path.add(event.point);
+
+            if (send) {
+                this.sendMouseDrag(event);
             }
-        });
+        };
 
-        $(window).mouseup((e: JQueryEventObject): void => {
-            this.updateMouseUp(e);
+        tool.onMouseUp = (event: any, userId= this.userPaths.own, send = true) => {
+            var path = this.userPaths[userId];
 
-            if (this.state == ManagerState.Dragging) {
-                this.onDragEnd();
+            path.simplify(10);
+
+            if (send) {
+                this.sendMouseUp(event);
             }
-            else {
-                this.onDrawEnd();
-            }
-        });
+        };
 
-        $(window).mousemove((e: JQueryEventObject): void => {
-            this.updateMousePosition(e);
-
-            if (this.ms.down) {
-                if (this.state == ManagerState.Dragging) {
-                    this.onDrag();
-                }
-                else {
-                    this.onDraw();
-                }
-            }
-        });
+        return tool;
     }
 
-    resetDrawingSettings(): void {
-        this.context.strokeStyle = "#000";
-        this.context.lineCap = "round";
-        this.context.lineJoin = "round";
-        this.context.lineWidth = 10;
+    sendMouseDown(event) {
+        this.manager.board.server.onMouseDown(event.point.x, event.point.y);
     }
 
-    updateMouseDown(e: JQueryEventObject): void {
-        if (e.button == 0) {
-            this.ms.down = true;
-        }
+    sendMouseDrag(event) {
+        this.manager.board.server.onMouseDrag(event.point.x, event.point.y);
     }
 
-    updateMouseUp(e: JQueryEventObject): void {
-        if (e.button == 0) {
-            this.ms.down = false;
-        }
+    sendMouseUp(event) {
+        this.manager.board.server.onMouseUp(event.point.x, event.point.y);
     }
 
-    updateMousePosition(e: JQueryEventObject): void {
-        var coords = this.$canvas.position();
 
-        if (!this.ms.initialized) {
-            this.ms.initialized = true;
-
-            this.ms.pos.x = e.clientX - coords.left;
-            this.ms.pos.y = e.clientY - coords.top;
-            this.ms.lastPos.x = this.ms.pos.x;
-            this.ms.lastPos.y = this.ms.pos.y;
-        }
-        else {
-            this.ms.lastPos.x = this.ms.pos.x;
-            this.ms.lastPos.y = this.ms.pos.y;
-            this.ms.pos.x = e.clientX - coords.left;
-            this.ms.pos.y = e.clientY - coords.top;
-        }
-    }
-
-    onDrag(): void {
-        var newX = this.ms.pos.x - this.drag.mx + this.drag.x;
-        var newY = this.ms.pos.y - this.drag.mx + this.drag.y;
-
-        this.$canvas.offset({
-            top: newY,
-            left: newX
-        })
-    }
-
-    onDragStart(): void {
-        var coords = this.$canvas.position();
-
-        this.drag.x = coords.left;
-        this.drag.y = coords.top;
-        this.drag.mx = this.ms.pos.x;
-        this.drag.my = this.ms.pos.y;
-    }
-
-    onDragEnd(): void {
-    }
-
-    onDraw(): void {
-        this.drawLine(this.ms.pos, this.ms.lastPos);
-        this.sendServerDrawLine(this.ms.pos, this.ms.lastPos);
-    }
-
-    onDrawStart(): void {
-        this.drawCircle(this.ms.pos);
-        this.sendServerDrawCircle(this.ms.pos, this.context.lineWidth / 2);
-
-    }
-
-    onDrawEnd(): void {
-    }
-
-    drawCircle(at: Point, radius = this.context.lineWidth / 2): void {
-        this.context.beginPath();
-        this.context.arc(at.x, at.y, radius, 0, 2 * Math.PI);
-        this.context.fill();
-    }
-
-    drawLine(from: Point, to: Point): void {
-        this.context.beginPath();
-        this.context.moveTo(from.x, from.y);
-        this.context.lineTo(to.x, to.y);
-        this.context.stroke();
-    }
-
-    updateState(state: DrawState): void {
-        for (var i = 0; i < state.lines.length; i++) {
-            this.drawLine(state.lines[i].first, state.lines[i].second);
-        }
-    }
-
-    sendServerDrawLine(from: Point, to: Point): void {
-        this.manager.board.server.drawLine(from, to);
-    }
-
-    sendServerDrawCircle(position: Point, radius: number) {
-        this.manager.board.server.drawCircle(position, radius);
-    }
-
-    getDrawState(): void {
-        this.manager.board.server.getState();
+    onUserConnect(cid: string) {
+        console.log(cid);
     }
 }

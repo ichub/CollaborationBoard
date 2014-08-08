@@ -10,23 +10,28 @@ namespace CollaborationBoard
 {
     public class BoardHub : Hub
     {
-        public void DrawLine(Point first, Point second)
+        public void OnMouseDown(double x, double y)
         {
             var context = new RequestContext(this);
             var clients = Clients.Clients(context.NeighborIds);
 
-            context.Board.DrawState.AddLine(new Line(first, second));
-
-            clients.drawLine(first, second);
+            clients.onMouseDown(context.Caller.ConnectionId, x, y);
         }
 
-        public void DrawCircle(Point position, double radius)
+        public void OnMouseDrag(double x, double y)
         {
             var context = new RequestContext(this);
             var clients = Clients.Clients(context.NeighborIds);
 
-            context.Board.DrawState.AddCircle(new Circle(position, radius));
-            clients.drawCircle(position, radius);
+            clients.onMouseDrag(context.Caller.ConnectionId, x, y);
+        }
+
+        public void OnMouseUp(double x, double y)
+        {
+            var context = new RequestContext(this);
+            var clients = Clients.Clients(context.NeighborIds);
+
+            clients.onMouseUp(context.Caller.ConnectionId, x, y);
         }
 
         public void Handshake(string boardId)
@@ -35,16 +40,12 @@ namespace CollaborationBoard
 
             UserManager.AddUser(boardId, newUser);
 
-            Clients.Caller.handshake();
-        }
+            var context = new RequestContext(this);
+            var clients = Clients.Clients(context.NeighborIds);
 
-        public void GetState()
-        {
-            User user = UserManager.GetUser(Context.ConnectionId);
+            Clients.Caller.handshake(context.NeighborIds);
 
-            Board board = BoardManager.GetBoard(user.BoardId);
-
-            Clients.Caller.state(board.DrawState);
+            clients.connect(newUser.ConnectionId);
         }
 
         public override Task OnDisconnected(bool stopCalled)

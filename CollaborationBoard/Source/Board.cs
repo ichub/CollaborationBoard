@@ -7,13 +7,11 @@ namespace CollaborationBoard
 {
     public class Board
     {
-        public DrawState DrawState { get; private set; }
         public string Id { get; private set; }
         public string Name { get; private set; }
 
         public Board(string id)
         {
-            this.DrawState = new DrawState();
             this.Id = id;
         }
 
