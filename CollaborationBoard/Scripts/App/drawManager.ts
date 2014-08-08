@@ -60,7 +60,7 @@ class DrawManager {
         this._enabled = value;
     }
 
-    private spoofEvent(x: number, y: number) {
+    private spoofEvent(x: number, y: number): any {
         var result = new paper.ToolEvent();
 
         result.point = new paper.Point(x, y);
@@ -69,12 +69,12 @@ class DrawManager {
     }
 
 
-    private initializeNetwork() {
-        this.manager.hub.client.onDrawEvent = (event : DrawEvent) => {
+    private initializeNetwork(): void {
+        this.manager.hub.client.onDrawEvent = (event: DrawEvent) => {
             this.processDrawEvent(event);
         };
 
-        this.manager.hub.client.onMouseMove = (cid: string, x: number, y: number) => {
+        this.manager.hub.client.onMouseMove = (cid: string, x: number, y: number): void=> {
             if (!this.cursors[cid]) {
                 this.cursors[cid] = new Cursor();
             }
@@ -83,12 +83,12 @@ class DrawManager {
         };
     }
 
-    private createTool() {
+    private createTool(): any {
         var tool = new paper.Tool();
 
         this.userPaths.own = new paper.Path();
 
-        tool.onMouseDown = (event: any, userId= this.userPaths.own, isLocalChange = true) => {
+        tool.onMouseDown = (event: any, userId= this.userPaths.own, isLocalChange = true): void => {
             if (this.enabled) {
                 var path = (this.userPaths[userId] = new paper.Path());
                 path.strokeWidth = 0;
@@ -106,7 +106,7 @@ class DrawManager {
             }
         };
 
-        tool.onMouseDrag = (event: any, userId= this.userPaths.own, isLocalChange = true) => {
+        tool.onMouseDrag = (event: any, userId= this.userPaths.own, isLocalChange = true): void=> {
             if (this.enabled) {
                 var path = this.userPaths[userId];
 
@@ -118,7 +118,7 @@ class DrawManager {
             }
         };
 
-        tool.onMouseUp = (event: any, userId= this.userPaths.own, isLocalChange = true) => {
+        tool.onMouseUp = (event: any, userId= this.userPaths.own, isLocalChange = true): void => {
             if (this.enabled) {
                 var path = this.userPaths[userId];
 
@@ -137,21 +137,21 @@ class DrawManager {
         return tool;
     }
 
-    private addListeners() {
-        this.$canvas.mousemove(e => {
+    private addListeners(): void {
+        this.$canvas.mousemove((e: JQueryMouseEventObject): void=> {
             this.sendMouseMove(e.clientX, e.clientY);
         });
     }
 
-    private sendDrawEvent(type: DrawEventType, event: any) {
+    private sendDrawEvent(type: DrawEventType, event: any): void {
         this.manager.hub.server.onDrawEvent(new DrawEvent(type, event.point.x, event.point.y));
     }
 
-    private sendMouseMove(x: number, y: number) {
+    private sendMouseMove(x: number, y: number): void {
         this.manager.hub.server.onMouseMove(x, y);
     }
 
-    private processDrawEvent(event: DrawEvent) {
+    private processDrawEvent(event: DrawEvent): void {
         var x = event.x;
         var y = event.y;
         var cid = event.cid;
@@ -171,17 +171,17 @@ class DrawManager {
         paper.view.draw();
     }
 
-    public processLoadEvents(events: Array<DrawEvent>) {
+    public processLoadEvents(events: Array<DrawEvent>): void {
         for (var i = 0; i < events.length; i++) {
             this.processDrawEvent(events[i]);
         }
     }
 
-    public onUserConnect(cid: string) {
+    public onUserConnect(cid: string): void{
         console.log(format("user %s connected", cid));
     }
 
-    public onUserDisconnect(cid: string) {
+    public onUserDisconnect(cid: string): void{
         console.log(format("user %s disconnected", cid));
     }
 }

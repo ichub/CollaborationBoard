@@ -33,11 +33,11 @@ class BoardManager {
             this.draw.processLoadEvents(actions);
         };
 
-        this.hub.client.connect = (cid) => {
+        this.hub.client.connect = (cid: string): void => {
             this.draw.onUserConnect(cid);
         };
 
-        this.hub.client.disconnect = (cid) => {
+        this.hub.client.disconnect = (cid: string): void => {
             this.draw.onUserDisconnect(cid);
         };
 
@@ -47,7 +47,7 @@ class BoardManager {
     }
 }
 
-onload = () => {
+onload = (): void => {
     ExtendJQuery();
     var manager = new BoardManager();
 };
