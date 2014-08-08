@@ -12,34 +12,30 @@ namespace CollaborationBoard
     {
         public void OnMouseDown(double x, double y)
         {
-            var context = new RequestContext(this);
-            var clients = Clients.Clients(context.NeighborIds);
+            var context = new RequestContext(this, Clients);
 
-            clients.onMouseDown(context.Caller.ConnectionId, x, y);
+            context.NeighborClients.onMouseDown(context.Caller.ConnectionId, x, y);
         }
 
         public void OnMouseDrag(double x, double y)
         {
-            var context = new RequestContext(this);
-            var clients = Clients.Clients(context.NeighborIds);
+            var context = new RequestContext(this, Clients);
 
-            clients.onMouseDrag(context.Caller.ConnectionId, x, y);
+            context.NeighborClients.onMouseDrag(context.Caller.ConnectionId, x, y);
         }
 
         public void OnMouseUp(double x, double y)
         {
-            var context = new RequestContext(this);
-            var clients = Clients.Clients(context.NeighborIds);
+            var context = new RequestContext(this, Clients);
 
-            clients.onMouseUp(context.Caller.ConnectionId, x, y);
+            context.NeighborClients.onMouseUp(context.Caller.ConnectionId, x, y);
         }
 
         public void OnMouseMove(double x, double y)
         {
-            var context = new RequestContext(this);
-            var clients = Clients.Clients(context.NeighborIds);
+            var context = new RequestContext(this, Clients);
 
-            clients.onMouseMove(context.Caller.ConnectionId, x, y);
+            context.NeighborClients.onMouseMove(context.Caller.ConnectionId, x, y);
         }
 
         public void Handshake(string boardId)
@@ -48,12 +44,11 @@ namespace CollaborationBoard
 
             UserManager.AddUser(boardId, newUser);
 
-            var context = new RequestContext(this);
-            var clients = Clients.Clients(context.NeighborIds);
+            var context = new RequestContext(this, Clients);
 
             Clients.Caller.handshake(context.NeighborIds);
 
-            clients.connect(newUser.ConnectionId);
+            context.NeighborClients.connect(newUser.ConnectionId);
         }
 
         public override Task OnDisconnected(bool stopCalled)
