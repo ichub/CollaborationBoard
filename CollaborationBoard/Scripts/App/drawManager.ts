@@ -1,16 +1,18 @@
 ﻿declare var paper;
 
+enum DrawEventType {
+    MouseDown,
+    MouseDrag,
+    MouseUp
+}
+
 interface BoardClient {
-    onMouseDown(cid: string, x: number, y: number);
-    onMouseDrag(cid: string, x: number, y: number);
-    onMouseUp(cid: string, x: number, y: number);
+    onDrawEvent(cid: string, type: DrawEventType, x: number, y: number);
     onMouseMove(cid: string, x: number, y: number);
 }
 
 interface BoardServer {
-    onMouseDown(x: number, y: number);
-    onMouseDrag(x: number, y: number);
-    onMouseUp(x: number, y: number);
+    onDrawEvent(type: DrawEventType, x: number, y: number);
     onMouseMove(x: number, y: number);
 }
 
@@ -54,18 +56,19 @@ class DrawManager {
 
 
     private initializeNetwork() {
-        this.manager.hub.client.onMouseDown = (cid: string, x: number, y: number) => {
-            this.tool.onMouseDown(this.spoofEvent(x, y), cid, false);
-            paper.view.draw();
-        };
+        this.manager.hub.client.onDrawEvent = (cid: string, type: DrawEventType, x: number, y: number) => {
+            switch (type) {
+                case DrawEventType.MouseDown:
+                    this.tool.onMouseDown(this.spoofEvent(x, y), cid, false);
+                    break;
+                case DrawEventType.MouseDrag:
+                    this.tool.onMouseDrag(this.spoofEvent(x, y), cid, false);
+                    break;
+                case DrawEventType.MouseUp:
+                    this.tool.onMouseUp(this.spoofEvent(x, y), cid, false);
+                    break;
+            }
 
-        this.manager.hub.client.onMouseDrag = (cid: string, x: number, y: number) => {
-            this.tool.onMouseDrag(this.spoofEvent(x, y), cid, false);
-            paper.view.draw();
-        };
-
-        this.manager.hub.client.onMouseUp = (cid: string, x: number, y: number) => {
-            this.tool.onMouseUp(this.spoofEvent(x, y), cid, false);
             paper.view.draw();
         };
 
@@ -91,7 +94,7 @@ class DrawManager {
                 path.add(event.point);
 
                 if (send) {
-                    this.sendMouseDown(event);
+                    this.sendDrawEvent(DrawEventType.MouseDown, event);
                 }
             }
         };
@@ -103,7 +106,7 @@ class DrawManager {
                 path.add(event.point);
 
                 if (send) {
-                    this.sendMouseDrag(event);
+                    this.sendDrawEvent(DrawEventType.MouseDrag , event);
                 }
             }
         };
@@ -115,7 +118,7 @@ class DrawManager {
                 path.simplify(10);
 
                 if (send) {
-                    this.sendMouseUp(event);
+                    this.sendDrawEvent(DrawEventType.MouseUp, event);
                 }
             }
         };
@@ -129,16 +132,8 @@ class DrawManager {
         });
     }
 
-    private sendMouseDown(event) {
-        this.manager.hub.server.onMouseDown(event.point.x, event.point.y);
-    }
-
-    private sendMouseDrag(event) {
-        this.manager.hub.server.onMouseDrag(event.point.x, event.point.y);
-    }
-
-    private sendMouseUp(event) {
-        this.manager.hub.server.onMouseUp(event.point.x, event.point.y);
+    private sendDrawEvent(type: DrawEventType, event: any) {
+        this.manager.hub.server.onDrawEvent(type, event.point.x, event.point.y);
     }
 
     private sendMouseMove(x: number, y: number) {

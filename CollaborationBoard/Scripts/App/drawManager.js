@@ -1,4 +1,11 @@
-﻿var DrawManager = (function () {
+﻿var DrawEventType;
+(function (DrawEventType) {
+    DrawEventType[DrawEventType["MouseDown"] = 0] = "MouseDown";
+    DrawEventType[DrawEventType["MouseDrag"] = 1] = "MouseDrag";
+    DrawEventType[DrawEventType["MouseUp"] = 2] = "MouseUp";
+})(DrawEventType || (DrawEventType = {}));
+
+var DrawManager = (function () {
     function DrawManager(manager, canvasId) {
         this.$canvas = $("#" + canvasId);
         this.manager = manager;
@@ -34,18 +41,19 @@
 
     DrawManager.prototype.initializeNetwork = function () {
         var _this = this;
-        this.manager.hub.client.onMouseDown = function (cid, x, y) {
-            _this.tool.onMouseDown(_this.spoofEvent(x, y), cid, false);
-            paper.view.draw();
-        };
+        this.manager.hub.client.onDrawEvent = function (cid, type, x, y) {
+            switch (type) {
+                case 0 /* MouseDown */:
+                    _this.tool.onMouseDown(_this.spoofEvent(x, y), cid, false);
+                    break;
+                case 1 /* MouseDrag */:
+                    _this.tool.onMouseDrag(_this.spoofEvent(x, y), cid, false);
+                    break;
+                case 2 /* MouseUp */:
+                    _this.tool.onMouseUp(_this.spoofEvent(x, y), cid, false);
+                    break;
+            }
 
-        this.manager.hub.client.onMouseDrag = function (cid, x, y) {
-            _this.tool.onMouseDrag(_this.spoofEvent(x, y), cid, false);
-            paper.view.draw();
-        };
-
-        this.manager.hub.client.onMouseUp = function (cid, x, y) {
-            _this.tool.onMouseUp(_this.spoofEvent(x, y), cid, false);
             paper.view.draw();
         };
 
@@ -74,7 +82,7 @@
                 path.add(event.point);
 
                 if (send) {
-                    _this.sendMouseDown(event);
+                    _this.sendDrawEvent(0 /* MouseDown */, event);
                 }
             }
         };
@@ -88,7 +96,7 @@
                 path.add(event.point);
 
                 if (send) {
-                    _this.sendMouseDrag(event);
+                    _this.sendDrawEvent(1 /* MouseDrag */, event);
                 }
             }
         };
@@ -102,7 +110,7 @@
                 path.simplify(10);
 
                 if (send) {
-                    _this.sendMouseUp(event);
+                    _this.sendDrawEvent(2 /* MouseUp */, event);
                 }
             }
         };
@@ -117,16 +125,8 @@
         });
     };
 
-    DrawManager.prototype.sendMouseDown = function (event) {
-        this.manager.hub.server.onMouseDown(event.point.x, event.point.y);
-    };
-
-    DrawManager.prototype.sendMouseDrag = function (event) {
-        this.manager.hub.server.onMouseDrag(event.point.x, event.point.y);
-    };
-
-    DrawManager.prototype.sendMouseUp = function (event) {
-        this.manager.hub.server.onMouseUp(event.point.x, event.point.y);
+    DrawManager.prototype.sendDrawEvent = function (type, event) {
+        this.manager.hub.server.onDrawEvent(type, event.point.x, event.point.y);
     };
 
     DrawManager.prototype.sendMouseMove = function (x, y) {
