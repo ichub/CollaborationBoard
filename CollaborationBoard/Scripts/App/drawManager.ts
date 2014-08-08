@@ -15,11 +15,11 @@ interface BoardServer {
 }
 
 class DrawManager {
-    $canvas: JQuery;
-    manager: BoardManager;
-    cursors: any;
-    userPaths: any;
-    tool: any;
+    private $canvas: JQuery;
+    private manager: BoardManager;
+    private cursors: any;
+    private userPaths: any;
+    private tool: any;
 
     constructor(manager: BoardManager, canvasId: string) {
         this.$canvas = $("#" + canvasId);
@@ -48,22 +48,22 @@ class DrawManager {
 
 
     initializeNetwork() {
-        this.manager.board.client.onMouseDown = (cid: string, x: number, y: number) => {
+        this.manager.hub.client.onMouseDown = (cid: string, x: number, y: number) => {
             this.tool.onMouseDown(this.spoofEvent(x, y), cid, false);
             paper.view.draw();
         };
 
-        this.manager.board.client.onMouseDrag = (cid: string, x: number, y: number) => {
+        this.manager.hub.client.onMouseDrag = (cid: string, x: number, y: number) => {
             this.tool.onMouseDrag(this.spoofEvent(x, y), cid, false);
             paper.view.draw();
         };
 
-        this.manager.board.client.onMouseUp = (cid: string, x: number, y: number) => {
+        this.manager.hub.client.onMouseUp = (cid: string, x: number, y: number) => {
             this.tool.onMouseUp(this.spoofEvent(x, y), cid, false);
             paper.view.draw();
         };
 
-        this.manager.board.client.onMouseMove = (cid: string, x: number, y: number) => {
+        this.manager.hub.client.onMouseMove = (cid: string, x: number, y: number) => {
             if (!this.cursors[cid]) {
                 this.cursors[cid] = new Cursor();
             }
@@ -118,19 +118,19 @@ class DrawManager {
     }
 
     sendMouseDown(event) {
-        this.manager.board.server.onMouseDown(event.point.x, event.point.y);
+        this.manager.hub.server.onMouseDown(event.point.x, event.point.y);
     }
 
     sendMouseDrag(event) {
-        this.manager.board.server.onMouseDrag(event.point.x, event.point.y);
+        this.manager.hub.server.onMouseDrag(event.point.x, event.point.y);
     }
 
     sendMouseUp(event) {
-        this.manager.board.server.onMouseUp(event.point.x, event.point.y);
+        this.manager.hub.server.onMouseUp(event.point.x, event.point.y);
     }
 
     sendMouseMove(x: number, y: number) {
-        this.manager.board.server.onMouseMove(x, y);
+        this.manager.hub.server.onMouseMove(x, y);
     }
 
     onUserConnect(cid: string) {

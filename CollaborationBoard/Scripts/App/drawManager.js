@@ -24,22 +24,22 @@
 
     DrawManager.prototype.initializeNetwork = function () {
         var _this = this;
-        this.manager.board.client.onMouseDown = function (cid, x, y) {
+        this.manager.hub.client.onMouseDown = function (cid, x, y) {
             _this.tool.onMouseDown(_this.spoofEvent(x, y), cid, false);
             paper.view.draw();
         };
 
-        this.manager.board.client.onMouseDrag = function (cid, x, y) {
+        this.manager.hub.client.onMouseDrag = function (cid, x, y) {
             _this.tool.onMouseDrag(_this.spoofEvent(x, y), cid, false);
             paper.view.draw();
         };
 
-        this.manager.board.client.onMouseUp = function (cid, x, y) {
+        this.manager.hub.client.onMouseUp = function (cid, x, y) {
             _this.tool.onMouseUp(_this.spoofEvent(x, y), cid, false);
             paper.view.draw();
         };
 
-        this.manager.board.client.onMouseMove = function (cid, x, y) {
+        this.manager.hub.client.onMouseMove = function (cid, x, y) {
             if (!_this.cursors[cid]) {
                 _this.cursors[cid] = new Cursor();
             }
@@ -102,19 +102,19 @@
     };
 
     DrawManager.prototype.sendMouseDown = function (event) {
-        this.manager.board.server.onMouseDown(event.point.x, event.point.y);
+        this.manager.hub.server.onMouseDown(event.point.x, event.point.y);
     };
 
     DrawManager.prototype.sendMouseDrag = function (event) {
-        this.manager.board.server.onMouseDrag(event.point.x, event.point.y);
+        this.manager.hub.server.onMouseDrag(event.point.x, event.point.y);
     };
 
     DrawManager.prototype.sendMouseUp = function (event) {
-        this.manager.board.server.onMouseUp(event.point.x, event.point.y);
+        this.manager.hub.server.onMouseUp(event.point.x, event.point.y);
     };
 
     DrawManager.prototype.sendMouseMove = function (x, y) {
-        this.manager.board.server.onMouseMove(x, y);
+        this.manager.hub.server.onMouseMove(x, y);
     };
 
     DrawManager.prototype.onUserConnect = function (cid) {

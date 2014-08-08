@@ -1,19 +1,19 @@
 ﻿var BoardManager = (function () {
     function BoardManager() {
         var _this = this;
-        this.board = $.connection.boardHub;
+        this.hub = $.connection.boardHub;
         this.draw = new DrawManager(this, "drawCanvas");
 
-        this.board.client.handshake = function (neighbors) {
+        this.hub.client.handshake = function (neighbors) {
             _this.draw.enableDrawing();
         };
 
-        this.board.client.connect = function (cid) {
+        this.hub.client.connect = function (cid) {
             _this.draw.onUserConnect(cid);
         };
 
         $.connection.hub.start().done(function () {
-            _this.board.server.handshake(boardId);
+            _this.hub.server.handshake(boardId);
         });
     }
     return BoardManager;

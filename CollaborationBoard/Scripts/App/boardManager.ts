@@ -19,24 +19,24 @@ interface BoardServer {
 }
 
 class BoardManager {
-    draw: DrawManager;
-    boardId: string;
-    board: HubProxy;
+    private  draw: DrawManager;
+    private boardId: string;
+    public hub: HubProxy;
 
     constructor() {
-        this.board = $.connection.boardHub;
+        this.hub = $.connection.boardHub;
         this.draw = new DrawManager(this, "drawCanvas");
 
-        this.board.client.handshake = (neighbors: Array<string>): void => {
+        this.hub.client.handshake = (neighbors: Array<string>): void => {
             this.draw.enableDrawing();
         };
 
-        this.board.client.connect = (cid) => {
+        this.hub.client.connect = (cid) => {
             this.draw.onUserConnect(cid);
         };
 
         $.connection.hub.start().done((): void => {
-            this.board.server.handshake(boardId);
+            this.hub.server.handshake(boardId);
         });
     }
 }
