@@ -12,7 +12,8 @@ namespace CollaborationBoard
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js").Include(
-                        "~/Scripts/jquery.signalR-2.1.1.js"));
+                        "~/Scripts/jquery.signalR-2.1.1.js").Include(
+                        "~/Scripts/jquery-ui.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
@@ -28,7 +29,8 @@ namespace CollaborationBoard
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/jquery-ui.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/app_scripts").IncludeDirectory("~/Scripts/App/", "*.js"));
             bundles.Add(new ScriptBundle("~/bundles/common_scripts").IncludeDirectory("~/Scripts/Common/", "*.js").Include("~/Scripts/paper-full.js"));

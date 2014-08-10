@@ -6,6 +6,10 @@ enum DrawEventType {
     MouseUp
 }
 
+interface JQuery {
+    draggable(...params: Array<any>);
+}
+
 interface BoardClient {
     onDrawEvent(event: DrawEvent);
     onMouseMove(cid: string, x: number, y: number);
@@ -32,18 +36,27 @@ class DrawEvent {
 
 class DrawManager {
     private $canvas: JQuery;
+    private $container: JQuery;
     private manager: BoardManager;
     private cursors: any;
     private userPaths: any;
     private tool: any;
     private _enabled: boolean;
+    private canvasMargin: number;
 
     public constructor(manager: BoardManager, canvasId: string) {
         this.$canvas = $("#" + canvasId);
+        this.$container = this.$canvas.parent();
+
+        //this.$canvas.draggable({
+        //    cursor: "move",
+        //});
+
         this.manager = manager;
         this.cursors = new Object();
         this.userPaths = new Object();
         this.enabled = false;
+        this.canvasMargin = 100;
 
         paper.setup(canvasId);
         this.tool = this.createTool();
@@ -67,7 +80,6 @@ class DrawManager {
         result.tool = this.tool;
         return result;
     }
-
 
     private initializeNetwork(): void {
         this.manager.hub.client.onDrawEvent = (event: DrawEvent) => {
@@ -177,11 +189,11 @@ class DrawManager {
         }
     }
 
-    public onUserConnect(cid: string): void{
+    public onUserConnect(cid: string): void {
         console.log(format("user %s connected", cid));
     }
 
-    public onUserDisconnect(cid: string): void{
+    public onUserDisconnect(cid: string): void {
         console.log(format("user %s disconnected", cid));
     }
 }

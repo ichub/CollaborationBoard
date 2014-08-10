@@ -5,7 +5,7 @@
         this.draw = new DrawManager(this, "drawCanvas");
 
         this.hub.client.handshake = function (neighbors, actions) {
-            _this.draw.enabled = true;
+            //this.draw.enabled = true;
             _this.draw.processLoadEvents(actions);
         };
 

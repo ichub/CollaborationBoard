@@ -19,10 +19,16 @@ var DrawEvent = (function () {
 var DrawManager = (function () {
     function DrawManager(manager, canvasId) {
         this.$canvas = $("#" + canvasId);
+        this.$container = this.$canvas.parent();
+
+        //this.$canvas.draggable({
+        //    cursor: "move",
+        //});
         this.manager = manager;
         this.cursors = new Object();
         this.userPaths = new Object();
         this.enabled = false;
+        this.canvasMargin = 100;
 
         paper.setup(canvasId);
         this.tool = this.createTool();
