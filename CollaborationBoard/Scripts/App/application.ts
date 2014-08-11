@@ -19,14 +19,14 @@ interface BoardServer {
     handshake(boardId: string): void;
 }
 
-class BoardManager {
-    private draw: DrawManager;
+class Application {
+    private draw: Canvas;
     private boardId: string;
     public hub: HubProxy;
 
     public constructor() {
         this.hub = $.connection.boardHub;
-        this.draw = new DrawManager(this, "drawCanvas");
+        this.draw = new Canvas(this, "drawCanvas");
 
         this.hub.client.handshake = (neighbors: Array<string>, actions: Array<DrawEvent>): void => {
             this.draw.enabled = true;
@@ -47,7 +47,9 @@ class BoardManager {
     }
 }
 
+var app;
+
 onload = (): void => {
     ExtendJQuery();
-    var manager = new BoardManager();
+    app = new Application();
 };

@@ -1,6 +1,4 @@
-﻿declare var paper;
-
-enum DrawEventType {
+﻿enum DrawEventType {
     MouseDown,
     MouseDrag,
     MouseUp
@@ -34,17 +32,14 @@ class DrawEvent {
     }
 }
 
-class DrawManager {
+class Canvas {
     private $canvas: JQuery;
     private $container: JQuery;
-    private manager: BoardManager;
+    private manager: Application;
     private cursors: any;
-    private userPaths: any;
-    private tool: any;
     private _enabled: boolean;
-    private canvasMargin: number;
 
-    public constructor(manager: BoardManager, canvasId: string) {
+    public constructor(manager: Application, canvasId: string) {
         this.$canvas = $("#" + canvasId);
         this.$container = this.$canvas.parent();
 
@@ -54,12 +49,8 @@ class DrawManager {
 
         this.manager = manager;
         this.cursors = new Object();
-        this.userPaths = new Object();
-        this.enabled = false;
-        this.canvasMargin = 100;
+        this._enabled = false;
 
-        paper.setup(canvasId);
-        this.tool = this.createTool();
 
         this.initializeNetwork();
         this.addListeners();
@@ -71,14 +62,6 @@ class DrawManager {
 
     public set enabled(value: boolean) {
         this._enabled = value;
-    }
-
-    private spoofEvent(x: number, y: number): any {
-        var result = new paper.ToolEvent();
-
-        result.point = new paper.Point(x, y);
-        result.tool = this.tool;
-        return result;
     }
 
     private initializeNetwork(): void {
@@ -93,60 +76,6 @@ class DrawManager {
 
             this.cursors[cid].setPosition(x, y);
         };
-    }
-
-    private createTool(): any {
-        var tool = new paper.Tool();
-
-        this.userPaths.own = new paper.Path();
-
-        tool.onMouseDown = (event: any, userId= this.userPaths.own, isLocalChange = true): void => {
-            if (this.enabled) {
-                var path = (this.userPaths[userId] = new paper.Path());
-                path.strokeWidth = 0;
-                if (isLocalChange) {
-                    path.strokeCap = "round";
-                    path.strokeColor = "black";
-                    path.fullySelected = true;
-                }
-
-                path.add(event.point);
-
-                if (isLocalChange) {
-                    this.sendDrawEvent(DrawEventType.MouseDown, event);
-                }
-            }
-        };
-
-        tool.onMouseDrag = (event: any, userId= this.userPaths.own, isLocalChange = true): void=> {
-            if (this.enabled) {
-                var path = this.userPaths[userId];
-
-                path.add(event.point);
-
-                if (isLocalChange) {
-                    this.sendDrawEvent(DrawEventType.MouseDrag, event);
-                }
-            }
-        };
-
-        tool.onMouseUp = (event: any, userId= this.userPaths.own, isLocalChange = true): void => {
-            if (this.enabled) {
-                var path = this.userPaths[userId];
-
-                path.simplify(10);
-                path.strokeWidth = 5;
-                path.fullySelected = false;
-                path.strokeColor = "black";
-                path.strokeCap = "round";
-
-                if (isLocalChange) {
-                    this.sendDrawEvent(DrawEventType.MouseUp, event);
-                }
-            }
-        };
-
-        return tool;
     }
 
     private addListeners(): void {
@@ -170,17 +99,15 @@ class DrawManager {
 
         switch (event.type) {
             case DrawEventType.MouseDown:
-                this.tool.onMouseDown(this.spoofEvent(x, y), cid, false);
+                //this.tool.onMouseDown(this.spoofEvent(x, y), cid, false);
                 break;
             case DrawEventType.MouseDrag:
-                this.tool.onMouseDrag(this.spoofEvent(x, y), cid, false);
+                //this.tool.onMouseDrag(this.spoofEvent(x, y), cid, false);
                 break;
             case DrawEventType.MouseUp:
-                this.tool.onMouseUp(this.spoofEvent(x, y), cid, false);
+                //this.tool.onMouseUp(this.spoofEvent(x, y), cid, false);
                 break;
         }
-
-        paper.view.draw();
     }
 
     public processLoadEvents(events: Array<DrawEvent>): void {
