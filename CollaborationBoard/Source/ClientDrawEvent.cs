@@ -12,20 +12,14 @@ namespace CollaborationBoard
         [DataMember(Name = "cid")]
         public string Sender { get; set; }
 
-        [DataMember(Name = "x")]
-        public int X { get; set; }
+        [DataMember(Name = "point")]
+        public Point Point { get; private set; }
 
-        [DataMember(Name = "y")]
-        public int Y { get; set; }
-
-        [DataMember(Name = "lastX")]
-        public int LastX { get; set; }
-
-        [DataMember(Name = "lastY")]
-        public int LastY { get; set; }
+        [DataMember(Name = "lastPoint")]
+        public Point LastPoint { get; private set; }
 
         [DataMember(Name = "type")]
-        public int EventType { get; set; }
+        public int EventType { get; private set; }
 
         public ClientDrawEvent()
         {

@@ -187,6 +187,7 @@
     <Compile Include="Source\ClientDrawEvent.cs" />
     <Compile Include="Source\Extensions.cs" />
     <Compile Include="Source\GenericServerError.cs" />
+    <Compile Include="Source\Point.cs" />
     <Compile Include="Source\RequestContext.cs" />
     <Compile Include="Source\User.cs" />
     <Compile Include="Source\UserManager.cs" />

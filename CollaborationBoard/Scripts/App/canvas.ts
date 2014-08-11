@@ -21,18 +21,14 @@ interface BoardServer {
 class DrawEvent {
     public type: DrawEventType;
     public cid: string;
-    public x: number;
-    public y: number;
-    public lastX: number;
-    public lastY: number;
+    public point: Point;
+    public lastPoint: Point;
 
-    constructor(type: DrawEventType, x: number, y: number, lastX: number, lastY: number, cid = "me") {
+    constructor(type: DrawEventType, point: Point, lastPoint: Point, cid = "me") {
         this.type = type;
         this.cid = cid;
-        this.x = x;
-        this.y = y;
-        this.lastX = lastX;
-        this.lastY = lastY;
+        this.point = point;
+        this.lastPoint = lastPoint;
     }
 }
 

@@ -37,8 +37,8 @@
 
     private onMouseDrag(event: DrawEvent): void {
         this.context.beginPath();
-        this.context.moveTo(event.x, event.y);
-        this.context.lineTo(event.lastX, event.lastY);
+        this.context.moveTo(event.point.x, event.point.y);
+        this.context.lineTo(event.lastPoint.x, event.lastPoint.y);
         this.context.stroke();
     }
 
@@ -48,7 +48,7 @@
 
             this.lastMouse = new Point(e.clientX, e.clientY);
 
-            var event = new DrawEvent(DrawEventType.MouseDown, e.clientX, e.clientY, this.lastMouse.x, this.lastMouse.y);
+            var event = new DrawEvent(DrawEventType.MouseDown, new Point(e.clientX, e.clientY), new Point(this.lastMouse.x, this.lastMouse.y));
             this.onMouseDown(event);
 
             this.canvas.sendDrawEvent(event);
@@ -57,7 +57,7 @@
         this.$canvas.mouseup(e => {
             this.isMouseDown = false;
 
-            var event = new DrawEvent(DrawEventType.MouseUp, e.clientX, e.clientY, this.lastMouse.x, this.lastMouse.y);
+            var event = new DrawEvent(DrawEventType.MouseUp, new Point(e.clientX, e.clientY), new Point(this.lastMouse.x, this.lastMouse.y));
             this.onMouseDown(event);
 
             this.canvas.sendDrawEvent(event);
@@ -65,7 +65,7 @@
 
         this.$canvas.mousemove(e => {
             if (this.isMouseDown) {
-                var event = new DrawEvent(DrawEventType.MouseDrag, e.clientX, e.clientY, this.lastMouse.x, this.lastMouse.y);
+                var event = new DrawEvent(DrawEventType.MouseDrag, new Point(e.clientX, e.clientY), new Point(this.lastMouse.x, this.lastMouse.y));
                 this.onMouseDrag(event);
 
                 this.lastMouse = new Point(e.clientX, e.clientY);
