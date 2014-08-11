@@ -23,12 +23,16 @@ class DrawEvent {
     public cid: string;
     public x: number;
     public y: number;
+    public lastX: number;
+    public lastY: number;
 
-    constructor(type: DrawEventType, x: number, y: number, cid = "me") {
+    constructor(type: DrawEventType, x: number, y: number, lastX: number, lastY: number, cid = "me") {
         this.type = type;
         this.cid = cid;
         this.x = x;
         this.y = y;
+        this.lastX = lastX;
+        this.lastY = lastY;
     }
 }
 
@@ -88,8 +92,8 @@ class Canvas {
         });
     }
 
-    private sendDrawEvent(type: DrawEventType, event: any): void {
-        this.manager.hub.server.onDrawEvent(new DrawEvent(type, event.point.x, event.point.y));
+    public sendDrawEvent(event: DrawEvent): void {
+        this.manager.hub.server.onDrawEvent(event);
     }
 
     private sendMouseMove(x: number, y: number): void {

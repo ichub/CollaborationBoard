@@ -18,6 +18,12 @@ namespace CollaborationBoard
         [DataMember(Name = "y")]
         public int Y { get; set; }
 
+        [DataMember(Name = "lastX")]
+        public int LastX { get; set; }
+
+        [DataMember(Name = "lastY")]
+        public int LastY { get; set; }
+
         [DataMember(Name = "type")]
         public int EventType { get; set; }
 
