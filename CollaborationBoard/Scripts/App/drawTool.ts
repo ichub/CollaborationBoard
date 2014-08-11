@@ -1,0 +1,71 @@
+﻿class DrawTool {
+    private canvas: Canvas;
+    private $canvas: JQuery;
+    private context: CanvasRenderingContext2D;
+    private isMouseDown: boolean;
+    private lastMouse: Point;
+
+    public constructor(canvas: Canvas) {
+        this.$canvas = canvas.$canvas;
+        this.canvas = canvas;
+        this.context = (<HTMLCanvasElement> this.$canvas.get(0)).getContext("2d");
+
+        this.addListeners();
+        this.isMouseDown = false;
+        this.lastMouse = null;
+    }
+
+    public onMouse(event: DrawEvent): void {
+        switch (event.type) {
+            case DrawEventType.MouseDown:
+                this.onMouseDown(event);
+                break;
+            case DrawEventType.MouseDrag:
+                this.onMouseDrag(event);
+                break;
+            case DrawEventType.MouseUp:
+                this.onMouseUp(event);
+                break;
+        }
+    }
+
+    private onMouseDown(event: DrawEvent): void {
+    }
+
+    private onMouseUp(event: DrawEvent): void {
+    }
+
+    private onMouseDrag(event: DrawEvent): void {
+        this.context.beginPath();
+        this.context.moveTo(event.x, event.y);
+        this.context.lineTo(this.lastMouse.x, this.lastMouse.y);
+        this.context.stroke();
+    }
+
+    private addListeners(): void {
+        this.$canvas.mousedown(e => {
+            this.isMouseDown = true;
+
+            this.lastMouse = new Point(e.clientX, e.clientY);
+
+            var event = new DrawEvent(DrawEventType.MouseDown, e.clientX, e.clientY);
+            this.onMouseDown(event);
+        });
+
+        this.$canvas.mouseup(e => {
+            this.isMouseDown = false;
+
+            var event = new DrawEvent(DrawEventType.MouseUp, e.clientX, e.clientY);
+            this.onMouseDown(event);
+        });
+
+        this.$canvas.mousemove(e => {
+            if (this.isMouseDown) {
+                var event = new DrawEvent(DrawEventType.MouseDrag, e.clientX, e.clientY);
+                this.onMouseDrag(event);
+
+                this.lastMouse = new Point(e.clientX, e.clientY);
+            }
+        });
+    }
+} 

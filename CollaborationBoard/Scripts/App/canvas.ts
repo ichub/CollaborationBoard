@@ -24,7 +24,7 @@ class DrawEvent {
     public x: number;
     public y: number;
 
-    constructor(type: DrawEventType, x: number, y: number, cid = undefined) {
+    constructor(type: DrawEventType, x: number, y: number, cid = "me") {
         this.type = type;
         this.cid = cid;
         this.x = x;
@@ -33,9 +33,11 @@ class DrawEvent {
 }
 
 class Canvas {
-    private $canvas: JQuery;
+    public $canvas: JQuery;
+
     private $container: JQuery;
     private manager: Application;
+    private tool: DrawTool;
     private cursors: any;
     private _enabled: boolean;
 
@@ -43,17 +45,19 @@ class Canvas {
         this.$canvas = $("#" + canvasId);
         this.$container = this.$canvas.parent();
 
-        //this.$canvas.draggable({
-        //    cursor: "move",
-        //});
+        var elem = <HTMLCanvasElement> this.$canvas.get(0);
+
+        elem.width = this.$canvas.width();
+        elem.height = this.$canvas.height();
 
         this.manager = manager;
         this.cursors = new Object();
         this._enabled = false;
 
-
         this.initializeNetwork();
         this.addListeners();
+
+        this.tool = new DrawTool(this);
     }
 
     public get enabled(): boolean {
@@ -66,7 +70,7 @@ class Canvas {
 
     private initializeNetwork(): void {
         this.manager.hub.client.onDrawEvent = (event: DrawEvent) => {
-            this.processDrawEvent(event);
+            this.tool.onMouse(event);
         };
 
         this.manager.hub.client.onMouseMove = (cid: string, x: number, y: number): void=> {
@@ -92,27 +96,9 @@ class Canvas {
         this.manager.hub.server.onMouseMove(x, y);
     }
 
-    private processDrawEvent(event: DrawEvent): void {
-        var x = event.x;
-        var y = event.y;
-        var cid = event.cid;
-
-        switch (event.type) {
-            case DrawEventType.MouseDown:
-                //this.tool.onMouseDown(this.spoofEvent(x, y), cid, false);
-                break;
-            case DrawEventType.MouseDrag:
-                //this.tool.onMouseDrag(this.spoofEvent(x, y), cid, false);
-                break;
-            case DrawEventType.MouseUp:
-                //this.tool.onMouseUp(this.spoofEvent(x, y), cid, false);
-                break;
-        }
-    }
-
     public processLoadEvents(events: Array<DrawEvent>): void {
         for (var i = 0; i < events.length; i++) {
-            this.processDrawEvent(events[i]);
+            this.tool.onMouse(events[i]);
         }
     }
 
