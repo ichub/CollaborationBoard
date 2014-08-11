@@ -1,2 +1,5 @@
-/App/*.js
-/Common/*.map
+App/*.js
+Common/*.js
+
+App/*.map
+Common/*.map
