@@ -29,7 +29,7 @@ class BoardManager {
         this.draw = new DrawManager(this, "drawCanvas");
 
         this.hub.client.handshake = (neighbors: Array<string>, actions: Array<DrawEvent>): void => {
-            //this.draw.enabled = true;
+            this.draw.enabled = true;
             this.draw.processLoadEvents(actions);
         };
 
