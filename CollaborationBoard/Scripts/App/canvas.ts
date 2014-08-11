@@ -84,7 +84,9 @@ class Canvas {
 
     private addListeners(): void {
         this.$canvas.mousemove((e: JQueryMouseEventObject): void=> {
-            this.sendMouseMove(e.clientX, e.clientY);
+            if (this.enabled) {
+                this.sendMouseMove(e.clientX, e.clientY);
+            }
         });
     }
 

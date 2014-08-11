@@ -44,33 +44,39 @@
 
     private addListeners(): void {
         this.$canvas.mousedown(e => {
-            this.isMouseDown = true;
-
-            this.lastMouse = new Point(e.clientX, e.clientY);
-
-            var event = new DrawEvent(DrawEventType.MouseDown, new Point(e.clientX, e.clientY), this.lastMouse);
-            this.onMouseDown(event);
-
-            this.canvas.sendDrawEvent(event);
-        });
-
-        this.$canvas.mouseup(e => {
-            this.isMouseDown = false;
-
-            var event = new DrawEvent(DrawEventType.MouseUp, new Point(e.clientX, e.clientY), this.lastMouse);
-            this.onMouseDown(event);
-
-            this.canvas.sendDrawEvent(event);
-        });
-
-        this.$canvas.mousemove(e => {
-            if (this.isMouseDown) {
-                var event = new DrawEvent(DrawEventType.MouseDrag, new Point(e.clientX, e.clientY), this.lastMouse);
-                this.onMouseDrag(event);
+            if (this.canvas.enabled) {
+                this.isMouseDown = true;
 
                 this.lastMouse = new Point(e.clientX, e.clientY);
 
+                var event = new DrawEvent(DrawEventType.MouseDown, new Point(e.clientX, e.clientY), this.lastMouse);
+                this.onMouseDown(event);
+
                 this.canvas.sendDrawEvent(event);
+            }
+        });
+
+        this.$canvas.mouseup(e => {
+            if (this.canvas.enabled) {
+                this.isMouseDown = false;
+
+                var event = new DrawEvent(DrawEventType.MouseUp, new Point(e.clientX, e.clientY), this.lastMouse);
+                this.onMouseDown(event);
+
+                this.canvas.sendDrawEvent(event);
+            }
+        });
+
+        this.$canvas.mousemove(e => {
+            if (this.canvas.enabled) {
+                if (this.isMouseDown) {
+                    var event = new DrawEvent(DrawEventType.MouseDrag, new Point(e.clientX, e.clientY), this.lastMouse);
+                    this.onMouseDrag(event);
+
+                    this.lastMouse = new Point(e.clientX, e.clientY);
+
+                    this.canvas.sendDrawEvent(event);
+                }
             }
         });
     }
