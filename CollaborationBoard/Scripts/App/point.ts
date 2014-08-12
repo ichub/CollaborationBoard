@@ -6,4 +6,8 @@
         this.x = x;
         this.y = y;
     }
+
+    public round(): Point {
+        return new Point(Math.floor(this.x), Math.floor(this.y));
+    }
 } 

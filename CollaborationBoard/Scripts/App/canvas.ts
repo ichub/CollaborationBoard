@@ -27,8 +27,8 @@ class DrawEvent {
     constructor(type: DrawEventType, point: Point, lastPoint: Point, cid = "me") {
         this.type = type;
         this.cid = cid;
-        this.point = point;
-        this.lastPoint = lastPoint;
+        this.point = point.round();
+        this.lastPoint = lastPoint.round();
     }
 }
 

@@ -13,6 +13,8 @@
         this.addListeners();
         this.isMouseDown = false;
         this.lastMouse = null;
+
+        this.initializeStyle();
     }
 
     public onMouse(event: DrawEvent): void {
@@ -27,6 +29,12 @@
                 this.onMouseUp(event);
                 break;
         }
+    }
+
+    private initializeStyle(): void {
+        this.context.lineCap = "round";
+        this.context.lineJoin = "round";
+        this.context.lineWidth = 5;
     }
 
     private onMouseDown(event: DrawEvent): void {
