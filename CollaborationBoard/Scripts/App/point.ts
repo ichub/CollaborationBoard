@@ -10,4 +10,11 @@
     public round(): Point {
         return new Point(Math.floor(this.x), Math.floor(this.y));
     }
+
+    public asOffset(): JQueryCoordinates {
+        return {
+            top: this.y,
+            left: this.x
+        };
+    }
 } 

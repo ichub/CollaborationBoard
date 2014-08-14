@@ -40,6 +40,7 @@ class Canvas {
     private tool: DrawTool;
     private cursors: any;
     private _enabled: boolean;
+    private entities: Array<Entity>;
 
     public constructor(manager: Application, canvasId: string) {
         this.$canvas = $("#" + canvasId);
@@ -58,6 +59,12 @@ class Canvas {
         this.addListeners();
 
         this.tool = new DrawTool(this);
+        this.entities = [];
+
+        var div = document.createElement("div");
+        div.classList.add("box");
+        document.body.appendChild(div);
+        var entity = new Entity($(div));
     }
 
     public get enabled(): boolean {
@@ -88,6 +95,10 @@ class Canvas {
                 this.sendMouseMove(e.clientX, e.clientY);
             }
         });
+    }
+
+    private addEntity(el: JQuery) {
+        this.entities.push(new Entity(el));
     }
 
     public sendDrawEvent(event: DrawEvent): void {

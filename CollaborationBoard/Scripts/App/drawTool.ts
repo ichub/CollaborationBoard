@@ -44,7 +44,7 @@
     }
 
     private onMouseDrag(event: DrawEvent): void {
-        requestAnimationFrame(() => {
+        requestAnimationFrame(() => { // this call is required for any drawing on canvas, otherwise aliasing bugs happen
             this.context.beginPath();
             this.context.moveTo(event.point.x, event.point.y);
             this.context.lineTo(event.lastPoint.x, event.lastPoint.y);

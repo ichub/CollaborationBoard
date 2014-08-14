@@ -12,8 +12,8 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    width: 2000px;
-    height: 2000px;
+    width: 100vw;
+    height: 100vh;
     overflow: hidden;
     cursor: default;
 
@@ -42,7 +42,6 @@ body {
 
 .cursorContainer {
     display: none;
-
     width: auto;
     height: auto;
     position: absolute;
@@ -56,4 +55,18 @@ body {
         user-select: none;
         font-size: 20pt;
     }
+}
+
+.entity {
+    z-index: 20;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.box {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    background-color: red;
 }
