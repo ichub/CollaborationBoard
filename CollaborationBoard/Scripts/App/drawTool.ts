@@ -44,10 +44,13 @@
     }
 
     private onMouseDrag(event: DrawEvent): void {
-        this.context.beginPath();
-        this.context.moveTo(event.point.x, event.point.y);
-        this.context.lineTo(event.lastPoint.x, event.lastPoint.y);
-        this.context.stroke();
+        requestAnimationFrame(() => {
+            this.context.beginPath();
+            this.context.moveTo(event.point.x, event.point.y);
+            this.context.lineTo(event.lastPoint.x, event.lastPoint.y);
+            this.context.stroke();
+            this.context.closePath();
+        });
     }
 
     private addListeners(): void {
