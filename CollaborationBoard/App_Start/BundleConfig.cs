@@ -25,10 +25,10 @@ namespace CollaborationBoard
             //          "~/Scripts/bootstrap.js",
             //          "~/Scripts/respond.js"));
 
-            //bundles.Add(new StyleBundle("~/bundles/css").Include(
-            //          "~/Content/bootstrap.css",
-            //          "~/Content/site.css",
-            //          "~/Content/jquery-ui.css"));
+            bundles.Add(new StyleBundle("~/bundles/css").Include(
+                      "~/Content/bootstrap.css",
+                      "~/Content/site.css",
+                      "~/Content/jquery-ui.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/app_scripts").IncludeDirectory("~/Scripts/App/", "*.js"));
             //bundles.Add(new ScriptBundle("~/bundles/common_scripts").IncludeDirectory("~/Scripts/Common/", "*.js"));
