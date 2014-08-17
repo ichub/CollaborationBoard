@@ -11,7 +11,7 @@ namespace CollaborationBoard
             bundles.FileSetOrderList.Clear();
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-2.1.1").Include(
+                        "/Scripts/jquery-2.1.1").Include(
                         "~/Scripts/jquery.signalR-2.1.1.js").Include(
                         "~/Scripts/jquery-ui.js"));
 
@@ -27,7 +27,7 @@ namespace CollaborationBoard
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include(
+            bundles.Add(new StyleBundle("~/bundles/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
                       "~/Content/jquery-ui.css"));
