@@ -8,6 +8,8 @@ namespace CollaborationBoard
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+            bundles.FileSetOrderList.Clear();
+
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-2.1.1").Include(
                         "~/Scripts/jquery.signalR-2.1.1.js").Include(
