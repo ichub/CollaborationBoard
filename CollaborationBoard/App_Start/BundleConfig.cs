@@ -11,7 +11,7 @@ namespace CollaborationBoard
             bundles.FileSetOrderList.Clear();
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "/Scripts/jquery-2.1.1").Include(
+                        "~/Scripts/jquery-2.1.1").Include(
                         "~/Scripts/jquery.signalR-2.1.1.js").Include(
                         "~/Scripts/jquery-ui.js"));
 
