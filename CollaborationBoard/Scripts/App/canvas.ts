@@ -60,11 +60,6 @@ class Canvas {
 
         this.tool = new DrawTool(this);
         this.entities = [];
-
-        var div = document.createElement("div");
-        div.classList.add("box");
-        document.body.appendChild(div);
-        var entity = new Entity($(div));
     }
 
     public get enabled(): boolean {
