@@ -68,7 +68,7 @@
         });
 
         this.$canvas.mouseup(e => {
-            if (this.canvas.enabled) {
+            if (this.canvas.enabled && this.isMouseDown) {
                 this.isMouseDown = false;
 
                 var event = new DrawEvent(DrawEventType.MouseUp, new Point(e.clientX, e.clientY), this.lastMouse);

@@ -92,8 +92,8 @@ class Canvas {
         });
     }
 
-    private addEntity(el: JQuery) {
-        this.entities.push(new Entity(el));
+    private addTextbox() {
+        this.entities.push(new EntityText());
     }
 
     public sendDrawEvent(event: DrawEvent): void {
