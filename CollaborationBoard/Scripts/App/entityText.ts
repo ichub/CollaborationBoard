@@ -1,8 +1,8 @@
 ﻿class EntityText extends Entity {
     constructor() {
         var text = document.createElement("input");
+        text.classList.add("entityText");
 
-        text.setAttribute("disabled", "disabled");
         super($(text));
     }
 

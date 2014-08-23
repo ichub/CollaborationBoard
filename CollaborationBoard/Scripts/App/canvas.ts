@@ -6,6 +6,7 @@
 
 interface JQuery {
     draggable(...params: Array<any>);
+    resizable();
 }
 
 interface BoardClient {
@@ -34,13 +35,13 @@ class DrawEvent {
 
 class Canvas {
     public $canvas: JQuery;
+    public entities: EntityCollection;
 
     private $container: JQuery;
     private manager: Application;
     private tool: DrawTool;
     private cursors: any;
     private _enabled: boolean;
-    private entities: Array<Entity>;
 
     public constructor(manager: Application, canvasId: string) {
         this.$canvas = $("#" + canvasId);
@@ -59,7 +60,7 @@ class Canvas {
         this.addListeners();
 
         this.tool = new DrawTool(this);
-        this.entities = [];
+        this.entities = new EntityCollection();
     }
 
     public get enabled(): boolean {
@@ -90,10 +91,6 @@ class Canvas {
                 this.sendMouseMove(e.clientX, e.clientY);
             }
         });
-    }
-
-    private addTextbox() {
-        this.entities.push(new EntityText());
     }
 
     public sendDrawEvent(event: DrawEvent): void {

@@ -21,24 +21,24 @@ interface BoardServer {
 
 class Application {
     private _hub: HubProxy;
-    private draw: Canvas;
+    private canvas: Canvas;
     private boardId: string;
 
     public constructor() {
         this._hub = $.connection.boardHub;
-        this.draw = new Canvas(this, "drawCanvas");
+        this.canvas = new Canvas(this, "drawCanvas");
 
         this._hub.client.handshake = (neighbors: Array<string>, actions: Array<DrawEvent>): void => {
-            this.draw.enabled = true;
-            this.draw.processLoadEvents(actions);
+            this.canvas.enabled = true;
+            this.canvas.processLoadEvents(actions);
         };
 
         this._hub.client.connect = (cid: string): void => {
-            this.draw.onUserConnect(cid);
+            this.canvas.onUserConnect(cid);
         };
 
         this._hub.client.disconnect = (cid: string): void => {
-            this.draw.onUserDisconnect(cid);
+            this.canvas.onUserDisconnect(cid);
         };
 
         $.connection.hub.start().done((): void => {
