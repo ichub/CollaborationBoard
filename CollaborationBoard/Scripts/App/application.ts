@@ -54,7 +54,6 @@ class Application {
 var app;
 
 onload = (): void => {
-    document.body["scroll"] = "no";
     ExtendJQuery();
     app = new Application();
 };
