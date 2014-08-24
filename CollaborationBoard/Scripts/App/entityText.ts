@@ -1,12 +1,12 @@
 ﻿class EntityText extends Entity {
-    constructor() {
+    constructor(canvas: Canvas, id: string) {
         var text = document.createElement("input");
         text.classList.add("entityText");
 
-        super($(text));
+        super(canvas, $(text), id);
     }
 
-    private addListeners() {
-
+    public onDrag(event: JQueryEventObject, ui: any): void {
+        console.log(this.id + " " + event.clientX + " " + event.clientY);
     }
 } 

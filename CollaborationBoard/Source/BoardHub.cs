@@ -36,7 +36,7 @@ namespace CollaborationBoard
             var context = new RequestContext(this, Clients);
             var actions = context.Board.Events;
 
-            Clients.Caller.handshake(context.NeighborIds, actions);
+            Clients.Caller.handshake(context.Caller.ConnectionId, context.NeighborIds, actions);
 
             context.NeighborClients.connect(newUser.ConnectionId);
         }

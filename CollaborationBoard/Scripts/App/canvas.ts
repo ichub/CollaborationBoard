@@ -25,20 +25,20 @@ class DrawEvent {
     public point: Point;
     public lastPoint: Point;
 
-    constructor(type: DrawEventType, point: Point, lastPoint: Point, cid = "me") {
+    constructor(type: DrawEventType, point: Point, lastPoint: Point) {
         this.type = type;
-        this.cid = cid;
         this.point = point.round();
         this.lastPoint = lastPoint.round();
+        this.cid = "";
     }
 }
 
 class Canvas {
     public $canvas: JQuery;
     public entities: EntityCollection;
+    public app: Application;
 
     private $container: JQuery;
-    private manager: Application;
     private tool: DrawTool;
     private cursors: any;
     private _enabled: boolean;
@@ -52,7 +52,7 @@ class Canvas {
         elem.width = this.$canvas.width();
         elem.height = this.$canvas.height();
 
-        this.manager = manager;
+        this.app = manager;
         this.cursors = new Object();
         this._enabled = false;
 
@@ -60,7 +60,7 @@ class Canvas {
         this.addListeners();
 
         this.tool = new DrawTool(this);
-        this.entities = new EntityCollection();
+        this.entities = new EntityCollection(this);
     }
 
     public get enabled(): boolean {
@@ -72,11 +72,11 @@ class Canvas {
     }
 
     private initializeNetwork(): void {
-        this.manager.hub.client.onDrawEvent = (event: DrawEvent) => {
+        this.app.hub.client.onDrawEvent = (event: DrawEvent) => {
             this.tool.onMouse(event);
         };
 
-        this.manager.hub.client.onMouseMove = (cid: string, x: number, y: number): void=> {
+        this.app.hub.client.onMouseMove = (cid: string, x: number, y: number): void=> {
             if (!this.cursors[cid]) {
                 this.cursors[cid] = new Cursor();
             }
@@ -94,11 +94,11 @@ class Canvas {
     }
 
     public sendDrawEvent(event: DrawEvent): void {
-        this.manager.hub.server.onDrawEvent(event);
+        this.app.hub.server.onDrawEvent(event);
     }
 
     private sendMouseMove(x: number, y: number): void {
-        this.manager.hub.server.onMouseMove(x, y);
+        this.app.hub.server.onMouseMove(x, y);
     }
 
     public processLoadEvents(events: Array<DrawEvent>): void {
