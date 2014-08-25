@@ -12,7 +12,7 @@ namespace CollaborationBoard
     {
         public void AddTextEntity(TextEntity entity)
         {
-            var context = new RequestContext(this, Clients);
+            var context = new RequestContext(this);
 
             context.Board.AddTextEntity(entity);
 
@@ -21,7 +21,7 @@ namespace CollaborationBoard
 
         public void TextEntityMove(string id, Point position)
         {
-            var context = new RequestContext(this, Clients);
+            var context = new RequestContext(this);
 
             context.Board.SetEntityPosition(id, position);
 
@@ -30,7 +30,7 @@ namespace CollaborationBoard
 
         public void textEntityUpdateText(string id, string text)
         {
-            var context = new RequestContext(this, Clients);
+            var context = new RequestContext(this);
 
             context.Board.SetTextEntityText(id, text);
 
@@ -39,7 +39,7 @@ namespace CollaborationBoard
 
         public void OnDrawEvent(ClientDrawEvent e)
         {
-            var context = new RequestContext(this, Clients);
+            var context = new RequestContext(this);
             context.Board.AppendEvent(e);
 
             e.Sender = context.Caller.ConnectionId;
@@ -49,7 +49,7 @@ namespace CollaborationBoard
 
         public void OnMouseMove(double x, double y)
         {
-            var context = new RequestContext(this, Clients);
+            var context = new RequestContext(this);
 
             context.NeighborClients.onMouseMove(context.Caller.ConnectionId, x, y);
         }
@@ -60,7 +60,7 @@ namespace CollaborationBoard
 
             UserManager.AddUser(boardId, newUser);
 
-            var context = new RequestContext(this, Clients);
+            var context = new RequestContext(this);
             var actions = context.Board.Events;
 
             Clients.Caller.handshake(context.Caller.ConnectionId, context.NeighborIds, actions);
@@ -70,7 +70,7 @@ namespace CollaborationBoard
 
         public override Task OnDisconnected(bool stopCalled)
         {
-            var context = new RequestContext(this, Clients);
+            var context = new RequestContext(this);
 
             UserManager.TryRemoveUser(Context.ConnectionId);
 

@@ -14,13 +14,13 @@ namespace CollaborationBoard
         public dynamic NeighborClients { get; private set; }
         public Board Board { get; private set; }
 
-        public RequestContext(BoardHub hub, IHubConnectionContext<dynamic> context)
+        public RequestContext(BoardHub hub)
         {
             this.Caller = UserManager.GetUser(hub.Context.ConnectionId);
             this.Board = BoardManager.GetBoard(this.Caller.BoardId);
             this.Neighbors = UserManager.GetBoardUsersExcept(this.Caller.BoardId, this.Caller.ConnectionId).ToList();
             this.NeighborIds = this.Neighbors.Select(a => a.ConnectionId).ToList();
-            this.NeighborClients = context.Clients(this.NeighborIds);
+            this.NeighborClients = hub.Clients.Clients(this.NeighborIds);
         }
     }
 }
