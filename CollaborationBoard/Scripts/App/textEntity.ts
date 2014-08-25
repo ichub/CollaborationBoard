@@ -1,4 +1,4 @@
-﻿class EntityText extends Entity {
+﻿class TextEntity extends Entity {
     constructor(canvas: Canvas, id: string) {
         var text = document.createElement("input");
         text.classList.add("entityText");

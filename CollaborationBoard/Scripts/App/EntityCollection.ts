@@ -1,13 +1,13 @@
 ﻿interface BoardClient {
-    addTextEntity(entity: EntityText);
+    addTextEntity(entity: TextEntity);
 }
 
 interface BoardServer {
-    addTextEntity(entity: EntityText);
+    addTextEntity(entity: TextEntity);
 }
 
 class EntityCollection {
-    private entityTexts: Array<EntityText>;
+    private entityTexts: Array<TextEntity>;
     private canvas: Canvas;
     private static entityCount = 0;
 
@@ -28,8 +28,8 @@ class EntityCollection {
         return this.canvas.app.cid.replace(/\-/g, "_") + "__" + (EntityCollection.entityCount++);
     }
 
-    private addTextEntityWithoutSync(id: string) : EntityText{
-        var newEntity = new EntityText(this.canvas, id);
+    private addTextEntityWithoutSync(id: string) : TextEntity{
+        var newEntity = new TextEntity(this.canvas, id);
 
         this.entityTexts.push(newEntity);
 
