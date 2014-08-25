@@ -28,7 +28,7 @@ namespace CollaborationBoard
             context.NeighborClients.textEntityMove(id, position);
         }
 
-        public void textEntityUpdateText(string id, string text)
+        public void TextEntityUpdateText(string id, string text)
         {
             var context = new RequestContext(this);
 
