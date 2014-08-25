@@ -1,9 +1,11 @@
 ﻿interface BoardClient {
     addTextEntity(entity: TextEntity);
+    textEntityMove(id: string, to: Point);
 }
 
 interface BoardServer {
     addTextEntity(entity: TextEntity);
+    textEntityMove(id: string, to: Point);
 }
 
 class EntityCollection {
@@ -19,8 +21,18 @@ class EntityCollection {
     }
 
     private initializeNetwork(): void {
-        this.canvas.app.hub.client.addTextEntity = (entity: Entity) => {
-            this.addTextEntityWithoutSync(entity.id);
+        this.canvas.app.hub.client.addTextEntity = (entity: Entity): void=> {
+            this.addTextEntityWithoutSync(entity._id);
+        };
+
+        this.canvas.app.hub.client.textEntityMove = (id: string, to: Point): void => {
+            var matching = this.entityTexts.filter((val, index) => {
+                return val.id == id;
+            })
+
+            if (matching.length == 1) {
+                matching[0].position = Point.clone(to);
+            }
         };
     }
 
@@ -28,7 +40,7 @@ class EntityCollection {
         return this.canvas.app.cid.replace(/\-/g, "_") + "__" + (EntityCollection.entityCount++);
     }
 
-    private addTextEntityWithoutSync(id: string) : TextEntity{
+    private addTextEntityWithoutSync(id: string): TextEntity {
         var newEntity = new TextEntity(this.canvas, id);
 
         this.entityTexts.push(newEntity);

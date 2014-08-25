@@ -20,7 +20,9 @@
 
         this.$container.draggable({
             containment: "#container",
-            drag: this.onDrag
+            drag: (event: JQueryEventObject, ui: any) => {
+                this.onDrag(event, ui);
+            }
         });
     }
 
@@ -46,5 +48,6 @@
     }
 
     public onDrag(event: JQueryEventObject, ui: any): void {
+        this.canvas.app.hub.server.textEntityMove(this.id, Point.fromOffset(ui.offset));
     }
 } 

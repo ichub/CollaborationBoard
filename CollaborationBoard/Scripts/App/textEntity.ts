@@ -6,10 +6,6 @@
         super(canvas, $(text), id);
     }
 
-    public onDrag(event: JQueryEventObject, ui: any): void {
-        console.log(this.id + " " + event.clientX + " " + event.clientY);
-    }
-
     public getSerializable(): any {
         var ser = super.getSerializable();
 

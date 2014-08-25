@@ -19,6 +19,15 @@ namespace CollaborationBoard
             context.NeighborClients.addTextEntity(entity);
         }
 
+        public void TextEntityMove(string id, Point position)
+        {
+            var context = new RequestContext(this, Clients);
+
+            context.Board.SetEntityPosition(id, position);
+
+            context.NeighborClients.textEntityMove(id, position);
+        }
+
         public void OnDrawEvent(ClientDrawEvent e)
         {
             var context = new RequestContext(this, Clients);

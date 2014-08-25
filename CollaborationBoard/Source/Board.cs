@@ -44,5 +44,10 @@ namespace CollaborationBoard
         {
             this.textEntities.Add(entity);
         }
+
+        public void SetEntityPosition(string id, Point position)
+        {
+            this.textEntities.First(a => a.Id == id).Position = position;
+        }
     }
 }

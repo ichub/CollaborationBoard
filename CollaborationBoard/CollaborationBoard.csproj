@@ -208,7 +208,7 @@
     <TypeScriptCompile Include="Scripts\App\drawTool.ts" />
     <TypeScriptCompile Include="Scripts\App\entity.ts" />
     <TypeScriptCompile Include="Scripts\App\entityCollection.ts" />
-    <TypeScriptCompile Include="Scripts\App\entityText.ts" />
+    <TypeScriptCompile Include="Scripts\App\textEntity.ts" />
     <TypeScriptCompile Include="Scripts\App\point.ts" />
     <TypeScriptCompile Include="Scripts\Common\misc.ts" />
     <Content Include="Scripts\bootstrap.js" />
