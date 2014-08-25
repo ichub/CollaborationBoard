@@ -1,6 +1,7 @@
 ﻿class Entity {
+    public $element: JQuery;
+
     private canvas: Canvas;
-    private $element: JQuery;
     private $container: JQuery;
     private _id: string;
 
@@ -27,8 +28,21 @@
         return this._id;
     }
 
-    public setPosition(position: Point): void {
+    public getSerializable(): any {
+        return {
+            _id: this._id,
+            position: this.position,
+        };
+    }
+
+    public set position(position: Point) {
         this.$container.offset(position.asOffset());
+    }
+
+    public get position(): Point {
+        var offset = this.$container.offset();
+
+        return new Point(offset.left, offset.top);
     }
 
     public onDrag(event: JQueryEventObject, ui: any): void {

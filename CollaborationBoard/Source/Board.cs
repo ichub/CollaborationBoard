@@ -17,6 +17,8 @@ namespace CollaborationBoard
             }
         }
 
+        private List<TextEntity> textEntities;
+
         public string Id { get; private set; }
         public string Name { get; private set; }
 
@@ -24,6 +26,7 @@ namespace CollaborationBoard
         {
             this.Id = id;
             this.events = new List<ClientDrawEvent>();
+            this.textEntities = new List<TextEntity>();
         }
 
         public Board(string id, string name)
@@ -35,6 +38,11 @@ namespace CollaborationBoard
         public void AppendEvent(ClientDrawEvent e)
         {
             this.events.Add(e);
+        }
+
+        public void AddTextEntity(TextEntity entity)
+        {
+            this.textEntities.Add(entity);
         }
     }
 }

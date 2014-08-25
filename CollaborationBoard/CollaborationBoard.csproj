@@ -184,6 +184,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source\BoardManager.cs" />
     <Compile Include="Source\ClientDrawEvent.cs" />
+    <Compile Include="Source\Entity.cs" />
     <Compile Include="Source\Extensions.cs" />
     <Compile Include="Source\GenericServerError.cs" />
     <Compile Include="Source\Point.cs" />
@@ -206,7 +207,7 @@
     <TypeScriptCompile Include="Scripts\App\cursor.ts" />
     <TypeScriptCompile Include="Scripts\App\drawTool.ts" />
     <TypeScriptCompile Include="Scripts\App\entity.ts" />
-    <TypeScriptCompile Include="Scripts\App\EntityCollection.ts" />
+    <TypeScriptCompile Include="Scripts\App\entityCollection.ts" />
     <TypeScriptCompile Include="Scripts\App\entityText.ts" />
     <TypeScriptCompile Include="Scripts\App\point.ts" />
     <TypeScriptCompile Include="Scripts\Common\misc.ts" />
