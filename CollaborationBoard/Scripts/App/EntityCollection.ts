@@ -14,11 +14,13 @@ class EntityCollection {
     constructor(canvas: Canvas) {
         this.canvas = canvas;
         this.entityTexts = [];
+
+        this.initializeNetwork();
     }
 
     private initializeNetwork(): void {
         this.canvas.app.hub.client.addTextEntity = (entity: Entity) => {
-            this.addTextEntity(entity.id);
+            this.addTextEntityWithoutSync(entity.id);
         };
     }
 
@@ -26,11 +28,17 @@ class EntityCollection {
         return this.canvas.app.cid.replace(/\-/g, "_") + "__" + (EntityCollection.entityCount++);
     }
 
-    public addTextEntity(id = this.generateId()) {
+    private addTextEntityWithoutSync(id: string) : EntityText{
         var newEntity = new EntityText(this.canvas, id);
 
         this.entityTexts.push(newEntity);
 
-        this.canvas.app.hub.server.addTextEntity(newEntity.getSerializable());
+        return newEntity;
+    }
+
+    public addTextEntity(id = this.generateId()) {
+        var entity = this.addTextEntityWithoutSync(id);
+
+        this.canvas.app.hub.server.addTextEntity(entity.getSerializable());
     }
 } 

@@ -10,10 +10,10 @@ namespace CollaborationBoard
     public class Point
     {
         [DataMember(Name="x")]
-        public int X { get; private set; }
+        public double X { get; private set; }
 
         [DataMember(Name="y")]
-        public int Y { get; private set; }
+        public double Y { get; private set; }
 
         public Point(int x, int y)
         {
