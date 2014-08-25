@@ -22,7 +22,7 @@ class EntityCollection {
 
     private initializeNetwork(): void {
         this.canvas.app.hub.client.addTextEntity = (entity: Entity): void=> {
-            this.addTextEntityWithoutSync(entity._id);
+            this.addTextEntityWithoutSync(entity.id);
         };
 
         this.canvas.app.hub.client.textEntityMove = (id: string, to: Point): void => {

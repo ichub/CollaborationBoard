@@ -32,7 +32,7 @@
 
     public getSerializable(): any {
         return {
-            _id: this._id,
+            id: this._id,
             position: this.position,
         };
     }

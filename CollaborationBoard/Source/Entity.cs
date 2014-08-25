@@ -9,7 +9,7 @@ namespace CollaborationBoard
     [DataContract]
     public abstract class Entity
     {
-        [DataMember(Name = "_id")]
+        [DataMember(Name = "id")]
         public string Id { get; private set; }
 
         [DataMember(Name = "position")]
