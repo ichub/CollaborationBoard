@@ -1,21 +1,20 @@
 ﻿class Entity {
-    public $element: JQuery;
-
-    private canvas: Canvas;
+    private _$element: JQuery;
+    private _canvas: Canvas;
     private $container: JQuery;
     private _id: string;
 
     constructor(canvas: Canvas, $element: JQuery, id: string) {
         this._id = id;
-        this.canvas = canvas;
+        this._canvas = canvas;
         this.$container = $(document.createElement("div"));
-        this.$element = $element;
-        this.$element.addClass("entity");
+        this._$element = $element;
+        this._$element.addClass("entity");
 
         this.$container.addClass("entityContainer");
         this.$container.attr("id", this._id);
 
-        this.$container.append(this.$element);
+        this.$container.append(this._$element);
         $(document.body).append(this.$container);
 
         this.$container.draggable({
@@ -24,6 +23,12 @@
                 this.onDrag(event, ui);
             }
         });
+
+        this.addListeners();
+    }
+
+    public addListeners() {
+
     }
 
     public get id() {
@@ -48,6 +53,14 @@
     }
 
     public onDrag(event: JQueryEventObject, ui: any): void {
-        this.canvas.app.hub.server.textEntityMove(this.id, Point.fromOffset(ui.offset));
+        this._canvas.app.hub.server.textEntityMove(this.id, Point.fromOffset(ui.offset));
+    }
+
+    public get $element() {
+        return this._$element;
+    }
+
+    public get canvas() {
+        return this._canvas;
     }
 } 

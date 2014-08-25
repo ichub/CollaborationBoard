@@ -1,11 +1,13 @@
 ﻿interface BoardClient {
     addTextEntity(entity: TextEntity);
     textEntityMove(id: string, to: Point);
+    textEntityUpdateText(id: string, text: string);
 }
 
 interface BoardServer {
     addTextEntity(entity: TextEntity);
     textEntityMove(id: string, to: Point);
+    textEntityUpdateText(id: string, text: string);
 }
 
 class EntityCollection {
@@ -26,14 +28,18 @@ class EntityCollection {
         };
 
         this.canvas.app.hub.client.textEntityMove = (id: string, to: Point): void => {
-            var matching = this.entityTexts.filter((val, index) => {
-                return val.id == id;
-            })
-
-            if (matching.length == 1) {
-                matching[0].position = Point.clone(to);
-            }
+            this.getEntity<TextEntity>(id).position = Point.clone(to);
         };
+
+        this.canvas.app.hub.client.textEntityUpdateText = (id: string, text: string): void => {
+            this.getEntity<TextEntity>(id).text = text;
+        };
+    }
+
+    private getEntity<T>(id: String): T {
+        return <T> <any> (this.entityTexts.filter((val, index) => {
+            return val.id == id;
+        })[0]);
     }
 
     private generateId(): string {

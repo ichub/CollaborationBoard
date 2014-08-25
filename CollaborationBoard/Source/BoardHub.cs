@@ -28,6 +28,15 @@ namespace CollaborationBoard
             context.NeighborClients.textEntityMove(id, position);
         }
 
+        public void textEntityUpdateText(string id, string text)
+        {
+            var context = new RequestContext(this, Clients);
+
+            context.Board.SetTextEntityText(id, text);
+
+            context.NeighborClients.textEntityUpdateText(id, text);
+        }
+
         public void OnDrawEvent(ClientDrawEvent e)
         {
             var context = new RequestContext(this, Clients);

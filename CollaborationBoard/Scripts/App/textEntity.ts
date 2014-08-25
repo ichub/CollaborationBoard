@@ -14,7 +14,19 @@
         return ser;
     }
 
+    public addListeners(): void {
+        super.addListeners();
+
+        this.$element.on("keyup", (event: JQueryEventObject) => {
+            this.canvas.app.hub.server.textEntityUpdateText(this.id, this.text);
+        });
+    }
+
     public get text() {
-        return this.$element.text();
+        return this.$element.val();
+    }
+
+    public set text(text: string) {
+        this.$element.val(text);
     }
 } 
