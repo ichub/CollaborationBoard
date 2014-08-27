@@ -17,7 +17,7 @@ namespace CollaborationBoard
             }
         }
 
-        private List<TextEntity> textEntities;
+        private Dictionary<string, Entity> entities;
 
         public string Id { get; private set; }
         public string Name { get; private set; }
@@ -26,7 +26,7 @@ namespace CollaborationBoard
         {
             this.Id = id;
             this.events = new List<ClientDrawEvent>();
-            this.textEntities = new List<TextEntity>();
+            this.entities = new Dictionary<string, Entity>();
         }
 
         public Board(string id, string name)
@@ -35,24 +35,39 @@ namespace CollaborationBoard
             this.Name = name;
         }
 
+        private T FindEntity<T>(string id) where T : Entity
+        {
+            return this.FindEntity(id) as T;
+        }
+
+        private Entity FindEntity(string id)
+        {
+            if (this.entities.ContainsKey(id))
+            {
+                return this.entities[id];
+            }
+
+            return null;
+        }
+
         public void AppendEvent(ClientDrawEvent e)
         {
             this.events.Add(e);
         }
 
-        public void AddTextEntity(TextEntity entity)
+        public void AddEntity(Entity entity)
         {
-            this.textEntities.Add(entity);
+            this.entities.Add(entity.Id, entity);
         }
 
         public void SetEntityPosition(string id, Point position)
         {
-            this.textEntities.First(a => a.Id == id).Position = position;
+            this.FindEntity(id).Position = position;
         }
 
         public void SetTextEntityText(string id, string text)
         {
-            this.textEntities.First(a => a.Id == id).Text = text;
+            this.FindEntity<TextEntity>(id).Text = text;
         }
     }
 }

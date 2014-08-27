@@ -53,7 +53,7 @@
     }
 
     public onDrag(event: JQueryEventObject, ui: any): void {
-        this._canvas.app.hub.server.textEntityMove(this.id, Point.fromOffset(ui.offset));
+        this._canvas.app.hub.server.entityMove(this.id, Point.fromOffset(ui.offset));
     }
 
     public get $element() {

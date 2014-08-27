@@ -1,13 +1,17 @@
 ﻿interface BoardClient {
     addTextEntity(entity: TextEntity);
-    textEntityMove(id: string, to: Point);
     textEntityUpdateText(id: string, text: string);
+    entityMove(id: string, to: Point);
 }
 
 interface BoardServer {
     addTextEntity(entity: TextEntity);
-    textEntityMove(id: string, to: Point);
     textEntityUpdateText(id: string, text: string);
+    entityMove(id: string, to: Point);
+}
+
+enum EntityType {
+    Text
 }
 
 class EntityCollection {
@@ -27,7 +31,7 @@ class EntityCollection {
             this.addTextEntityWithoutSync(entity.id);
         };
 
-        this.canvas.app.hub.client.textEntityMove = (id: string, to: Point): void => {
+        this.canvas.app.hub.client.entityMove = (id: string, to: Point): void => {
             this.getEntity<TextEntity>(id).position = Point.clone(to);
         };
 
@@ -42,8 +46,8 @@ class EntityCollection {
         })[0]);
     }
 
-    private generateId(): string {
-        return this.canvas.app.cid.replace(/\-/g, "_") + "__" + (EntityCollection.entityCount++);
+    private generateId(type: EntityType): string {
+        return this.canvas.app.cid.replace(/\-/g, "_") + "__" + (EntityCollection.entityCount++) + "__" + type.toString();
     }
 
     private addTextEntityWithoutSync(id: string): TextEntity {
@@ -54,7 +58,7 @@ class EntityCollection {
         return newEntity;
     }
 
-    public addTextEntity(id = this.generateId()) {
+    public addTextEntity(id = this.generateId(EntityType.Text)) {
         var entity = this.addTextEntityWithoutSync(id);
 
         this.canvas.app.hub.server.addTextEntity(entity.getSerializable());

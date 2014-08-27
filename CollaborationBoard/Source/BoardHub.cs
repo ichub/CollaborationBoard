@@ -14,18 +14,18 @@ namespace CollaborationBoard
         {
             var context = new RequestContext(this);
 
-            context.Board.AddTextEntity(entity);
+            context.Board.AddEntity(entity);
 
             context.NeighborClients.addTextEntity(entity);
         }
 
-        public void TextEntityMove(string id, Point position)
+        public void EntityMove(string id, Point position)
         {
             var context = new RequestContext(this);
 
             context.Board.SetEntityPosition(id, position);
 
-            context.NeighborClients.textEntityMove(id, position);
+            context.NeighborClients.entityMove(id, position);
         }
 
         public void TextEntityUpdateText(string id, string text)
