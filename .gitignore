@@ -158,3 +158,6 @@ $RECYCLE.BIN/
 # Sql Database Files
 *.mdf
 *.ldf
+
+# private configuration files
+*.private
