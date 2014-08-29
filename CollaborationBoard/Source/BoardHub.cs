@@ -63,7 +63,7 @@ namespace CollaborationBoard
             var context = new RequestContext(this);
             var actions = context.Board.Events;
 
-            Clients.Caller.handshake(context.Caller.ConnectionId, context.NeighborIds, actions);
+            Clients.Caller.handshake(context.Caller.ConnectionId, new BoardSnapshot(context.Board));
 
             context.NeighborClients.connect(newUser.ConnectionId);
         }

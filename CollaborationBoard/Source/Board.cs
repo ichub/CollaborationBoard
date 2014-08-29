@@ -9,7 +9,7 @@ namespace CollaborationBoard
     {
         private List<ClientDrawEvent> events;
 
-        public IReadOnlyCollection<ClientDrawEvent> Events
+        public IReadOnlyList<ClientDrawEvent> Events
         {
             get
             {
@@ -18,6 +18,14 @@ namespace CollaborationBoard
         }
 
         private Dictionary<string, Entity> entities;
+
+        public IReadOnlyList<Entity> Entities
+        {
+            get
+            {
+                return this.entities.Select(a => a.Value).ToList();
+            }
+        }
 
         public string Id { get; private set; }
         public string Name { get; private set; }

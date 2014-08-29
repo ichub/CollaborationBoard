@@ -10,7 +10,7 @@ interface HubProxy {
 declare var boardId;
 
 interface BoardClient {
-    handshake(cid: string, neighbor: Array<string>, actions: Array<DrawEvent>): void;
+    handshake(cid: string, snapshot: BoardSnapshot): void;
     connect(cid: string): void;
     disconnect(cid: string): void;
 }
@@ -29,10 +29,10 @@ class Application {
         this._hub = $.connection.boardHub;
         this.canvas = new Canvas(this, "drawCanvas");
 
-        this._hub.client.handshake = (cid: string, neighbors: Array<string>, actions: Array<DrawEvent>): void => {
+        this._hub.client.handshake = (cid: string, snapshot: BoardSnapshot): void => {
             this._cid = cid;
             this.canvas.enabled = true;
-            this.canvas.processLoadEvents(actions);
+            this.canvas.initializeFromSnapshot(snapshot);
         };
 
         this._hub.client.connect = (cid: string): void => {

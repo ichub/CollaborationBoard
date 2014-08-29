@@ -191,6 +191,7 @@
     <Compile Include="Source\BoardHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source\BoardManager.cs" />
+    <Compile Include="Source\BoardSnapshot.cs" />
     <Compile Include="Source\ClientDrawEvent.cs" />
     <Compile Include="Source\Entity.cs" />
     <Compile Include="Source\Extensions.cs" />
@@ -213,6 +214,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <TypeScriptCompile Include="Scripts\App\boardSnapshot.ts" />
     <TypeScriptCompile Include="Scripts\App\cursor.ts" />
     <TypeScriptCompile Include="Scripts\App\drawTool.ts" />
     <TypeScriptCompile Include="Scripts\App\entity.ts" />

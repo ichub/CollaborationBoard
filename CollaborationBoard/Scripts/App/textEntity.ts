@@ -1,9 +1,12 @@
 ﻿class TextEntity extends Entity {
-    constructor(canvas: Canvas, id: string) {
-        var text = document.createElement("input");
-        text.classList.add("entityText");
+    constructor(canvas: Canvas, id: string, text: string, position: Point) {
+        var textElement = document.createElement("input");
+        textElement.classList.add("entityText");
 
-        super(canvas, $(text), id);
+        super(canvas, $(textElement), id);
+
+        this.text = text;
+        this.position = position;
     }
 
     public getSerializable(): any {

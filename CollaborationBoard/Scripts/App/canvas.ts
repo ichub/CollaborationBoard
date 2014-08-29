@@ -101,10 +101,24 @@ class Canvas {
         this.app.hub.server.onMouseMove(x, y);
     }
 
-    public processLoadEvents(events: Array<DrawEvent>): void {
+    private processLoadEvents(events: Array<DrawEvent>): void {
         for (var i = 0; i < events.length; i++) {
             this.tool.onMouse(events[i]);
         }
+    }
+
+    private processLoadEntities(snapshot: BoardSnapshot) {
+        for (var i = 0; i < snapshot.textEntities.length; i++) {
+            var entity = snapshot.textEntities[i];
+            entity.position = Point.clone(entity.position);
+
+            this.entities.addTextEntity(entity.id, entity.text, entity.position);
+        }
+    }
+
+    public initializeFromSnapshot(snapshot: BoardSnapshot): void {
+        this.processLoadEvents(snapshot.events);
+        this.processLoadEntities(snapshot);
     }
 
     public onUserConnect(cid: string): void {
