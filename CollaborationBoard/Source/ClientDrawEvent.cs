@@ -20,9 +20,5 @@ namespace CollaborationBoard
 
         [DataMember(Name = "type")]
         public int EventType { get; private set; }
-
-        public ClientDrawEvent()
-        {
-        }
     }
 }

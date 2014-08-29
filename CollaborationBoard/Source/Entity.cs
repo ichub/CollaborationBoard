@@ -14,12 +14,6 @@ namespace CollaborationBoard
 
         [DataMember(Name = "position")]
         public Point Position { get; set; }
-
-        public Entity(string id, Point position)
-        {
-            this.Id = id;
-            this.Position = position;
-        }
     }
 
     [DataContract]
@@ -27,11 +21,5 @@ namespace CollaborationBoard
     {
         [DataMember(Name = "text")]
         public string Text { get; set; }
-
-        public TextEntity(string id, Point position)
-            : base(id, position)
-        {
-
-        }
     }
 }

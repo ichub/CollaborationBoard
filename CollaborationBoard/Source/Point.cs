@@ -14,15 +14,5 @@ namespace CollaborationBoard
 
         [DataMember(Name="y")]
         public double Y { get; private set; }
-
-        public Point(int x, int y)
-        {
-            this.X = x;
-            this.Y = y;
-        }
-
-        public Point()
-        {
-        }
     }
 }
