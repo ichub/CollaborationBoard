@@ -28,7 +28,7 @@ class EntityCollection {
 
     private initializeNetwork(): void {
         this.canvas.app.hub.client.addTextEntity = (entity: TextEntity): void=> {
-            this.addTextEntityWithoutSync(entity.id, entity.text, entity.position);
+            this.addTextEntityWithoutSync(entity.id, entity.text, Point.clone(entity.position));
         };
 
         this.canvas.app.hub.client.entityMove = (id: string, to: Point): void => {
