@@ -7,6 +7,22 @@ namespace CollaborationBoard
 {
     public class Board
     {
+        public IReadOnlyList<User> Users
+        {
+            get
+            {
+                return UserManager.GetBoardUsers(this.Id).ToList();
+            }
+        }
+
+        public bool IsEmpty
+        {
+            get
+            {
+                return this.Users.Count == 0;
+            }
+        }
+
         private List<ClientDrawEvent> events;
 
         public IReadOnlyList<ClientDrawEvent> Events

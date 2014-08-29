@@ -66,6 +66,11 @@ namespace CollaborationBoard
             Clients.Caller.handshake(context.Caller.ConnectionId, new BoardSnapshot(context.Board));
 
             context.NeighborClients.connect(newUser.ConnectionId);
+
+            if (BoardManager.IsBoardScheduledForDeletion(boardId))
+            {
+                BoardManager.CancelBoardDeletion(boardId);
+            }
         }
 
         public override Task OnDisconnected(bool stopCalled)
@@ -76,7 +81,19 @@ namespace CollaborationBoard
 
             context.NeighborClients.disconnect(Context.ConnectionId);
 
+            if (context.Board.IsEmpty)
+            {
+                BoardManager.ScheduleBoardDeletion(TimeSpan.FromMinutes(5), context.Board.Id);
+            }
+
             return base.OnDisconnected(stopCalled);
+        }
+
+        public override Task OnConnected()
+        {
+            var context = new RequestContext(this);
+
+            return base.OnConnected();
         }
     }
 }
