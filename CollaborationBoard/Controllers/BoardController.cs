@@ -24,13 +24,20 @@ namespace CollaborationBoard
             return View("BoardError");
         }
 
-        [Route("Board/New")]
-        [HttpGet]
-        public JsonResult CreateBoard()
+        [Route("Board/Create")]
+        [HttpPost]
+        public ActionResult NewBoard([Bind(Include="Title,Password,PasswordEnabled,PasswordRepeat")]BoardModel model)
         {
-            string id = BoardManager.CreateBoard();
+            if (ModelState.IsValid)
+            {
+                string id = BoardManager.CreateBoard(model);
 
-            return Json(new NewBoardModel(id), JsonRequestBehavior.AllowGet);
+                return new RedirectResult("/board/" + id);
+            }
+
+            ViewBag.ErrorMessage = "The parameters for creating the board were incorrect";
+
+            return View("BoardError");
         }
     }
 }

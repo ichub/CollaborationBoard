@@ -20,11 +20,12 @@ namespace CollaborationBoard
             deletionCancelationObjects = new Dictionary<string, IDisposable>();
         }
 
-        public static string CreateBoard()
+        public static string CreateBoard(BoardModel model)
         {
             string id = random.String(8);
 
             Board board = new Board(id);
+            board.Initialize(model);
 
             boards.Add(board);
 

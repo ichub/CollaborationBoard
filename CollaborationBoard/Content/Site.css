@@ -15,3 +15,83 @@ select,
 textarea {
     max-width: 280px;
 }
+
+#createBoardForm .form-group > label {
+    margin-top: -5px !important;
+    font-size: 10pt !important;
+}
+
+.checkbox {
+    visibility: hidden;
+    margin-left: -10000px !important;
+    position: absolute;
+}
+
+    .checkbox + label, .checkLabel {
+        display: block;
+        position: relative;
+        cursor: pointer;
+        outline: none;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+    }
+
+input.checkbox + label {
+    width: 120px;
+    height: 30px;
+    box-sizing: border-box;
+    line-height: 1.5;
+}
+
+    input.checkbox + label:before, input.checkbox + label:after {
+        display: block;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        bottom: 0px;
+        content: "";
+    }
+
+    input.checkbox + label:after {
+        width: 60px;
+        background-color: #EEE;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+        transition: margin 0.3s;
+    }
+
+input.checkbox:checked + label:after {
+    margin-left: 60px;
+}
+
+.nocheck {
+    background-color: #C2C2C2;
+    color: #5E5E5E;
+}
+
+.yescheck {
+    background-color: #009FE3;
+    color: #054B69;
+}
+
+.checktext {
+    box-sizing: border-box;
+    width: 50%;
+    float: left;
+    height: 100%;
+    text-align: center;
+}
+
+    .checktext .fa {
+        font-size: 15pt;
+        padding-top: -10px;
+    }
+
+.checkLabel {
+    margin-top: 10px;
+}
+
+#hiddenPasswordInput {
+    display: none;
+}

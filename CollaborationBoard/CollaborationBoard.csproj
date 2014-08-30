@@ -197,7 +197,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\NewBoardModel.cs" />
+    <Compile Include="Models\BoardModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Source\Board.cs" />
     <Compile Include="Source\BoardHub.cs" />
@@ -226,6 +226,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Views\Shared\BoardCreationModal.cshtml" />
     <TypeScriptCompile Include="Scripts\App\boardSnapshot.ts" />
     <TypeScriptCompile Include="Scripts\App\cursor.ts" />
     <TypeScriptCompile Include="Scripts\App\drawTool.ts" />

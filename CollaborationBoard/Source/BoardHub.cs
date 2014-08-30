@@ -88,12 +88,5 @@ namespace CollaborationBoard
 
             return base.OnDisconnected(stopCalled);
         }
-
-        public override Task OnConnected()
-        {
-            var context = new RequestContext(this);
-
-            return base.OnConnected();
-        }
     }
 }

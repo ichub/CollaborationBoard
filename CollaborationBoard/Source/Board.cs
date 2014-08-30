@@ -45,6 +45,10 @@ namespace CollaborationBoard
 
         public string Id { get; private set; }
         public string Name { get; private set; }
+        public bool PasswordEnabled { get; private set; }
+        public string Password { get; private set; }
+        public string Title { get; private set; }
+
 
         public Board(string id)
         {
@@ -92,6 +96,17 @@ namespace CollaborationBoard
         public void SetTextEntityText(string id, string text)
         {
             this.FindEntity<TextEntity>(id).Text = text;
+        }
+
+        public void Initialize(BoardModel model)
+        {
+            this.Title = model.Title;
+            this.PasswordEnabled = model.PasswordEnabled;
+
+            if (model.PasswordEnabled)
+            {
+                this.Password = model.Password;
+            }
         }
     }
 }
