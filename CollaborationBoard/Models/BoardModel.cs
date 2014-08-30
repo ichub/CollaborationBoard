@@ -20,5 +20,16 @@ namespace CollaborationBoard
                 yield return new ValidationResult("Passwords must match.");
             }
         }
+
+        public BoardModel()
+        {
+        }
+
+        public BoardModel(string title, string password, bool passwordEnabled)
+        {
+            this.Title = title;
+            this.Password = this.PasswordRepeat = password;
+            this.PasswordEnabled = passwordEnabled;
+        }
     }
 }

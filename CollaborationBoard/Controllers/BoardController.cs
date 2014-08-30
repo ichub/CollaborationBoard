@@ -8,25 +8,52 @@ namespace CollaborationBoard
 {
     public class BoardController : Controller
     {
+        private string GetPassword(string boardId)
+        {
+            string key = String.Format("BoardPassword:{0}", boardId);
+
+            if (ControllerContext.HttpContext.Request.Cookies.AllKeys.Contains(key))
+            {
+                return ControllerContext.HttpContext.Request.Cookies.Get(key).Value;
+            }
+
+            return null;
+        }
+
         [Route("Board/{id}")]
         [HttpGet]
         public ActionResult Id(string id)
         {
             ViewBag.BoardId = id;
 
-            if (BoardManager.BoardExists(id))
+            if (!BoardManager.BoardExists(id))
             {
-                return View("Board");
+                ViewBag.ErrorMessage = "No such board exists";
+
+                return View("BoardError");
             }
 
-            ViewBag.ErrorMessage = "No such board exists";
+            Board board = BoardManager.GetBoard(id);
 
-            return View("BoardError");
+            if (board.PasswordEnabled)
+            {
+                string storedPassword = this.GetPassword(id);
+
+                if (storedPassword != null)
+                {
+                    if (storedPassword == board.Password)
+                    {
+                        return View("Board");
+                    }
+                }
+            }
+
+            return new RedirectResult("/password/board/" + id);
         }
 
         [Route("Board/Create")]
         [HttpPost]
-        public ActionResult NewBoard([Bind(Include="Title,Password,PasswordEnabled,PasswordRepeat")]BoardModel model)
+        public ActionResult NewBoard([Bind(Include = "Title,Password,PasswordEnabled,PasswordRepeat")]BoardModel model)
         {
             if (ModelState.IsValid)
             {

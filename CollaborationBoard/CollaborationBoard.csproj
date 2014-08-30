@@ -192,10 +192,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BoardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PasswordController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\BoardModel.cs" />
+    <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Source\Board.cs" />
     <Compile Include="Source\BoardHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -224,6 +226,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Views\Shared\BoardCreationModal.cshtml" />
+    <Content Include="Views\Password\Login.cshtml" />
     <TypeScriptCompile Include="Scripts\App\boardSnapshot.ts" />
     <TypeScriptCompile Include="Scripts\App\cursor.ts" />
     <TypeScriptCompile Include="Scripts\App\drawTool.ts" />
@@ -253,7 +256,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Views\Board\BoardError.cshtml" />
+    <Content Include="Views\Shared\BoardError.cshtml" />
     <Content Include="Views\Board\Board.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

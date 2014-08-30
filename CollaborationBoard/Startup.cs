@@ -11,6 +11,10 @@ namespace CollaborationBoard
         {
             GlobalHost.HubPipeline.AddModule(new LoggingPipelineModule()); 
             app.MapSignalR();
+
+#if DEBUG
+            BoardManager.CreateBoard(new BoardModel("test", "test", true), "test");
+#endif
         }
     }
 }
