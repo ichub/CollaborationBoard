@@ -198,6 +198,7 @@
     </Compile>
     <Compile Include="Models\BoardModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Source\AuthManager.cs" />
     <Compile Include="Source\Board.cs" />
     <Compile Include="Source\BoardHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -8,18 +8,6 @@ namespace CollaborationBoard
 {
     public class BoardController : Controller
     {
-        private string GetPassword(string boardId)
-        {
-            string key = String.Format("BoardPassword:{0}", boardId);
-
-            if (ControllerContext.HttpContext.Request.Cookies.AllKeys.Contains(key))
-            {
-                return ControllerContext.HttpContext.Request.Cookies.Get(key).Value;
-            }
-
-            return null;
-        }
-
         [Route("Board/{id}")]
         [HttpGet]
         public ActionResult Id(string id)
@@ -37,14 +25,9 @@ namespace CollaborationBoard
 
             if (board.PasswordEnabled)
             {
-                string storedPassword = this.GetPassword(id);
-
-                if (storedPassword != null)
+                if (AuthManager.IsUserAuthenticated(Session.SessionID, id))
                 {
-                    if (storedPassword == board.Password)
-                    {
-                        return View("Board");
-                    }
+                    return View("Board");
                 }
             }
 
@@ -58,6 +41,8 @@ namespace CollaborationBoard
             if (ModelState.IsValid)
             {
                 string id = BoardManager.CreateBoard(model);
+
+                AuthManager.AuthenticateUser(Session.SessionID, id);
 
                 return new RedirectResult("/board/" + id);
             }

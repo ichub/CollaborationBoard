@@ -8,13 +8,6 @@ namespace CollaborationBoard.Controllers
 {
     public class PasswordController : Controller
     {
-        private void SetPasswordCookie(string boardId, string password)
-        {
-            HttpCookie cookie = new HttpCookie(String.Format("BoardPassword:{0}", boardId), password);
-
-            ControllerContext.HttpContext.Response.Cookies.Add(cookie);
-        }
-
         [Route("Password/Board/{id}")]
         [HttpGet]
         public ActionResult Login(string id)
@@ -58,7 +51,7 @@ namespace CollaborationBoard.Controllers
 
             if (board.Password == password)
             {
-                this.SetPasswordCookie(id, password);
+                AuthManager.AuthenticateUser(Session.SessionID, id);
 
                 return new RedirectResult("/board/" + id);
             }

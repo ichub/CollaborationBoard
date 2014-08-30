@@ -24,6 +24,11 @@ namespace CollaborationBoard
             // http://stackoverflow.com/questions/281881/sessionid-keeps-changing-in-asp-net-mvc-why
 
             HttpContext.Current.Session.Add("__MyAppSession", string.Empty);
+
+            if (!AuthManager.IsSessionInitialized(Session.SessionID))
+            {
+                AuthManager.InitializeSession(Session.SessionID);
+            }
         }
     }
 }
