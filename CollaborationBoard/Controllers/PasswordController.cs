@@ -51,7 +51,10 @@ namespace CollaborationBoard.Controllers
 
             if (board.Password == password)
             {
-                AuthManager.AuthenticateUser(Session.SessionID, id);
+                if (!AuthManager.IsUserAuthenticated(Session.SessionID, id))
+                {
+                    AuthManager.AuthenticateUser(Session.SessionID, id);
+                }
 
                 return new RedirectResult("/board/" + id);
             }

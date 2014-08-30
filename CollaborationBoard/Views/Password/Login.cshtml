@@ -10,19 +10,24 @@
     <title></title>
 </head>
 <body>
-    <div>
-        @ViewBag.BoardId
+    <div id="passwordPage">
+        <div id="passwordFormContainer">
+            <form role="form" action="/Password/Board/@ViewBag.BoardId/Validate" method="post">
+                <div class="form-group">
+                    <div class="row">
+                        @*<div class="col-lg-8">*@
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="password" name="Password" placeholder="Password">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="submit">Login</button>
+                                </span>
+                            </div>
+                        @*</div>*@
+                    </div>
+                </div>
+                <input id="hiddenIdInput" type="text" class="form-control" name="BoardId" value="@ViewBag.BoardId">
+            </form>
+        </div>
     </div>
-    <form role="form" action="/Password/Board/@ViewBag.BoardId/Validate" method="post">
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" name="Password" placeholder="Password">
-        </div>
-        <div class="form-group" id="hiddenIdInput">
-            <label for="boardId">Password</label>
-            <input type="text" class="form-control" id="boardId" name="" value="@ViewBag.BoardId">
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-    </form>
 </body>
 </html>
