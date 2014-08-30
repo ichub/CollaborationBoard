@@ -7,6 +7,8 @@ namespace CollaborationBoard
 {
     public class Board
     {
+        private const string DefaultTitle = "Untitled";
+
         public IReadOnlyList<User> Users
         {
             get
@@ -100,7 +102,7 @@ namespace CollaborationBoard
 
         public void Initialize(BoardModel model)
         {
-            this.Title = model.Title;
+            this.Title = model.Title ?? DefaultTitle;
             this.PasswordEnabled = model.PasswordEnabled;
 
             if (model.PasswordEnabled)
