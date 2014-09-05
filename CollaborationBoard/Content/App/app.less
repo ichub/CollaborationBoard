@@ -82,6 +82,7 @@ body {
 
 @messageWidth: 300px;
 @messageMargin: 20px;
+@inputHeight: 25px;
 
 #messenger {
     /*display: flex;
@@ -91,11 +92,11 @@ body {
     top: 0px;
     left: 0px;
     width: @messageWidth;
-    height: 500px;
+    height: 100vh;
 
     #messageContainer {
-        width: @messageWidth;
-        height: 500px;
+        width: 100%;
+        height: ~"calc(100vh - " @inputHeight ~")";
         background-color: antiquewhite;
         -webkit-flex: 1 1 auto;
         justify-content: flex-start;
@@ -121,11 +122,13 @@ body {
 
     #messageInputContainer {
         position: absolute;
-        width: @messageWidth;
+        width: 100%;
         display: inline-block;
         background-color: red;
 
         #messageInput {
+            height: @inputHeight;
+            outline: 0;
             width: 100%;
         }
     }
