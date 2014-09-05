@@ -43,8 +43,8 @@ class Canvas {
     private cursors: any;
     private _enabled: boolean;
 
-    public constructor(manager: Application, canvasId: string) {
-        this.$canvas = $("#" + canvasId);
+    public constructor(manager: Application) {
+        this.$canvas = $("#drawCanvas");
         this.$container = this.$canvas.parent();
 
         var elem = <HTMLCanvasElement> this.$canvas.get(0);
@@ -110,7 +110,7 @@ class Canvas {
     private processLoadEntities(snapshot: BoardSnapshot) {
         for (var i = 0; i < snapshot.textEntities.length; i++) {
             var entity = snapshot.textEntities[i];
-            entity.position = Point.clone(entity.position);
+            entity.position = Point.deserialize(entity.position);
 
             this.entities.addTextEntity(entity.id, entity.text, entity.position);
         }

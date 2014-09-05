@@ -30,6 +30,10 @@ namespace CollaborationBoard
                     return View("Board");
                 }
             }
+            else
+            {
+                return View("Board");
+            }
 
             return new RedirectResult("/password/board/" + id);
         }

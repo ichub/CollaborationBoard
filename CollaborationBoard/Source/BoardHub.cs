@@ -10,6 +10,15 @@ namespace CollaborationBoard
 {
     public class BoardHub : Hub
     {
+        public void AddMessage(Message message)
+        {
+            var context = new RequestContext(this);
+
+            message.Sender = context.Caller.ConnectionId;
+
+            context.NeighborClients.addMessage(message);
+        }
+
         public void AddTextEntity(TextEntity entity)
         {
             var context = new RequestContext(this);

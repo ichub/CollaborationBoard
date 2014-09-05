@@ -28,11 +28,11 @@ class EntityCollection {
 
     private initializeNetwork(): void {
         this.canvas.app.hub.client.addTextEntity = (entity: TextEntity): void=> {
-            this.addTextEntityWithoutSync(entity.id, entity.text, Point.clone(entity.position));
+            this.addTextEntityWithoutSync(entity.id, entity.text, Point.deserialize(entity.position));
         };
 
         this.canvas.app.hub.client.entityMove = (id: string, to: Point): void => {
-            this.getEntity<TextEntity>(id).position = Point.clone(to);
+            this.getEntity<TextEntity>(id).position = Point.deserialize(to);
         };
 
         this.canvas.app.hub.client.textEntityUpdateText = (id: string, text: string): void => {
@@ -61,6 +61,6 @@ class EntityCollection {
     public addTextEntity(id = this.generateId(EntityType.Text), text = "", position = new Point(0, 0)): void {
         var entity = this.addTextEntityWithoutSync(id, text, position);
 
-        this.canvas.app.hub.server.addTextEntity(entity.getSerializable());
+        this.canvas.app.hub.server.addTextEntity(entity.serialize());
     }
 } 

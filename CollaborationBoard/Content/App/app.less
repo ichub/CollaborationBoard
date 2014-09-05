@@ -1,5 +1,4 @@
 ﻿@backColor: #808080;
-@sideColor: #9fe4f7;
 @canvasColor: #ffffff;
 
 body {
@@ -27,17 +26,6 @@ body {
         width: 2000px;
         height: 2000px;
     }
-}
-
-#sidebar {
-    display: none;
-    width: 200px;
-    height: 100vh;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: @sideColor;
-    z-index: 999;
 }
 
 .cursorContainer {
@@ -85,9 +73,7 @@ body {
 @inputHeight: 25px;
 
 #messenger {
-    /*display: flex;
-    justify-content: flex-start;
-    flex-flow: column;*/
+    background-color: #9fe4f7;
     position: absolute;
     top: 0px;
     left: 0px;
@@ -97,7 +83,6 @@ body {
     #messageContainer {
         width: 100%;
         height: ~"calc(100vh - " @inputHeight ~")";
-        background-color: antiquewhite;
         -webkit-flex: 1 1 auto;
         justify-content: flex-start;
         flex-flow: column;
@@ -105,9 +90,9 @@ body {
         padding-bottom: @messageMargin;
 
         .message {
-            border: 3px solid black;
+            background-color: #90cbdb;
+            border: 1px solid grey;
             display: inline-block;
-            background-color: green;
             margin-left: @messageMargin;
             margin-right: @messageMargin;
             margin-top: @messageMargin;

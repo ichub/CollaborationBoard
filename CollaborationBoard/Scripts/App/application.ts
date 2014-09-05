@@ -23,11 +23,13 @@ class Application {
     private _hub: HubProxy;
     private _cid: string;
     private canvas: Canvas;
+    private chat: Chat;
     private boardId: string;
 
     public constructor() {
         this._hub = $.connection.boardHub;
-        this.canvas = new Canvas(this, "drawCanvas");
+        this.canvas = new Canvas(this);
+        this.chat = new Chat(this);
 
         this._hub.client.handshake = (cid: string, snapshot: BoardSnapshot): void => {
             this._cid = cid;

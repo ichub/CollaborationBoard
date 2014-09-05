@@ -208,6 +208,7 @@
     <Compile Include="Source\Entity.cs" />
     <Compile Include="Source\Extensions.cs" />
     <Compile Include="Source\GenericServerError.cs" />
+    <Compile Include="Source\Message.cs" />
     <Compile Include="Source\Point.cs" />
     <Compile Include="Source\RequestContext.cs" />
     <Compile Include="Source\LoggingPipelineModule.cs" />
@@ -234,6 +235,7 @@
     <TypeScriptCompile Include="Scripts\App\drawTool.ts" />
     <TypeScriptCompile Include="Scripts\App\entity.ts" />
     <TypeScriptCompile Include="Scripts\App\entityCollection.ts" />
+    <TypeScriptCompile Include="Scripts\App\message.ts" />
     <TypeScriptCompile Include="Scripts\App\textEntity.ts" />
     <TypeScriptCompile Include="Scripts\App\point.ts" />
     <TypeScriptCompile Include="Scripts\Common\misc.ts" />

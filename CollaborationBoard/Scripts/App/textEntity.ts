@@ -9,8 +9,8 @@
         this.position = position;
     }
 
-    public getSerializable(): any {
-        var ser = super.getSerializable();
+    public serialize(): any {
+        var ser = super.serialize();
 
         ser.text = this.text;
 

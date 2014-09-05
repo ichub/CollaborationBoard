@@ -7,8 +7,8 @@
         this.y = y;
     }
 
-    public static clone(point: Point): Point {
-        return new Point(point.x, point.y);
+    public static deserialize(serialized: any): Point {
+        return new Point(serialized.x, serialized.y);
     }
 
     public static fromOffset(offset: JQueryCoordinates): Point {

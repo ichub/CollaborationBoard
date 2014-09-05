@@ -35,7 +35,7 @@
         return this._id;
     }
 
-    public getSerializable(): any {
+    public serialize(): any {
         return {
             id: this._id,
             position: this.position,
