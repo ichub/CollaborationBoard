@@ -54,4 +54,13 @@ class Chat {
 
         this.$messageContainer.append(element);
     }
+
+    public initializeFromSnapshot(snapshot: BoardSnapshot) {
+        snapshot.messages.forEach(message => {
+            message = Message.deserialize(message);
+
+            this.appendChatMessage(message);
+        });
+
+    }
 } 

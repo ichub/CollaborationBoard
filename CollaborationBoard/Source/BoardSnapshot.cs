@@ -18,6 +18,9 @@ namespace CollaborationBoard
         [DataMember(Name = "neighbors")]
         public IReadOnlyList<string> Neighbors { get; private set; }
 
+        [DataMember(Name = "messages")]
+        public IReadOnlyList<Message> Messages { get; private set; }
+
         public BoardSnapshot(Board board)
         {
             var entities = board.Entities;
@@ -25,6 +28,7 @@ namespace CollaborationBoard
             this.TextEntities = entities.Where(a => a is TextEntity).Select(a => a as TextEntity).ToList();
             this.Events = board.Events;
             this.Neighbors = UserManager.GetBoardUserIds(board.Id).ToList();
+            this.Messages = board.Messages;
         }
     }
 }

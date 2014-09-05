@@ -16,6 +16,8 @@ namespace CollaborationBoard
 
             message.Sender = context.Caller.ConnectionId;
 
+            context.Board.AddMessage(message);
+
             context.NeighborClients.addMessage(message);
         }
 

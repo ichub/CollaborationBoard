@@ -35,6 +35,7 @@ class Application {
             this._cid = cid;
             this.canvas.enabled = true;
             this.canvas.initializeFromSnapshot(snapshot);
+            this.chat.initializeFromSnapshot(snapshot);
         };
 
         this._hub.client.connect = (cid: string): void => {

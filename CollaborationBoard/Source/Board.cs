@@ -45,6 +45,17 @@ namespace CollaborationBoard
             }
         }
 
+        private List<Message> messages;
+
+
+        public IReadOnlyList<Message> Messages
+        {
+            get
+            {
+                return this.messages;
+            }
+        }
+
         public string Id { get; private set; }
         public string Name { get; private set; }
         public bool PasswordEnabled { get; private set; }
@@ -57,6 +68,7 @@ namespace CollaborationBoard
             this.Id = id;
             this.events = new List<ClientDrawEvent>();
             this.entities = new Dictionary<string, Entity>();
+            this.messages = new List<Message>();
         }
 
         public Board(string id, string name)
@@ -109,6 +121,11 @@ namespace CollaborationBoard
             {
                 this.Password = model.Password;
             }
+        }
+
+        public void AddMessage(Message message)
+        {
+            this.messages.Add(message);
         }
     }
 }
