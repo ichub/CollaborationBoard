@@ -4,30 +4,21 @@
 
 <!DOCTYPE html>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title></title>
-</head>
-<body>
-    <div id="passwordPage">
-        <div id="passwordFormContainer">
-            <form role="form" action="/Password/Board/@ViewBag.BoardId/Validate" method="post">
-                <div class="form-group">
-                    <div class="row">
-                        @*<div class="col-lg-8">*@
-                            <div class="input-group">
-                                <input type="password" class="form-control" id="password" name="Password" placeholder="Password">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="submit">Login</button>
-                                </span>
-                            </div>
-                        @*</div>*@
+
+<div id="passwordPage">
+    <div id="passwordFormContainer">
+        <form role="form" action="/Password/Board/@ViewBag.BoardId/Validate" method="post">
+            <div class="form-group">
+                <div class="row">
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="password" name="Password" placeholder="Password">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">Login</button>
+                        </span>
                     </div>
                 </div>
-                <input id="hiddenIdInput" type="text" class="form-control" name="BoardId" value="@ViewBag.BoardId">
-            </form>
-        </div>
+            </div>
+            <input id="hiddenIdInput" type="text" class="form-control" name="BoardId" value="@ViewBag.BoardId">
+        </form>
     </div>
-</body>
-</html>
+</div>
