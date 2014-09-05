@@ -229,6 +229,7 @@
     <Content Include="Views\Shared\BoardCreationModal.cshtml" />
     <Content Include="Views\Password\Login.cshtml" />
     <TypeScriptCompile Include="Scripts\App\boardSnapshot.ts" />
+    <TypeScriptCompile Include="Scripts\App\chat.ts" />
     <TypeScriptCompile Include="Scripts\App\cursor.ts" />
     <TypeScriptCompile Include="Scripts\App\drawTool.ts" />
     <TypeScriptCompile Include="Scripts\App\entity.ts" />

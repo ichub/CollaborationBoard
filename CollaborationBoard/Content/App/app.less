@@ -79,3 +79,54 @@ body {
     position: absolute;
     background-color: red;
 }
+
+@messageWidth: 300px;
+@messageMargin: 20px;
+
+#messenger {
+    /*display: flex;
+    justify-content: flex-start;
+    flex-flow: column;*/
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: @messageWidth;
+    height: 500px;
+
+    #messageContainer {
+        width: @messageWidth;
+        height: 500px;
+        background-color: antiquewhite;
+        -webkit-flex: 1 1 auto;
+        justify-content: flex-start;
+        flex-flow: column;
+        overflow-y: scroll;
+        padding-bottom: @messageMargin;
+
+        .message {
+            border: 3px solid black;
+            display: inline-block;
+            background-color: green;
+            margin-left: @messageMargin;
+            margin-right: @messageMargin;
+            margin-top: @messageMargin;
+            width: calc(@messageWidth - 2 * @messageMargin - 17px);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            padding: 10px;
+            min-height: 0;
+            min-width: 0;
+        }
+    }
+
+    #messageInputContainer {
+        position: absolute;
+        width: @messageWidth;
+        display: inline-block;
+        background-color: red;
+
+        #messageInput {
+            width: 100%;
+        }
+    }
+}
