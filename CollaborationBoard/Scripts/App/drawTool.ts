@@ -78,7 +78,7 @@
             }
         });
 
-        this.$canvas.mousemove(e => {
+        $(document.body).mousemove(e => {
             if (this.canvas.enabled) {
                 if (this.isMouseDown) {
                     var event = new DrawEvent(DrawEventType.MouseDrag, new Point(e.clientX, e.clientY), this.lastMouse);
