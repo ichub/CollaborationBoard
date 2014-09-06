@@ -48,9 +48,22 @@ class Chat {
     private appendChatMessage(message: Message) {
         var element = document.createElement("div");
 
+        var header = document.createElement("div");
+        var footer = document.createElement("div");
+        var content = document.createElement("div");
+
+        header.classList.add("messageHeader");
+        footer.classList.add("messageFooter");
+        content.classList.add("messageContent");
+
         element.classList.add("message");
 
-        element.innerText = message.sender + " :: " + message.text;
+        header.innerText = message.sender;
+        content.innerText = message.text;
+
+        element.appendChild(header);
+        element.appendChild(content);
+        element.appendChild(footer);
 
         this.$messageContainer.append(element);
     }

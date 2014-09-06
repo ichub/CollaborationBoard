@@ -1,8 +1,4 @@
-﻿@backColor: #808080;
-@canvasColor: #ffffff;
-
-body {
-    background-color: @backColor;
+﻿body {
     margin: 0;
     overflow: hidden;
 }
@@ -17,7 +13,7 @@ body {
     cursor: default;
 
     #drawCanvas {
-        background-color: @canvasColor;
+        background-color: #ffffff;
         cursor: default;
         box-shadow: 0px 0px 100px 0px rgba(0, 0, 0, 0.75);
         position: absolute;
@@ -71,9 +67,13 @@ body {
 @messageWidth: 300px;
 @messageMargin: 20px;
 @inputHeight: 25px;
+@messengerBackColor: #dbdbdb;
+@messageColor: white;
+@messageShadowColor: #b4b4b4;
+@messageHeaderColor: #ffd800;
 
 #messenger {
-    background-color: #9fe4f7;
+    background-color: @messengerBackColor;
     position: absolute;
     top: 0px;
     left: 0px;
@@ -90,18 +90,36 @@ body {
         padding-bottom: @messageMargin;
 
         .message {
-            background-color: #90cbdb;
-            border: 1px solid grey;
+            background-color: @messageColor;
             display: inline-block;
             margin-left: @messageMargin;
             margin-right: @messageMargin;
             margin-top: @messageMargin;
             width: calc(@messageWidth - 2 * @messageMargin - 17px);
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            padding: 10px;
             min-height: 0;
             min-width: 0;
+
+            .messageContent {
+                white-space: pre-wrap;
+                word-wrap: break-word;
+                padding: 10px;
+            }
+
+            .messageHeader {
+                height: 25px;
+                width: 100%;
+                background-color: @messageHeaderColor;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                padding: 3px;
+            }
+
+            .messageFooter {
+                height: 3px;
+                width: 100%;
+                background-color: @messageShadowColor;
+            }
         }
     }
 
