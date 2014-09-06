@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -42,6 +43,27 @@ namespace CollaborationBoard
             }
 
             return false;
+        }
+
+        public static int NextInt(this Random random, int max)
+        {
+            double number = random.NextDouble();
+
+            return (int)Math.Round(number * max);
+        }
+
+        public static T TakeRandom<T>(this List<T> list)
+        {
+            Random random = new Random();
+
+            int randomIndex = random.NextInt(list.Count - 1);
+
+            return list[randomIndex];
+        }
+
+        public static string ToRGBString(this Color color)
+        {
+            return "#" + color.R.ToString("x2") + color.G.ToString("x2") + color.B.ToString("x2");
         }
     }
 }

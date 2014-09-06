@@ -14,7 +14,7 @@ namespace CollaborationBoard
         {
             var context = new RequestContext(this);
 
-            message.Sender = context.Caller.ConnectionId;
+            message.Sender = context.Caller.DisplayName;
 
             context.Board.AddMessage(message);
 
@@ -74,7 +74,11 @@ namespace CollaborationBoard
             var context = new RequestContext(this);
             var actions = context.Board.Events;
 
-            Clients.Caller.handshake(context.Caller.ConnectionId, new BoardSnapshot(context.Board));
+            var snapshot = new BoardSnapshot(context.Board);
+            snapshot.DisplayColor = context.Caller.DisplayColor.ToRGBString();
+            snapshot.DisplayName = context.Caller.DisplayName;
+
+            Clients.Caller.handshake(context.Caller.ConnectionId, snapshot);
 
             context.NeighborClients.connect(newUser.ConnectionId);
 

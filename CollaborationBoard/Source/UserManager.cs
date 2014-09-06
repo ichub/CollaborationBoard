@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Web;
 
@@ -52,6 +53,8 @@ namespace CollaborationBoard
                 users.Add(boardId, new List<User>());
             }
 
+            UserRandomizer.RandomizeUser(boardId, user);
+
             users[boardId].Add(user);
         }
 
@@ -78,7 +81,6 @@ namespace CollaborationBoard
         public static IEnumerable<string> GetBoardUserIdsExcept(string boardId, string exceptConnectionId)
         {
             return GetBoardUsersExcept(boardId, exceptConnectionId).Select(user => user.ConnectionId);
-
         }
     }
 }

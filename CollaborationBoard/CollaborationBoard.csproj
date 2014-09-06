@@ -214,6 +214,7 @@
     <Compile Include="Source\LoggingPipelineModule.cs" />
     <Compile Include="Source\User.cs" />
     <Compile Include="Source\UserManager.cs" />
+    <Compile Include="Source\UserRandomizer.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>

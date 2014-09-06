@@ -9,6 +9,8 @@ interface BoardServer {
 class Chat {
     private $messageContainer: JQuery;
     private $messageInput: JQuery;
+    private displayColor: string;
+    private displayName: string;
 
     private app: Application;
 
@@ -36,7 +38,7 @@ class Chat {
                 var text = this.$messageInput.val();
                 this.$messageInput.val("");
 
-                var newMessage = new Message(text, this.app.cid);
+                var newMessage = new Message(text, this.displayName, this.displayColor);
 
                 this.appendChatMessage(newMessage);
 
@@ -65,15 +67,19 @@ class Chat {
         element.appendChild(content);
         element.appendChild(footer);
 
+        $(header).css("background-color", message.color);
+
         this.$messageContainer.append(element);
     }
 
     public initializeFromSnapshot(snapshot: BoardSnapshot) {
+        this.displayColor = snapshot.displayColor;
+        this.displayName = snapshot.displayName;
+
         snapshot.messages.forEach(message => {
             message = Message.deserialize(message);
 
             this.appendChatMessage(message);
         });
-
     }
 } 
