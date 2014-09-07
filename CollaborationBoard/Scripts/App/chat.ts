@@ -91,6 +91,16 @@ class Chat {
         this.previousMessage = message;
     }
 
+    private appendNotification(message: string) {
+        var element = document.createElement("div");
+
+        element.classList.add("notification");
+
+        element.innerText = message;
+
+        this.$messageContainer.append(element);
+    }
+
     public initializeFromSnapshot(snapshot: BoardSnapshot) {
         this.displayColor = snapshot.displayColor;
         this.displayName = snapshot.displayName;
