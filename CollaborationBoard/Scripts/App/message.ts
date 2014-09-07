@@ -4,7 +4,7 @@
     private _sender: string;
     private _color: string;
 
-    constructor(text: string, senderName: string, color: string) {
+    constructor(text: string, sender: string, senderName: string, color: string) {
         this._text = text;
         this._senderName = senderName;
         this._color = color;
@@ -29,13 +29,13 @@
     public serialize(): any {
         return {
             text: this._text,
-            snder: this._sender,
+            sender: this._sender,
             senderName: this._senderName,
             color: this._color
         };
     }
 
     public static deserialize(serialized: any): Message {
-        return new Message(serialized.text, serialized.sender, serialized.color);
+        return new Message(serialized.text, serialized.sender, serialized.senderName, serialized.color);
     }
 }

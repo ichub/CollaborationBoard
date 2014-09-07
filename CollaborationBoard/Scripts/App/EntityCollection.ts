@@ -47,7 +47,7 @@ class EntityCollection {
     }
 
     private generateId(type: EntityType): string {
-        return this.canvas.app.cid.replace(/\-/g, "_") + "__" + (EntityCollection.entityCount++) + "__" + type.toString();
+        return this.canvas.app.user.cid.replace(/\-/g, "_") + "__" + (EntityCollection.entityCount++) + "__" + type.toString();
     }
 
     private addTextEntityWithoutSync(id: string, text: string, position: Point): TextEntity {

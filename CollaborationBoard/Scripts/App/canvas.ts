@@ -121,11 +121,11 @@ class Canvas {
         this.processLoadEntities(snapshot);
     }
 
-    public onUserConnect(cid: string): void {
-        console.log(format("user %s connected", cid));
+    public onUserConnect(user: UserInfo): void {
+        console.log(format("user %s connected", user.cid));
     }
 
-    public onUserDisconnect(cid: string): void {
-        console.log(format("user %s disconnected", cid));
+    public onUserDisconnect(user: UserInfo): void {
+        console.log(format("user %s disconnected", user.cid));
     }
 }

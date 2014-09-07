@@ -10,9 +10,9 @@ interface HubProxy {
 declare var boardId;
 
 interface BoardClient {
-    handshake(cid: string, snapshot: BoardSnapshot): void;
-    connect(cid: string): void;
-    disconnect(cid: string): void;
+    handshake(user: UserInfo, snapshot: BoardSnapshot): void;
+    connect(user: UserInfo): void;
+    disconnect(user: UserInfo): void;
 }
 
 interface BoardServer {
@@ -21,7 +21,7 @@ interface BoardServer {
 
 class Application {
     private _hub: HubProxy;
-    private _cid: string;
+    private _user: UserInfo;
     private canvas: Canvas;
     private chat: Chat;
     private boardId: string;
@@ -31,19 +31,26 @@ class Application {
         this.canvas = new Canvas(this);
         this.chat = new Chat(this);
 
-        this._hub.client.handshake = (cid: string, snapshot: BoardSnapshot): void => {
-            this._cid = cid;
+        this._hub.client.handshake = (user: UserInfo, snapshot: BoardSnapshot): void => {
+            this._user = user;
             this.canvas.enabled = true;
+            this.chat.enabled = true;
             this.canvas.initializeFromSnapshot(snapshot);
             this.chat.initializeFromSnapshot(snapshot);
         };
 
-        this._hub.client.connect = (cid: string): void => {
-            this.canvas.onUserConnect(cid);
+        this._hub.client.connect = (user: UserInfo): void => {
+            user = UserInfo.deserialize(user);
+
+            this.canvas.onUserConnect(user);
+            this.chat.onUserConnect(user);
         };
 
-        this._hub.client.disconnect = (cid: string): void => {
-            this.canvas.onUserDisconnect(cid);
+        this._hub.client.disconnect = (user: UserInfo): void => {
+            user = UserInfo.deserialize(user);
+
+            this.canvas.onUserDisconnect(user);
+            this.chat.onUserDisconnect(user);
         };
 
         $.connection.hub.start().done((): void => {
@@ -55,8 +62,8 @@ class Application {
         return this._hub;
     }
 
-    public get cid(): string {
-        return this._cid;
+    public get user(): UserInfo {
+        return this._user;
     }
 }
 

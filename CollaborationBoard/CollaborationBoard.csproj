@@ -239,6 +239,7 @@
     <TypeScriptCompile Include="Scripts\App\message.ts" />
     <TypeScriptCompile Include="Scripts\App\textEntity.ts" />
     <TypeScriptCompile Include="Scripts\App\point.ts" />
+    <TypeScriptCompile Include="Scripts\App\userInfo.ts" />
     <TypeScriptCompile Include="Scripts\Common\misc.ts" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

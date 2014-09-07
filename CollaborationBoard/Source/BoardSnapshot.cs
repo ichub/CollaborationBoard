@@ -21,12 +21,6 @@ namespace CollaborationBoard
         [DataMember(Name = "messages")]
         public IReadOnlyList<Message> Messages { get; private set; }
 
-        [DataMember(Name = "displayColor")]
-        public string DisplayColor { get; set; }
-
-        [DataMember(Name = "displayName")]
-        public string DisplayName { get; set; }
-
         public BoardSnapshot(Board board)
         {
             var entities = board.Entities;
@@ -35,9 +29,6 @@ namespace CollaborationBoard
             this.Events = board.Events;
             this.Neighbors = UserManager.GetBoardUserIds(board.Id).ToList();
             this.Messages = board.Messages;
-
-            this.DisplayColor = "white";
-            this.DisplayName = "user";
         }
     }
 }

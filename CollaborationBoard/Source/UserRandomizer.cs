@@ -8,7 +8,7 @@ namespace CollaborationBoard
 {
     public static class UserRandomizer
     {
-        private static readonly List<Color> colors;
+        private static readonly List<string> colors;
         private static readonly List<string> names;
 
         static UserRandomizer()
@@ -24,7 +24,7 @@ namespace CollaborationBoard
                 Color.FromArgb(217, 82, 82),
                 Color.FromArgb(101, 82, 219),
                 Color.FromArgb(82, 140, 219),
-            };
+            }.Select(color => color.ToRGBString()).ToList();
 
             names = new List<string>()
             {
@@ -41,13 +41,14 @@ namespace CollaborationBoard
             user.DisplayName = RandomName(boardId);
         }
 
-        private static Color RandomColor(string boardId)
+        private static string RandomColor(string boardId)
         {
-            List<Color> taken = UserManager.GetBoardUsers(boardId).Select(a => a.DisplayColor).ToList();
+            List<string> taken = UserManager.GetBoardUsers(boardId).Select(a => a.DisplayColor).ToList();
 
-            List<Color> notTaken = colors.Where(a => !taken.Contains(a)).ToList();
+            List<string> notTaken = colors.Where(a => !taken.Contains(a)).ToList();
 
-            Color color = notTaken.Count > 0 ? notTaken.TakeRandom() : taken.TakeRandom();
+            string color = notTaken.Count > 0 ? notTaken.TakeRandom() : taken.TakeRandom();
+
             return color;
         }
 

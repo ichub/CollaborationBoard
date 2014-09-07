@@ -6,11 +6,17 @@ interface BoardServer {
     addMessage(message: Message);
 }
 
+enum NotificationType {
+    Error,
+    Warning,
+    Info
+}
+
 class Chat {
+    public enabled: boolean;
+
     private $messageContainer: JQuery;
     private $messageInput: JQuery;
-    private displayColor: string;
-    private displayName: string;
 
     private previousMessage: Message;
 
@@ -18,6 +24,8 @@ class Chat {
 
     constructor(app: Application) {
         this.app = app;
+
+        this.enabled = false;
 
         this.$messageContainer = $(".messageContainer");
         this.$messageInput = $(".input");
@@ -36,15 +44,19 @@ class Chat {
         };
     }
 
+    private scrollDown() {
+        this.$messageContainer.prop("scrollTop", this.$messageContainer.prop("scrollHeight"));
+    }
+
     private addListeners() {
         this.$messageInput.keydown(e => {
-            if (e.keyCode == 13) {
+            if (this.enabled && e.keyCode == 13) {
                 var text = this.$messageInput.val();
 
                 if (text.length != 0) {
                     this.$messageInput.val("");
 
-                    var newMessage = new Message(text, this.displayName, this.displayColor);
+                    var newMessage = new Message(text, this.app.user.cid, this.app.user.displayName, this.app.user.displayColor);
 
                     this.appendChatMessage(newMessage);
 
@@ -85,30 +97,62 @@ class Chat {
         $(header).css("background-color", message.color);
 
         this.$messageContainer.append(element);
-
-        this.$messageContainer.prop("scrollTop", this.$messageContainer.prop("scrollHeight"));
+        this.scrollDown();
 
         this.previousMessage = message;
     }
 
-    private appendNotification(message: string) {
+    private appendNotification(message: string, type: NotificationType) {
         var element = document.createElement("div");
+        var content = document.createElement("div");
+        var header = document.createElement("div");
+        var footer = document.createElement("div");
+
+        content.classList.add("content");
+        footer.classList.add("footer");
+        header.classList.add("header");
 
         element.classList.add("notification");
 
-        element.innerText = message;
+        switch (type) {
+            case NotificationType.Error:
+                element.classList.add("error");
+                break;
+            case NotificationType.Warning:
+                element.classList.add("warning");
+                break;
+            case NotificationType.Info:
+                element.classList.add("info");
+                break;
+        }
+
+        content.innerText = message;
+
+        element.appendChild(header);
+        element.appendChild(content);
+        element.appendChild(footer);
 
         this.$messageContainer.append(element);
+
+        this.scrollDown();
     }
 
     public initializeFromSnapshot(snapshot: BoardSnapshot) {
-        this.displayColor = snapshot.displayColor;
-        this.displayName = snapshot.displayName;
 
         snapshot.messages.forEach(message => {
             message = Message.deserialize(message);
 
             this.appendChatMessage(message);
         });
+
+        this.appendNotification(format("Welcome %s!", app.user.displayName), NotificationType.Info);
+    }
+
+    public onUserConnect(user: UserInfo): void {
+        this.appendNotification(format("User %s connected", user.displayName), NotificationType.Info);
+    }
+
+    public onUserDisconnect(user: UserInfo): void {
+        this.appendNotification(format("User %s disconnected", user.displayName), NotificationType.Info);
     }
 } 

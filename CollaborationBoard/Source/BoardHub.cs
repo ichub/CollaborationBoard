@@ -76,12 +76,10 @@ namespace CollaborationBoard
             var actions = context.Board.Events;
 
             var snapshot = new BoardSnapshot(context.Board);
-            snapshot.DisplayColor = context.Caller.DisplayColor.ToRGBString();
-            snapshot.DisplayName = context.Caller.DisplayName;
 
-            Clients.Caller.handshake(context.Caller.ConnectionId, snapshot);
+            Clients.Caller.handshake(context.Caller, snapshot);
 
-            context.NeighborClients.connect(newUser.ConnectionId);
+            context.NeighborClients.connect(newUser);
 
             if (BoardManager.IsBoardScheduledForDeletion(boardId))
             {
@@ -95,7 +93,7 @@ namespace CollaborationBoard
 
             UserManager.TryRemoveUser(Context.ConnectionId);
 
-            context.NeighborClients.disconnect(Context.ConnectionId);
+            context.NeighborClients.disconnect(context.Caller);
 
             if (context.Board.IsEmpty)
             {
