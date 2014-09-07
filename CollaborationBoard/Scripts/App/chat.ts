@@ -40,13 +40,16 @@ class Chat {
         this.$messageInput.keydown(e => {
             if (e.keyCode == 13) {
                 var text = this.$messageInput.val();
-                this.$messageInput.val("");
 
-                var newMessage = new Message(text, this.displayName, this.displayColor);
+                if (text.length != 0) {
+                    this.$messageInput.val("");
 
-                this.appendChatMessage(newMessage);
+                    var newMessage = new Message(text, this.displayName, this.displayColor);
 
-                this.app.hub.server.addMessage(newMessage.serialize());
+                    this.appendChatMessage(newMessage);
+
+                    this.app.hub.server.addMessage(newMessage.serialize());
+                }
             }
         });
     }
@@ -68,10 +71,14 @@ class Chat {
         content.innerText = message.text;
 
         if (this.previousMessage != null)
-        if (message.sender == this.previousMessage.sender) {
-            header.innerText = "";
-            header.classList.add("emptyHeader");
-        }
+            if (message.sender == this.previousMessage.sender) {
+                header.innerText = "";
+                header.classList.add("emptyHeader");
+
+                element.classList.add("messageUserRepeat");
+            }
+            else {
+            }
 
         element.appendChild(header);
         element.appendChild(content);
@@ -80,6 +87,8 @@ class Chat {
         $(header).css("background-color", message.color);
 
         this.$messageContainer.append(element);
+
+        this.$messageContainer.prop("scrollTop", this.$messageContainer.prop("scrollHeight"));
 
         this.previousMessage = message;
     }

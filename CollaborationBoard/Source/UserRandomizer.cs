@@ -17,7 +17,13 @@ namespace CollaborationBoard
             {
                 Color.Yellow,
                 Color.FromArgb(155, 0, 155),
-                Color.FromArgb(0, 155, 155),
+                Color.FromArgb(217, 114, 201),
+                Color.FromArgb(114, 217, 201),
+                Color.FromArgb(219, 175, 82),
+                Color.FromArgb(219, 114, 201),
+                Color.FromArgb(217, 82, 82),
+                Color.FromArgb(101, 82, 219),
+                Color.FromArgb(82, 140, 219),
             };
 
             names = new List<string>()

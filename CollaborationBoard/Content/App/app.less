@@ -66,6 +66,7 @@
 
 @messageWidth: 300px;
 @messageMargin: 20px;
+@sameUserMessageMargin: 5px;
 @inputHeight: 25px;
 @messengerBackColor: #dbdbdb;
 @messageColor: white;
@@ -116,7 +117,7 @@
             }
 
             .emptyHeader {
-                height: 3px;
+                height: 0px;
                 padding: initial;
             }
 
@@ -125,6 +126,10 @@
                 width: 100%;
                 background-color: @messageShadowColor;
             }
+        }
+
+        .messageUserRepeat {
+            margin-top: @sameUserMessageMargin;
         }
     }
 
