@@ -12,13 +12,17 @@ class Chat {
     private displayColor: string;
     private displayName: string;
 
+    private previousMessage: Message;
+
     private app: Application;
 
     constructor(app: Application) {
         this.app = app;
 
-        this.$messageContainer = $("#messageContainer");
-        this.$messageInput = $("#messageInput");
+        this.$messageContainer = $(".messageContainer");
+        this.$messageInput = $(".input");
+
+        this.previousMessage = null;
 
         this.inititalizeNetwork();
         this.addListeners();
@@ -54,14 +58,20 @@ class Chat {
         var footer = document.createElement("div");
         var content = document.createElement("div");
 
-        header.classList.add("messageHeader");
-        footer.classList.add("messageFooter");
-        content.classList.add("messageContent");
+        header.classList.add("header");
+        footer.classList.add("footer");
+        content.classList.add("content");
 
         element.classList.add("message");
 
         header.innerText = message.sender;
         content.innerText = message.text;
+
+        if (this.previousMessage != null)
+        if (message.sender == this.previousMessage.sender) {
+            header.innerText = "";
+            header.classList.add("emptyHeader");
+        }
 
         element.appendChild(header);
         element.appendChild(content);
@@ -70,6 +80,8 @@ class Chat {
         $(header).css("background-color", message.color);
 
         this.$messageContainer.append(element);
+
+        this.previousMessage = message;
     }
 
     public initializeFromSnapshot(snapshot: BoardSnapshot) {

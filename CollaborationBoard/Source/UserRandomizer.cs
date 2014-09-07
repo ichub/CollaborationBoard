@@ -16,16 +16,16 @@ namespace CollaborationBoard
             colors = new List<Color>()
             {
                 Color.Yellow,
-                Color.Red,
-                Color.Green
+                Color.FromArgb(155, 0, 155),
+                Color.FromArgb(0, 155, 155),
             };
 
             names = new List<string>()
             {
-                "Square",
-                "Tree",
-                "Stumpy",
-                "Bub",
+                "Constitution",
+                "Bill of Rights",
+                "Anonymous",
+                "Proletariat",
             };
         }
 

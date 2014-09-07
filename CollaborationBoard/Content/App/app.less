@@ -72,7 +72,7 @@
 @messageShadowColor: #b4b4b4;
 @messageHeaderColor: #ffd800;
 
-#messenger {
+.messenger {
     background-color: @messengerBackColor;
     position: absolute;
     top: 0px;
@@ -80,7 +80,7 @@
     width: @messageWidth;
     height: 100vh;
 
-    #messageContainer {
+    .messageContainer {
         width: 100%;
         height: ~"calc(100vh - " @inputHeight ~")";
         -webkit-flex: 1 1 auto;
@@ -99,13 +99,13 @@
             min-height: 0;
             min-width: 0;
 
-            .messageContent {
+            .content {
                 white-space: pre-wrap;
                 word-wrap: break-word;
                 padding: 10px;
             }
 
-            .messageHeader {
+            .header {
                 height: 25px;
                 width: 100%;
                 background-color: @messageHeaderColor;
@@ -115,7 +115,12 @@
                 padding: 3px;
             }
 
-            .messageFooter {
+            .emptyHeader {
+                height: 3px;
+                padding: initial;
+            }
+
+            .footer {
                 height: 3px;
                 width: 100%;
                 background-color: @messageShadowColor;
@@ -123,13 +128,13 @@
         }
     }
 
-    #messageInputContainer {
+    .inputContainer {
         position: absolute;
         width: 100%;
         display: inline-block;
         background-color: red;
 
-        #messageInput {
+        .input {
             height: @inputHeight;
             outline: 0;
             width: 100%;
