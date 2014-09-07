@@ -1,11 +1,12 @@
 ﻿class Message {
     private _text: string;
+    private _senderName: string;
     private _sender: string;
     private _color: string;
 
-    constructor(text: string, sender: string, color: string) {
+    constructor(text: string, senderName: string, color: string) {
         this._text = text;
-        this._sender = sender;
+        this._senderName = senderName;
         this._color = color;
     }
 
@@ -13,8 +14,12 @@
         return this._text;
     }
 
+    public get senderName() {
+        return this._senderName;
+    }
+
     public get sender() {
-        return this._sender;
+        return this._senderName;
     }
 
     public get color() {
@@ -24,7 +29,8 @@
     public serialize(): any {
         return {
             text: this._text,
-            sender: this._sender,
+            snder: this._sender,
+            senderName: this._senderName,
             color: this._color
         };
     }

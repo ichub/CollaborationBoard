@@ -15,6 +15,9 @@ namespace CollaborationBoard
         [DataMember(Name = "sender")]
         public string Sender { get; set; }
 
+        [DataMember(Name = "senderName")]
+        public string SenderName { get; set; }
+
         [DataMember(Name = "color")]
         public string Color { get; set; }
     }

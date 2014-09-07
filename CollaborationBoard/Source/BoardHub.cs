@@ -14,7 +14,8 @@ namespace CollaborationBoard
         {
             var context = new RequestContext(this);
 
-            message.Sender = context.Caller.DisplayName;
+            message.Sender = context.Caller.ConnectionId;
+            message.SenderName = context.Caller.DisplayName;
 
             context.Board.AddMessage(message);
 

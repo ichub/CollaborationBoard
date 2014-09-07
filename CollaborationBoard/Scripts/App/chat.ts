@@ -67,7 +67,7 @@ class Chat {
 
         element.classList.add("message");
 
-        header.innerText = message.sender;
+        header.innerText = message.senderName;
         content.innerText = message.text;
 
         if (this.previousMessage != null)
@@ -76,8 +76,6 @@ class Chat {
                 header.classList.add("emptyHeader");
 
                 element.classList.add("messageUserRepeat");
-            }
-            else {
             }
 
         element.appendChild(header);
