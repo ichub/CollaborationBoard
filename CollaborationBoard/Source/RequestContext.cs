@@ -16,7 +16,7 @@ namespace CollaborationBoard
 
         public RequestContext(BoardHub hub)
         {
-            this.Caller = UserManager.GetUser(hub.Context.ConnectionId);
+            this.Caller = UserManager.GetUserByConnection(hub.Context.ConnectionId);
             this.Board = BoardManager.GetBoard(this.Caller.BoardId);
             this.Neighbors = UserManager.GetBoardUsersExcept(this.Caller.BoardId, this.Caller.ConnectionId).ToList();
             this.NeighborIds = this.Neighbors.Select(a => a.ConnectionId).ToList();

@@ -15,7 +15,50 @@ namespace CollaborationBoard
             users = new Dictionary<string, List<User>>();
         }
 
-        public static User GetUser(string connectionId)
+        public static void MoveUserToBoard(string connectionId, string boardId)
+        {
+            if (BoardManager.BoardExists(boardId))
+            {
+                if (!users.ContainsKey(boardId))
+                {
+                    users.Add(boardId, new List<User>());
+                }
+            }
+
+            foreach (var pair in users)
+            {
+                User user = pair.Value.Find(a => a.ConnectionId == connectionId);
+
+                if (user != null)
+                {
+                    user.BoardId = boardId;
+
+                    if (users.ContainsKey(boardId))
+                    {
+                        pair.Value.Remove(user);
+
+                        users[boardId].Add(user);
+                    }
+                }
+            }
+        }
+
+        public static User GetUserBySession(string sessionId)
+        {
+            foreach (var pair in users)
+            {
+                User user = pair.Value.Find(a => a.SessionId == sessionId);
+
+                if (user != null)
+                {
+                    return user;
+                }
+            }
+
+            return null;
+        }
+
+        public static User GetUserByConnection(string connectionId)
         {
             foreach (var pair in users)
             {

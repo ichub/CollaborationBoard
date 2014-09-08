@@ -32,7 +32,7 @@ class Application {
         this.chat = new Chat(this);
 
         this._hub.client.handshake = (user: UserInfo, snapshot: BoardSnapshot): void => {
-            this._user = user;
+            this._user = UserInfo.deserialize(user);
             this.canvas.enabled = true;
             this.chat.enabled = true;
             this.canvas.initializeFromSnapshot(snapshot);

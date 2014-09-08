@@ -68,10 +68,28 @@ namespace CollaborationBoard
 
         public void Handshake(string boardId)
         {
-            var newUser = new User(Context.ConnectionId, boardId);
+            string sessionId = Context.RequestCookies["ASP.NET_SessionId"].Value;
+
+            var user = UserManager.GetUserBySession(sessionId);
+
+            if (user != null)
+            {
+                UserManager.MoveUserToBoard(user.ConnectionId, boardId);
+
+                FinalizeHandshake(boardId, user);
+
+                return;
+            }
+
+            var newUser = new User(Context.ConnectionId, boardId, sessionId);
 
             UserManager.AddUser(boardId, newUser);
 
+            FinalizeHandshake(boardId, newUser);
+        }
+
+        private void FinalizeHandshake(string boardId, User user)
+        {
             var context = new RequestContext(this);
             var actions = context.Board.Events;
 
@@ -79,7 +97,7 @@ namespace CollaborationBoard
 
             Clients.Caller.handshake(context.Caller, snapshot);
 
-            context.NeighborClients.connect(newUser);
+            context.NeighborClients.connect(user);
 
             if (BoardManager.IsBoardScheduledForDeletion(boardId))
             {
@@ -91,7 +109,7 @@ namespace CollaborationBoard
         {
             var context = new RequestContext(this);
 
-            UserManager.TryRemoveUser(Context.ConnectionId);
+            //UserManager.TryRemoveUser(Context.ConnectionId);
 
             context.NeighborClients.disconnect(context.Caller);
 
