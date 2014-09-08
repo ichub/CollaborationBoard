@@ -122,10 +122,10 @@ class Canvas {
     }
 
     public onUserConnect(user: UserInfo): void {
-        console.log(format("user %s connected", user.cid));
+        console.log(format("user %s connected", user.id));
     }
 
     public onUserDisconnect(user: UserInfo): void {
-        console.log(format("user %s disconnected", user.cid));
+        console.log(format("user %s disconnected", user.id));
     }
 }

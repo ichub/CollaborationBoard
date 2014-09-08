@@ -9,8 +9,6 @@ namespace CollaborationBoard
     public class RequestContext
     {
         public User Caller { get; private set; }
-        public IList<User> Neighbors { get; private set; }
-        public IList<string> NeighborIds { get; private set; }
         public dynamic NeighborClients { get; private set; }
         public Board Board { get; private set; }
 
@@ -18,9 +16,10 @@ namespace CollaborationBoard
         {
             this.Caller = UserManager.GetUserByConnection(hub.Context.ConnectionId);
             this.Board = BoardManager.GetBoard(this.Caller.BoardId);
-            this.Neighbors = UserManager.GetBoardUsersExcept(this.Caller.BoardId, this.Caller.ConnectionId).ToList();
-            this.NeighborIds = this.Neighbors.Select(a => a.ConnectionId).ToList();
-            this.NeighborClients = hub.Clients.Clients(this.NeighborIds);
+
+            var neighborIds = UserManager.GetUserIds(this.Board.Id).Where(a => a != hub.Context.ConnectionId);
+
+            this.NeighborClients = hub.Clients.Clients(neighborIds.ToList());
         }
     }
 }

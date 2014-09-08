@@ -10,8 +10,8 @@ namespace CollaborationBoard
     [DataContract]
     public class User
     {
-        [DataMember(Name="cid")]
-        public string ConnectionId { get; set; }
+        [DataMember(Name = "id")]
+        public string Id { get; private set; }
 
         [DataMember(Name = "boardId")]
         public string BoardId { get; set; }
@@ -23,14 +23,49 @@ namespace CollaborationBoard
         public string DisplayColor { get; set; }
 
         [IgnoreDataMember]
+        public IReadOnlyList<string> ConnectionIds
+        {
+            get
+            {
+                return this.connectionIds;
+            }
+        }
+
+        [IgnoreDataMember]
         public string SessionId { get; set; }
+
+        [IgnoreDataMember]
+        private List<string> connectionIds;
 
         public User(string connectionId, string boardId, string sessionId)
         {
-            this.ConnectionId = connectionId;
+            this.Id = new Guid().ToString();
+            this.connectionIds = new List<string>();
+
+            this.connectionIds.Add(connectionId);
             this.BoardId = boardId;
             this.SessionId = sessionId;
         }
 
+        public void AddConnection(string connectionId)
+        {
+            if (!this.connectionIds.Contains(connectionId))
+            {
+                this.connectionIds.Add(connectionId);
+            }
+        }
+
+        public void RemoveConnection(string connectionId)
+        {
+            if (this.connectionIds.Contains(connectionId))
+            {
+                this.connectionIds.Remove(connectionId);
+            }
+        }
+
+        public bool HasConnection(string connectionId)
+        {
+            return this.connectionIds.Contains(connectionId);
+        }
     }
 }

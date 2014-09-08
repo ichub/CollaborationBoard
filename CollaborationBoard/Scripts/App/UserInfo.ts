@@ -1,13 +1,13 @@
 ﻿class UserInfo {
     private _displayName: string;
     private _displayColor: string;
-    private _cid: string;
+    private _id: string;
     private _boardId: string;
 
     constructor(displayName: string, displayColor: string, cid: string, boardId: string) {
         this._displayColor = displayColor,
         this._displayName = displayName,
-        this._cid = cid;
+        this._id = cid;
         this._boardId = boardId;
     }
 
@@ -19,8 +19,8 @@
         return this._displayColor;
     }
 
-    public get cid() {
-        return this._cid;
+    public get id() {
+        return this._id;
     }
 
     public get boardId() {
@@ -31,7 +31,7 @@
         return {
             displayName: this._displayName,
             displayColor: this._displayColor,
-            cid: this._cid,
+            cid: this._id,
         }
     }
 

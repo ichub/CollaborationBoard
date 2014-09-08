@@ -15,69 +15,26 @@ namespace CollaborationBoard
             users = new Dictionary<string, List<User>>();
         }
 
-        public static void MoveUserToBoard(string connectionId, string boardId)
+        private static List<User> GetAllUsers()
         {
-            if (BoardManager.BoardExists(boardId))
-            {
-                if (!users.ContainsKey(boardId))
-                {
-                    users.Add(boardId, new List<User>());
-                }
-            }
-
-            foreach (var pair in users)
-            {
-                User user = pair.Value.Find(a => a.ConnectionId == connectionId);
-
-                if (user != null)
-                {
-                    user.BoardId = boardId;
-
-                    if (users.ContainsKey(boardId))
-                    {
-                        pair.Value.Remove(user);
-
-                        users[boardId].Add(user);
-                    }
-                }
-            }
+            return users.Select(a => a.Value).SelectMany(a => a).ToList();
         }
 
         public static User GetUserBySession(string sessionId)
         {
-            foreach (var pair in users)
-            {
-                User user = pair.Value.Find(a => a.SessionId == sessionId);
-
-                if (user != null)
-                {
-                    return user;
-                }
-            }
-
-            return null;
+            return GetAllUsers().Where(a => a.SessionId == sessionId).FirstOrDefault();
         }
 
         public static User GetUserByConnection(string connectionId)
         {
-            foreach (var pair in users)
-            {
-                User user = pair.Value.Find(a => a.ConnectionId == connectionId);
-
-                if (user != null)
-                {
-                    return user;
-                }
-            }
-
-            return null;
+            return GetAllUsers().Where(a => a.HasConnection(connectionId)).FirstOrDefault();
         }
 
         public static bool TryRemoveUser(string connectionId)
         {
             foreach (var pair in users)
             {
-                int index = pair.Value.FindIndex(user => user.ConnectionId == connectionId);
+                int index = pair.Value.FindIndex(user => user.HasConnection(connectionId));
 
                 if (index >= 0)
                 {
@@ -111,19 +68,10 @@ namespace CollaborationBoard
             return null;
         }
 
-        public static IEnumerable<User> GetBoardUsersExcept(string boardId, string exceptConnectionId)
+        public static IEnumerable<string> GetUserIds(string boardId)
         {
-            return GetBoardUsers(boardId).Where(user => user.ConnectionId != exceptConnectionId);
-        }
-
-        public static IEnumerable<string> GetBoardUserIds(string boardId)
-        {
-            return GetBoardUsers(boardId).Select(user => user.ConnectionId);
-        }
-
-        public static IEnumerable<string> GetBoardUserIdsExcept(string boardId, string exceptConnectionId)
-        {
-            return GetBoardUsersExcept(boardId, exceptConnectionId).Select(user => user.ConnectionId);
+            return GetBoardUsers(boardId)
+                .SelectMany(a => a.ConnectionIds);
         }
     }
 }

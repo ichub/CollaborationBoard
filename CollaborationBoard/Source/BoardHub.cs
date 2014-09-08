@@ -14,7 +14,7 @@ namespace CollaborationBoard
         {
             var context = new RequestContext(this);
 
-            message.Sender = context.Caller.ConnectionId;
+            message.Sender = context.Caller.Id;
             message.SenderName = context.Caller.DisplayName;
 
             context.Board.AddMessage(message);
@@ -54,7 +54,7 @@ namespace CollaborationBoard
             var context = new RequestContext(this);
             context.Board.AppendEvent(e);
 
-            e.Sender = context.Caller.ConnectionId;
+            e.Sender = context.Caller.Id;
 
             context.NeighborClients.onDrawEvent(e);
         }
@@ -63,7 +63,7 @@ namespace CollaborationBoard
         {
             var context = new RequestContext(this);
 
-            context.NeighborClients.onMouseMove(context.Caller.ConnectionId, x, y);
+            context.NeighborClients.onMouseMove(context.Caller.Id, x, y);
         }
 
         public void Handshake(string boardId)
@@ -74,7 +74,7 @@ namespace CollaborationBoard
 
             if (user != null)
             {
-                UserManager.MoveUserToBoard(user.ConnectionId, boardId);
+                user.AddConnection(Context.ConnectionId);
 
                 FinalizeHandshake(boardId, user);
 
@@ -108,8 +108,6 @@ namespace CollaborationBoard
         public override Task OnDisconnected(bool stopCalled)
         {
             var context = new RequestContext(this);
-
-            //UserManager.TryRemoveUser(Context.ConnectionId);
 
             context.NeighborClients.disconnect(context.Caller);
 
