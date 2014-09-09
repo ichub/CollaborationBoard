@@ -76,6 +76,8 @@ namespace CollaborationBoard
             {
                 user.AddConnection(Context.ConnectionId);
 
+                user.TrySetBoard(boardId);
+
                 FinalizeHandshake(boardId, user);
 
                 return;
@@ -83,7 +85,7 @@ namespace CollaborationBoard
 
             var newUser = new User(Context.ConnectionId, boardId, sessionId);
 
-            UserManager.AddUser(boardId, newUser);
+            UserManager.AddUser(newUser);
 
             FinalizeHandshake(boardId, newUser);
         }
@@ -108,6 +110,8 @@ namespace CollaborationBoard
         public override Task OnDisconnected(bool stopCalled)
         {
             var context = new RequestContext(this);
+
+            context.Caller.RemoveConnection(Context.ConnectionId);
 
             context.NeighborClients.disconnect(context.Caller);
 

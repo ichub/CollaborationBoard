@@ -10,11 +10,26 @@ namespace CollaborationBoard
     [DataContract]
     public class User
     {
+        [IgnoreDataMember]
+        public bool IsConnectedToServer
+        {
+            get
+            {
+                return this.connectionIds.Count > 0;
+            }
+        }
+
         [DataMember(Name = "id")]
         public string Id { get; private set; }
 
         [DataMember(Name = "boardId")]
-        public string BoardId { get; set; }
+        public string BoardId
+        {
+            get
+            {
+                return this.boardId;
+            }
+        }
 
         [DataMember(Name = "displayName")]
         public string DisplayName { get; set; }
@@ -37,13 +52,16 @@ namespace CollaborationBoard
         [IgnoreDataMember]
         private List<string> connectionIds;
 
+        [IgnoreDataMember]
+        private string boardId;
+
         public User(string connectionId, string boardId, string sessionId)
         {
             this.Id = new Guid().ToString();
             this.connectionIds = new List<string>();
 
             this.connectionIds.Add(connectionId);
-            this.BoardId = boardId;
+            this.boardId = boardId;
             this.SessionId = sessionId;
         }
 
@@ -66,6 +84,18 @@ namespace CollaborationBoard
         public bool HasConnection(string connectionId)
         {
             return this.connectionIds.Contains(connectionId);
+        }
+
+        public bool TrySetBoard(string boardId)
+        {
+            if (UserManager.TryMoveUserToBoard(this.Id, boardId))
+            {
+                this.boardId = boardId;
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

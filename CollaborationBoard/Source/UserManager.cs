@@ -30,6 +30,43 @@ namespace CollaborationBoard
             return GetAllUsers().Where(a => a.HasConnection(connectionId)).FirstOrDefault();
         }
 
+        public static User GetUserById(string userId)
+        {
+            return GetAllUsers().Where(a => a.Id == userId).FirstOrDefault();
+        }
+
+        public static bool IsUserOnBoard(string userId, string boardId)
+        {
+            if (users.ContainsKey(boardId))
+            {
+                return users[boardId].Where(a => a.Id == userId).Count() > 0;
+            }
+
+            return false;
+        }
+
+        public static bool TryMoveUserToBoard(string userId, string newBoardId)
+        {
+            if (!IsUserOnBoard(userId, newBoardId))
+            {
+                User user = GetUserById(userId);
+
+                foreach (var pair in users)
+                {
+                    if (pair.Value.Contains(user))
+                    {
+                        pair.Value.Remove(user);
+
+                        users[newBoardId].Add(user);
+
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         public static bool TryRemoveUser(string connectionId)
         {
             foreach (var pair in users)
@@ -46,16 +83,16 @@ namespace CollaborationBoard
             return false;
         }
 
-        public static void AddUser(string boardId, User user)
+        public static void AddUser(User user)
         {
-            if (!users.ContainsKey(boardId))
+            if (!users.ContainsKey(user.BoardId))
             {
-                users.Add(boardId, new List<User>());
+                users.Add(user.BoardId, new List<User>());
             }
 
-            UserRandomizer.RandomizeUser(boardId, user);
+            UserRandomizer.RandomizeUser(user.BoardId, user);
 
-            users[boardId].Add(user);
+            users[user.BoardId].Add(user);
         }
 
         public static IEnumerable<User> GetBoardUsers(string boardId)
