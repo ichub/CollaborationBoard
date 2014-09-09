@@ -149,10 +149,10 @@ class Chat {
     }
 
     public onUserConnect(user: UserInfo): void {
-        this.appendNotification(format("User %s connected", user.displayName), NotificationType.Info);
+        this.appendNotification(format("User %s has connected.", user.displayName), NotificationType.Info);
     }
 
     public onUserDisconnect(user: UserInfo): void {
-        this.appendNotification(format("User %s disconnected", user.displayName), NotificationType.Info);
+        this.appendNotification(format("User %s has disconnected.", user.displayName), NotificationType.Info);
     }
 } 
