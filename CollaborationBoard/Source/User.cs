@@ -57,7 +57,7 @@ namespace CollaborationBoard
 
         public User(string connectionId, string boardId, string sessionId)
         {
-            this.Id = new Guid().ToString();
+            this.Id = Guid.NewGuid().ToString();
             this.connectionIds = new List<string>();
 
             this.connectionIds.Add(connectionId);

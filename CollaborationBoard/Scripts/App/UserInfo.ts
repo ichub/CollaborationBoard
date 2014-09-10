@@ -31,11 +31,11 @@
         return {
             displayName: this._displayName,
             displayColor: this._displayColor,
-            cid: this._id,
+            id: this._id,
         }
     }
 
     public static deserialize(serialized: any): UserInfo {
-        return new UserInfo(serialized.displayName, serialized.displayColor, serialized.cid, serialized.boardId);
+        return new UserInfo(serialized.displayName, serialized.displayColor, serialized.id, serialized.boardId);
     }
 } 
