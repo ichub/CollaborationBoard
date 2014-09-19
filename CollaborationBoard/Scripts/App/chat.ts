@@ -13,7 +13,7 @@ enum NotificationType {
 }
 
 class Chat {
-    public enabled: boolean;
+    public enabled = false;
 
     private $messageContainer: JQuery;
     private $messageInput: JQuery;
@@ -21,6 +21,7 @@ class Chat {
     private $messenger: JQuery;
 
     private previousMessage: Message;
+    private wasPreviousANotification = false;
 
     private app: Application;
 
@@ -29,8 +30,6 @@ class Chat {
 
     constructor(app: Application) {
         this.app = app;
-
-        this.enabled = false;
 
         this.$messageContainer = $(".messageContainer");
         this.$messageInput = $(".input");
@@ -105,7 +104,7 @@ class Chat {
         header.innerText = message.senderName;
         content.innerText = message.text;
 
-        if (this.previousMessage != null)
+        if (this.previousMessage != null && !this.wasPreviousANotification)
             if (message.sender == this.previousMessage.sender) {
                 header.innerText = "";
                 header.classList.add("emptyHeader");
@@ -123,6 +122,8 @@ class Chat {
         this.scrollDown();
 
         this.previousMessage = message;
+
+        this.wasPreviousANotification = false;
     }
 
     private appendNotification(message: string, type: NotificationType) {
@@ -158,6 +159,8 @@ class Chat {
         this.$messageContainer.append(element);
 
         this.scrollDown();
+
+        this.wasPreviousANotification = true;
     }
 
     public initializeFromSnapshot(snapshot: BoardSnapshot) {
