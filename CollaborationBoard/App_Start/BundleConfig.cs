@@ -42,6 +42,7 @@ namespace CollaborationBoard
 
             bundles.Add(new StyleBundle("~/bundles/font_awesome").Include("~/Content/font-awesome.css"));
 
+            bundles.Add(new ScriptBundle("~/signalr", "/signalr/hubs"));
             bundles.UseCdn = true;
 
             bundles.Add(new StyleBundle("~/fonts", "http://fonts.googleapis.com/css?family=Open+Sans"));
