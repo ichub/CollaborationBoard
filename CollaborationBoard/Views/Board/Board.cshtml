@@ -1,25 +1,45 @@
 ﻿@{
-    Layout = "~/Views/Shared/_EmptyLayout.cshtml";
+    Layout = null;
 }
 
-<div id="sidebar"></div>
-<div id="container">
-    <canvas id="drawCanvas"></canvas>
-    <div class="messenger out">
-        <div class="messageContainer">
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/bundles/font_awesome")
+    @Styles.Render("~/bundles/css")
+    @Styles.Render("~/fonts")
+    @Styles.Render("~/katex_css")
+    @Styles.Render("~/bundles/app_styles")
+</head>
+<body>
+    <div id="sidebar"></div>
+    <div id="container">
+        <canvas id="drawCanvas"></canvas>
+        <div class="messenger out">
+            <div class="messageContainer">
+            </div>
+            <div class="inputContainer">
+                <input class="input" type="text" placeholder="Enter message here!" />
+            </div>
+            <div class="switchButton"><i class="arrowToggle fa fa-arrows-h"></i></div>
         </div>
-        <div class="inputContainer">
-            <input class="input" type="text" placeholder="Enter message here!" />
-        </div>
-        <div class="switchButton"><i class="arrowToggle fa fa-arrows-h"></i></div>
     </div>
-</div>
 
-<div class="loadingBlind"></div>
+    <div class="loadingBlind"></div>
 
-<script>
-    var boardId = "@ViewBag.BoardId";
-</script>
+    <script>
+        var boardId = "@ViewBag.BoardId";
+    </script>
 
-@Scripts.Render("~/bundles/app_scripts")
-@Styles.Render("~/bundles/app_styles")
+    @Scripts.Render("~/bundles/app_scripts")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/common_scripts")
+    @Scripts.Render("~/signalr/hubs")
+    @Scripts.Render("~/katex_script")
+</body>
+</html>
