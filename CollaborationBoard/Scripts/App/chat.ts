@@ -17,10 +17,15 @@ class Chat {
 
     private $messageContainer: JQuery;
     private $messageInput: JQuery;
+    private $toggle: JQuery;
+    private $messenger: JQuery;
 
     private previousMessage: Message;
 
     private app: Application;
+
+    private defaultMessengerWidth: string;
+    private hidden = false;
 
     constructor(app: Application) {
         this.app = app;
@@ -29,6 +34,9 @@ class Chat {
 
         this.$messageContainer = $(".messageContainer");
         this.$messageInput = $(".input");
+        this.$toggle = $(".switchButton");
+        this.$messenger = $(".messenger");
+        this.defaultMessengerWidth = this.$messageContainer.width() + "px";
 
         this.previousMessage = null;
 
@@ -62,6 +70,21 @@ class Chat {
 
                     this.app.hub.server.addMessage(newMessage.serialize());
                 }
+            }
+        });
+
+        this.$toggle.click(e => {
+            if (this.enabled) {
+                if (this.hidden) {
+                    this.$messenger.removeClass("in");
+                    this.$messenger.addClass("out");
+                }
+                else {
+                    this.$messenger.removeClass("out");
+                    this.$messenger.addClass("in");
+                }
+
+                this.hidden = !this.hidden;
             }
         });
     }

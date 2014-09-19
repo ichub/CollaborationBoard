@@ -3,6 +3,15 @@
     overflow: hidden;
 }
 
+.noSelect {
+    cursor: default;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 #container {
     position: absolute;
     top: 0;
@@ -31,12 +40,7 @@
     position: absolute;
 
     .cursor {
-        cursor: default;
-        -moz-user-select: none;
-        -khtml-user-select: none;
-        -webkit-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
+        .noSelect;
         font-size: 20pt;
     }
 }
@@ -73,17 +77,23 @@
 @messageShadowColor: #b4b4b4;
 @messageHeaderColor: #ffd800;
 
+@messengerMargin: 40px;
+@messengerSwitchButtonWidth: 50px;
+@messengerTransitionTime: 500ms;
+
 .messenger {
     background-color: @messengerBackColor;
     position: absolute;
-    top: 0px;
-    left: 0px;
     width: @messageWidth;
-    height: 100vh;
+    height: ~"calc(100vh - " @messengerMargin * 2 ~")";
+    top: @messengerMargin;
+    left: 0px;
+    -webkit-box-shadow: -1px 0px 20px 14px rgba(0,0,0,0.3);
+    transition: margin @messengerTransitionTime;
 
     .messageContainer {
         width: 100%;
-        height: ~"calc(100vh - " @inputHeight ~")";
+        height: ~"calc(100% - " @inputHeight ~")";
         -webkit-flex: 1 1 auto;
         justify-content: flex-start;
         flex-flow: column;
@@ -170,7 +180,6 @@
     }
 
     .inputContainer {
-        position: absolute;
         width: 100%;
         display: inline-block;
         background-color: red;
@@ -179,6 +188,68 @@
             height: @inputHeight;
             outline: 0;
             width: 100%;
+            border: none;
+            background-color: #f6f6f6;
+            padding-left: 5px;
+        }
+
+        .input:hover {
+            background-color: #e8e8e8;
+        }
+
+        .input:active {
+            background-color: #ffffff;
+        }
+
+        .input:hover:active {
+            background-color: #f1f1f1;
         }
     }
+
+    .switchButton {
+        position: absolute;
+        top: 0px;
+        right: -@messengerSwitchButtonWidth;
+        background-color: red;
+        z-index: 99999;
+        width: @messengerSwitchButtonWidth;
+        border: none;
+        font-size: 20pt;
+        text-align: center;
+        transition: background-color @messengerTransitionTime;
+
+        .arrowToggle {
+            .noSelect;
+            transition: transform 1s;
+        }
+    }
+}
+
+.out .switchButton {
+    background-color: #75c8ef;
+}
+
+.in .switchButton {
+    background-color: #8df1ba;
+    opacity: 0.5;
+}
+
+.in .switchButton:hover {
+    opacity: 0.7;
+}
+
+.out.messenger {
+    margin-left: 0px;
+}
+
+.in.messenger {
+    margin-left: -@messageWidth;
+}
+
+.out .arrowToggle {
+    transform: rotate(0deg);
+}
+
+.in .arrowToggle {
+    transform: rotate(360deg);
 }
