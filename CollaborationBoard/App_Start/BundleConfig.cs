@@ -42,8 +42,10 @@ namespace CollaborationBoard
 
             bundles.Add(new StyleBundle("~/bundles/font_awesome").Include("~/Content/font-awesome.css"));
 
-            // Set EnableOptimizations to false for debugging. For more information,
-            // visit http://go.microsoft.com/fwlink/?LinkId=301862
+            bundles.UseCdn = true;
+
+            bundles.Add(new StyleBundle("~/fonts", "http://fonts.googleapis.com/css?family=Open+Sans"));
+
             BundleTable.EnableOptimizations = true;
 
 #if DEBUG
