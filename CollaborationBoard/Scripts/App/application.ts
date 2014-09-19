@@ -37,6 +37,10 @@ class Application {
             this.chat.enabled = true;
             this.canvas.initializeFromSnapshot(snapshot);
             this.chat.initializeFromSnapshot(snapshot);
+
+            setTimeout(() => {
+                $(".loadingBlind").addClass("fadeout");
+            }, 500);
         };
 
         this._hub.client.connect = (user: UserInfo): void => {
@@ -53,8 +57,16 @@ class Application {
             this.chat.onUserDisconnect(user);
         };
 
+        this.addEventListeners();
+
         $.connection.hub.start().done((): void => {
             this._hub.server.handshake(boardId);
+        });
+    }
+
+    private addEventListeners() {
+        $(".loadingBlind").on("webkitTransitionEnd", () => {
+            $(".loadingBlind").hide();
         });
     }
 
