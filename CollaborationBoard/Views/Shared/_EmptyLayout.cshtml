@@ -7,6 +7,7 @@
     @Styles.Render("~/bundles/font_awesome")
     @Styles.Render("~/bundles/css")
     @Styles.Render("~/fonts")
+    @Styles.Render("~/katex_css")
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
@@ -17,6 +18,8 @@
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/common_scripts")
     @Scripts.Render("/signalr/hubs")
+    @Scripts.Render("~/katex_script")
+
     @RenderSection("scripts", required: false)
 </body>
 </html>
