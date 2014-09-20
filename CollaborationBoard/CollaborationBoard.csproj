@@ -249,6 +249,39 @@
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\KaTeX_AMS-Regular.eot" />
+    <Content Include="fonts\KaTeX_AMS-Regular.ttf" />
+    <Content Include="fonts\KaTeX_AMS-Regular.woff" />
+    <Content Include="fonts\KaTeX_Main-Bold.eot" />
+    <Content Include="fonts\KaTeX_Main-Bold.ttf" />
+    <Content Include="fonts\KaTeX_Main-Bold.woff" />
+    <Content Include="fonts\KaTeX_Main-Italic.eot" />
+    <Content Include="fonts\KaTeX_Main-Italic.ttf" />
+    <Content Include="fonts\KaTeX_Main-Italic.woff" />
+    <Content Include="fonts\KaTeX_Main-Regular.eot" />
+    <Content Include="fonts\KaTeX_Main-Regular.ttf" />
+    <Content Include="fonts\KaTeX_Main-Regular.woff" />
+    <Content Include="fonts\KaTeX_Math-BoldItalic.eot" />
+    <Content Include="fonts\KaTeX_Math-BoldItalic.ttf" />
+    <Content Include="fonts\KaTeX_Math-BoldItalic.woff" />
+    <Content Include="fonts\KaTeX_Math-Italic.eot" />
+    <Content Include="fonts\KaTeX_Math-Italic.ttf" />
+    <Content Include="fonts\KaTeX_Math-Italic.woff" />
+    <Content Include="fonts\KaTeX_Math-Regular.eot" />
+    <Content Include="fonts\KaTeX_Math-Regular.ttf" />
+    <Content Include="fonts\KaTeX_Math-Regular.woff" />
+    <Content Include="fonts\KaTeX_Size1-Regular.eot" />
+    <Content Include="fonts\KaTeX_Size1-Regular.ttf" />
+    <Content Include="fonts\KaTeX_Size1-Regular.woff" />
+    <Content Include="fonts\KaTeX_Size2-Regular.eot" />
+    <Content Include="fonts\KaTeX_Size2-Regular.ttf" />
+    <Content Include="fonts\KaTeX_Size2-Regular.woff" />
+    <Content Include="fonts\KaTeX_Size3-Regular.eot" />
+    <Content Include="fonts\KaTeX_Size3-Regular.ttf" />
+    <Content Include="fonts\KaTeX_Size3-Regular.woff" />
+    <Content Include="fonts\KaTeX_Size4-Regular.eot" />
+    <Content Include="fonts\KaTeX_Size4-Regular.ttf" />
+    <Content Include="fonts\KaTeX_Size4-Regular.woff" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
     <Content Include="Scripts\jquery-2.1.1.min.js" />
@@ -266,6 +299,7 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Shared\BoardError.cshtml" />
     <Content Include="Views\Board\Board.cshtml" />
+    <None Include="Views\Shared\KatexMessageModal.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -280,7 +314,6 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Shared\_EmptyLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

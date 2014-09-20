@@ -1,0 +1,31 @@
+﻿<div class="katexContainer">
+    <div class="katexModal">
+        <div class="normalText">
+            <textarea class="input"></textarea>
+        </div>
+        <div class="renderedText">
+        </div>
+    </div>
+</div>
+
+<script>
+    window.addEventListener("load", function () {
+        var $input = $(".katexModal .normalText .input");
+        var $output = $(".katexModal .renderedText");
+
+        $input.keyup(function (e) {
+            var text = this.value;
+            var html;
+
+            try {
+                html = katex.renderToString(text);
+            }
+            catch (e) {
+                $output.text(e.message);
+                return;
+            }
+
+            $output.html(html);
+        });
+    });
+</script>
