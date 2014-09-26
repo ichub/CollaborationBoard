@@ -9,6 +9,56 @@
 </div>
 
 <script>
+    function findEquations(text) {
+        var result = [];
+        var first = -1;
+
+        for (var i = 0; i < text.length; i++) {
+            if (text[i] == "`") {
+                if (first == -1) {
+                    first = i;
+                }
+                else {
+                    result.push({
+                        first: first,
+                        second: i
+                    });
+
+                    first = -1;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    function convertStringToHtml(text) {
+        var equations = findEquations(text);
+        var resultHtml = "";
+
+        var endOfPreviousEquation = -1;
+
+        for (var i = 0; i < equations.length; i++) {
+            var currentEquation = equations[i];
+
+            var html = katex.renderToString(text.substring(currentEquation.first + 1, currentEquation.second));
+
+            resultHtml += text.substring(endOfPreviousEquation + 1, currentEquation.first);
+
+            resultHtml += html;
+
+            endOfPreviousEquation = currentEquation.second;
+        }
+
+        resultHtml += text.substring(endOfPreviousEquation + 1, text.length);
+
+        if (equations.length == 0) {
+            resultHtml = text;
+        }
+
+        return resultHtml;
+    }
+
     window.addEventListener("load", function () {
         var $input = $(".katexModal .normalText .input");
         var $output = $(".katexModal .renderedText");
@@ -18,7 +68,8 @@
             var html;
 
             try {
-                html = katex.renderToString(text);
+                html = convertStringToHtml(text);
+                //html = katex.renderToString(text);
             }
             catch (e) {
                 $output.text(e.message);
