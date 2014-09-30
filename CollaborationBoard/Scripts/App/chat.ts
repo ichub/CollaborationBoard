@@ -63,7 +63,7 @@ class Chat {
                 if (text.length != 0) {
                     this.$messageInput.val("");
 
-                    var newMessage = new Message(text, this.app.user.id, this.app.user.displayName, this.app.user.displayColor);
+                    var newMessage = new Message(text, this.app.user.id, this.app.user.displayName, this.app.user.displayColor, new Date().toString());
 
                     this.appendChatMessage(newMessage);
 

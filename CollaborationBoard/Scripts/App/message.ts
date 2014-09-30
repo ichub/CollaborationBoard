@@ -3,11 +3,13 @@
     private _senderName: string;
     private _sender: string;
     private _color: string;
+    private _dateSent: string;
 
-    constructor(text: string, sender: string, senderName: string, color: string) {
+    constructor(text: string, sender: string, senderName: string, color: string, dateSent: string) {
         this._text = text;
         this._senderName = senderName;
         this._color = color;
+        this._dateSent = dateSent;
     }
 
     public get text() {
@@ -26,6 +28,10 @@
         return this._color;
     }
 
+    public get dateSent() {
+        return this._dateSent;
+    }
+
     public serialize(): any {
         return {
             text: this._text,
@@ -36,6 +42,6 @@
     }
 
     public static deserialize(serialized: any): Message {
-        return new Message(serialized.text, serialized.sender, serialized.senderName, serialized.color);
+        return new Message(serialized.text, serialized.sender, serialized.senderName, serialized.color, serialized.dateSent);
     }
 }

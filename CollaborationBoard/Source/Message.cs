@@ -20,5 +20,8 @@ namespace CollaborationBoard
 
         [DataMember(Name = "color")]
         public string Color { get; set; }
+
+        [DataMember(Name="dateSent")]
+        public string DateSent { get; set; }
     }
 }

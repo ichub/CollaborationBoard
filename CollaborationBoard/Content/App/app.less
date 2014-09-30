@@ -78,10 +78,10 @@
 }
 
 @messageWidth: 300px;
-@messageMargin: 20px;
-@sameUserMessageMargin: 5px;
+@messageMargin: 0px;
+@sameUserMessageMargin: 0px;
 @inputHeight: 25px;
-@messengerBackColor: #dbdbdb;
+@messengerBackColor: white;
 @messageColor: white;
 @messageShadowColor: #b4b4b4;
 @messageHeaderColor: #ffd800;
@@ -122,7 +122,7 @@
             .content {
                 white-space: pre-wrap;
                 word-wrap: break-word;
-                padding: 10px;
+                padding: 3px;
             }
 
             .header {
@@ -144,7 +144,7 @@
             }
 
             .footer {
-                height: 3px;
+                height: 0px;
                 width: 100%;
                 background-color: @messageShadowColor;
             }
@@ -196,13 +196,14 @@
         display: inline-block;
         background-color: red;
 
-        .input {
+        .input {    
             height: @inputHeight;
             outline: 0;
             width: 100%;
             border: none;
             background-color: #f6f6f6;
             padding-left: 5px;
+            resize: none;
         }
 
         .input:hover {
