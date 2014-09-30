@@ -22,7 +22,7 @@
             <div class="messageContainer">
             </div>
             <div class="inputContainer">
-                <input class="input" type="text" placeholder="Enter message here!" />
+                <input type="text" class="input" placeholder="Enter message here!"></input>
             </div>
             <div class="switchButton"><i class="arrowToggle fa fa-arrows-h"></i></div>
         </div>
@@ -34,13 +34,13 @@
         var boardId = "@ViewBag.BoardId";
     </script>
 
-    @Html.Partial("KatexMessageModal")
+    @*@Html.Partial("KatexMessageModal")*@
 
     @Scripts.Render("~/bundles/app_scripts")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/common_scripts") 
+    @Scripts.Render("~/bundles/common_scripts")
     @Scripts.Render("~/signalr/hubs")
     @Scripts.Render("~/katex_script")
 </body>
