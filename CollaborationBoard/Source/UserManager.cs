@@ -47,6 +47,14 @@ namespace CollaborationBoard
 
         public static bool TryMoveUserToBoard(string userId, string newBoardId)
         {
+            if (BoardManager.BoardExists(newBoardId))
+            {
+                if (!users.ContainsKey(newBoardId))
+                {
+                    users.Add(newBoardId, new List<User>());
+                }
+            }
+
             if (!IsUserOnBoard(userId, newBoardId))
             {
                 User user = GetUserById(userId);
@@ -56,7 +64,7 @@ namespace CollaborationBoard
                     if (pair.Value.Contains(user))
                     {
                         pair.Value.Remove(user);
-
+                        
                         users[newBoardId].Add(user);
 
                         return true;
