@@ -86,11 +86,11 @@ class Canvas {
     }
 
     private addListeners(): void {
-        this.$canvas.mousemove((e: JQueryMouseEventObject): void=> {
-            if (this.enabled) {
-                this.sendMouseMove(e.clientX, e.clientY);
-            }
-        });
+        //this.$canvas.mousemove((e: JQueryMouseEventObject): void=> {
+        //    if (this.enabled) {
+        //        this.sendMouseMove(e.clientX, e.clientY);
+        //    }
+        //});
     }
 
     public sendDrawEvent(event: DrawEvent): void {
