@@ -6,6 +6,12 @@ interface BoardServer {
     addMessage(message: Message);
 }
 
+interface JQuery {
+    modal(...args);
+}
+
+declare var katex;
+
 enum NotificationType {
     Error,
     Warning,
@@ -19,6 +25,12 @@ class Chat {
     private $messageInput: JQuery;
     private $toggle: JQuery;
     private $messenger: JQuery;
+    private $katexModal: JQuery;
+    private $katexToggle: JQuery;
+    private $katexInput: JQuery;
+
+    private $katexInputText: JQuery;
+    private $katexOutputText: JQuery;
 
     private previousMessage: Message;
     private wasPreviousANotification = false;
@@ -35,6 +47,13 @@ class Chat {
         this.$messageInput = $(".input");
         this.$toggle = $(".switchButton");
         this.$messenger = $(".messenger");
+        this.$katexModal = $(".katexModal");
+        this.$katexToggle = $(".latexInput");
+        this.$katexInput = $(".normalText .input");
+
+        this.$katexInputText = $(".normalText .input");
+        this.$katexOutputText = $(".renderedText");
+
         this.defaultMessengerWidth = this.$messageContainer.width() + "px";
 
         this.previousMessage = null;
@@ -85,6 +104,16 @@ class Chat {
 
                 this.hidden = !this.hidden;
             }
+        });
+
+        this.$katexToggle.click(e => {
+            this.$katexInput.val(this.$messageInput.val());
+
+            this.$katexModal.modal("show");
+        });
+
+        this.$katexInputText.keyup(e => {
+            Chat.updateKatexRenderedText();
         });
     }
 
@@ -161,6 +190,74 @@ class Chat {
         this.scrollDown();
 
         this.wasPreviousANotification = true;
+    }
+
+    private static findEquations(text) {
+        var result = [];
+        var first = -1;
+
+        for (var i = 0; i < text.length; i++) {
+            if (text[i] == "`") {
+                if (first == -1) {
+                    first = i;
+                }
+                else {
+                    result.push({
+                        first: first,
+                        second: i
+                    });
+
+                    first = -1;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private static convertStringToHtml(text) {
+        var equations = Chat.findEquations(text);
+        var resultHtml = "";
+
+        var endOfPreviousEquation = -1;
+
+        for (var i = 0; i < equations.length; i++) {
+            var currentEquation = equations[i];
+
+            var html = katex.renderToString(text.substring(currentEquation.first + 1, currentEquation.second));
+
+            resultHtml += text.substring(endOfPreviousEquation + 1, currentEquation.first);
+
+            resultHtml += html;
+
+            endOfPreviousEquation = currentEquation.second;
+        }
+
+        resultHtml += text.substring(endOfPreviousEquation + 1, text.length);
+
+        if (equations.length == 0) {
+            resultHtml = text;
+        }
+
+        return resultHtml;
+    }
+
+    public static updateKatexRenderedText() {
+        var $input = $(".katexModal .normalText .input");
+        var $output = $(".katexModal .renderedText");
+
+        var text = $input.val();
+        var html;
+
+        try {
+            html = Chat.convertStringToHtml(text);
+        }
+        catch (e) {
+            $output.text(e.message);
+            return;
+        }
+
+        $output.html(html);
     }
 
     public initializeFromSnapshot(snapshot: BoardSnapshot) {

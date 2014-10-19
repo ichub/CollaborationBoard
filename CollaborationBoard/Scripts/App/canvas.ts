@@ -35,6 +35,8 @@ class DrawEvent {
 
 class Canvas {
     public $canvas: JQuery;
+    public $finalCanvas: JQuery;
+
     public entities: EntityCollection;
     public app: Application;
 
@@ -45,9 +47,15 @@ class Canvas {
 
     public constructor(manager: Application) {
         this.$canvas = $("#drawCanvas");
+        this.$finalCanvas = $("#finalDrawCanvas");
         this.$container = this.$canvas.parent();
 
         var elem = <HTMLCanvasElement> this.$canvas.get(0);
+
+        elem.width = this.$canvas.width();
+        elem.height = this.$canvas.height();
+
+        elem = <HTMLCanvasElement> this.$finalCanvas.get(0);
 
         elem.width = this.$canvas.width();
         elem.height = this.$canvas.height();
@@ -127,5 +135,13 @@ class Canvas {
 
     public onUserDisconnect(user: UserInfo): void {
         console.log(format("user %s disconnected", user.id));
+    }
+
+    public get width() {
+        return this.$canvas.width();
+    }
+
+    public get height() {
+        return this.$canvas.height();
     }
 }
