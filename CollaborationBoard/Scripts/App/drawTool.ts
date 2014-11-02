@@ -44,13 +44,13 @@
     public onMouse(event: DrawEvent): void {
         switch (event.type) {
             case DrawEventType.MouseDown:
-                this.onMouseDown(event);
+                this.mouseDownWrapper(event, false);
                 break;
             case DrawEventType.MouseDrag:
-                this.onMouseDrag(event);
+                this.mouseMoveWrapper(event, false);
                 break;
             case DrawEventType.MouseUp:
-                this.onMouseUp(event);
+                this.mouseUpWrapper(event, false);
                 break;
         }
     }
@@ -85,6 +85,12 @@
         for (var i = 0; i < path.length; i++) {
             this.finalContext.fillRect(path[i].x, path[i].y, 5, 5);
         }
+
+        this.clearPath();
+    }
+
+    private clearPath(): void {
+        this.path = [];
     }
 
     private initializeStyle(): void {
@@ -113,51 +119,78 @@
         this.bufferContext.closePath();
     }
 
+    private mouseDownWrapper(event: DrawEvent, sendToServer: boolean) {
+        if (this.canvas.enabled) {
+            this.isMouseDown = true;
+
+            this.lastMouse = new Point(event.point.x, event.point.y);
+
+            var event = new DrawEvent(DrawEventType.MouseDown, this.lastMouse, this.lastMouse);
+            this.onMouseDown(event);
+
+            if (sendToServer) {
+                this.canvas.sendDrawEvent(event);
+            }
+        }
+    }
+
+    private mouseUpWrapper(event: DrawEvent, sendToServer: boolean) {
+        if (this.canvas.enabled && this.isMouseDown) {
+            this.isMouseDown = false;
+
+            var event = new DrawEvent(DrawEventType.MouseUp, new Point(event.point.x, event.point.y), this.lastMouse);
+
+            this.onMouseUp(event);
+
+            if (sendToServer) {
+                this.canvas.sendDrawEvent(event);
+            }
+        }
+    }
+
+    private mouseMoveWrapper(event: DrawEvent, sendToServer: boolean) {
+        if (this.canvas.enabled && this.isMouseDown) {
+            var event = new DrawEvent(DrawEventType.MouseDrag, new Point(event.point.x, event.point.y), this.lastMouse);
+
+            this.path.push(event.point);
+
+            this.onMouseDrag(event);
+
+            this.lastMouse = new Point(event.point.x, event.point.y);
+
+            if (sendToServer) {
+                this.canvas.sendDrawEvent(event);
+            }
+        }
+    }
+
     private addListeners(): void {
         $("#bufferContainer").mousedown(e => {
             requestAnimationFrame(() => {
-                if (this.canvas.enabled) {
-                    this.isMouseDown = true;
+                this.lastMouse = new Point(e.clientX, e.clientY);
 
-                    this.lastMouse = new Point(e.clientX, e.clientY);
+                var event = new DrawEvent(DrawEventType.MouseDown, new Point(e.clientX, e.clientY), this.lastMouse);
 
-                    var event = new DrawEvent(DrawEventType.MouseDown, new Point(e.clientX, e.clientY), this.lastMouse);
-                    this.onMouseDown(event);
-
-                    this.canvas.sendDrawEvent(event);
-                }
+                this.mouseDownWrapper(event, true);
             });
         });
 
         $(document.body).mouseup(e => {
             requestAnimationFrame(() => {
                 if (this.canvas.enabled && this.isMouseDown) {
-                    this.isMouseDown = false;
-
                     var event = new DrawEvent(DrawEventType.MouseUp, new Point(e.clientX, e.clientY), this.lastMouse);
-                    this.onMouseUp(event);
 
-                    this.canvas.sendDrawEvent(event);
-
-                    this.path = [];
+                    this.mouseUpWrapper(event, true);
                 }
             });
         });
 
         $(document.body).mousemove(e => {
             requestAnimationFrame(() => {
-                if (this.canvas.enabled) {
-                    if (this.isMouseDown) {
-                        var event = new DrawEvent(DrawEventType.MouseDrag, new Point(e.clientX, e.clientY), this.lastMouse);
+                if (this.canvas.enabled && this.isMouseDown) {
+                    var event = new DrawEvent(DrawEventType.MouseDrag, new Point(e.clientX, e.clientY), this.lastMouse);
 
-                        this.path.push(event.point);
-
-                        this.onMouseDrag(event);
-
-                        this.lastMouse = new Point(e.clientX, e.clientY);
-
-                        this.canvas.sendDrawEvent(event);
-                    }
+                    this.mouseMoveWrapper(event, true);
                 }
             });
         });
