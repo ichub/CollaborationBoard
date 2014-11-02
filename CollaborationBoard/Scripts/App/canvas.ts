@@ -34,7 +34,6 @@ class DrawEvent {
 }
 
 class Canvas {
-    public $canvas: JQuery;
     public $finalCanvas: JQuery;
 
     public entities: EntityCollection;
@@ -46,19 +45,13 @@ class Canvas {
     private _enabled: boolean;
 
     public constructor(manager: Application) {
-        this.$canvas = $("#drawCanvas");
         this.$finalCanvas = $("#finalDrawCanvas");
-        this.$container = this.$canvas.parent();
+        this.$container = this.$finalCanvas.parent();
 
-        var elem = <HTMLCanvasElement> this.$canvas.get(0);
+        var elem = <HTMLCanvasElement> this.$finalCanvas.get(0);
 
-        elem.width = this.$canvas.width();
-        elem.height = this.$canvas.height();
-
-        elem = <HTMLCanvasElement> this.$finalCanvas.get(0);
-
-        elem.width = this.$canvas.width();
-        elem.height = this.$canvas.height();
+        elem.width = this.$finalCanvas.width();
+        elem.height = this.$finalCanvas.height();
 
         this.app = manager;
         this.cursors = new Object();
@@ -138,10 +131,10 @@ class Canvas {
     }
 
     public get width() {
-        return this.$canvas.width();
+        return this.$finalCanvas.width();
     }
 
     public get height() {
-        return this.$canvas.height();
+        return this.$finalCanvas.height();
     }
 }

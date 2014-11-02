@@ -24,22 +24,36 @@
     display: flex;
 }
 
+@canvasSize: 2000px;
+
+.canvasType {
+    cursor: default;
+    box-shadow: 0px 0px 100px 0px rgba(0, 0, 0, 0.75);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: @canvasSize;
+    height: @canvasSize;
+}
 
 #container {
     .fullSize;
     overflow: hidden;
     cursor: default;
 
-    #drawCanvas, #finalDrawCanvas {
-        background-color: #ffffff;
-        cursor: default;
-        box-shadow: 0px 0px 100px 0px rgba(0, 0, 0, 0.75);
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 2000px;
-        height: 2000px;
+    #bufferContainer {
+        width: @canvasSize;
+        height: @canvasSize;
+
+        .buffer {
+            .canvasType;
+        }
     }
+
+    #finalDrawCanvas, #drawCanvas {
+        .canvasType;
+    }
+
 }
 
 .cursorContainer {
