@@ -83,7 +83,7 @@
 
     private drawSmoothPath(path: Array<Point>): void {
         for (var i = 0; i < path.length; i++) {
-            this.finalContext.fillRect(path[i].x, path[i].y, 5, 5);
+            this.finalContext.fillRect(path[i].x - 2.5, path[i].y - 2.5, 5, 5);
         }
 
         this.clearPath();

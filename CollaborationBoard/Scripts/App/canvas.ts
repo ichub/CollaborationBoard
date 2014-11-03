@@ -21,7 +21,7 @@ interface BoardServer {
 
 class DrawEvent {
     public type: DrawEventType;
-    public cid: string;
+    public id: string;
     public point: Point;
     public lastPoint: Point;
 
@@ -29,7 +29,7 @@ class DrawEvent {
         this.type = type;
         this.point = point.round();
         this.lastPoint = lastPoint.round();
-        this.cid = "";
+        this.id = "";
     }
 }
 
@@ -41,6 +41,7 @@ class Canvas {
 
     private $container: JQuery;
     private tool: DrawTool;
+    private toolCollection: Object;
     private cursors: any;
     private _enabled: boolean;
 
@@ -60,7 +61,9 @@ class Canvas {
         this.initializeNetwork();
         this.addListeners();
 
-        this.tool = new DrawTool(this);
+        this.toolCollection = new Object();
+
+
         this.entities = new EntityCollection(this);
     }
 
@@ -74,7 +77,7 @@ class Canvas {
 
     private initializeNetwork(): void {
         this.app.hub.client.onDrawEvent = (event: DrawEvent) => {
-            this.tool.onMouse(event);
+            this.toolCollection[event.id].onMouse(event);
         };
 
         this.app.hub.client.onMouseMove = (cid: string, x: number, y: number): void=> {
@@ -104,7 +107,11 @@ class Canvas {
 
     private processLoadEvents(events: Array<DrawEvent>): void {
         for (var i = 0; i < events.length; i++) {
-            this.tool.onMouse(events[i]);
+            if (!this.toolCollection[events[i].id]) {
+                this.toolCollection[events[i].id] = new DrawTool(this);
+            }
+
+            this.toolCollection[events[i].id].onMouse(events[i]);
         }
     }
 
@@ -118,16 +125,28 @@ class Canvas {
     }
 
     public initializeFromSnapshot(snapshot: BoardSnapshot): void {
+        for (var i = 0; i < snapshot.neighbors.length; i++) {
+            this.toolCollection[snapshot.neighbors[i]] = new DrawTool(this);
+        }
+
         this.processLoadEvents(snapshot.events);
         this.processLoadEntities(snapshot);
     }
 
     public onUserConnect(user: UserInfo): void {
         console.log(format("user %s connected", user.id));
+
+        if (this.toolCollection[user.id]) {
+            this.toolCollection[user.id] = new DrawTool(this);
+        }
     }
 
     public onUserDisconnect(user: UserInfo): void {
         console.log(format("user %s disconnected", user.id));
+
+        this.toolCollection[user.id].dispose();
+
+        delete this.toolCollection[user.id];
     }
 
     public get width() {

@@ -9,7 +9,7 @@ namespace CollaborationBoard
     [DataContract]
     public class ClientDrawEvent
     {
-        [DataMember(Name = "cid")]
+        [DataMember(Name = "id")]
         public string Sender { get; set; }
 
         [DataMember(Name = "point")]
