@@ -109,10 +109,22 @@ class Chat {
         this.$katexToggle.click(e => {
             this.$katexInput.val(this.$messageInput.val());
 
+            Chat.updateKatexRenderedText();
+
             this.$katexModal.modal("show");
         });
 
         this.$katexInputText.keyup(e => {
+            Chat.updateKatexRenderedText();
+        });
+
+        $(".katexSave").click(e => {
+            this.$messageInput.val(this.$katexInputText.val());
+
+            this.$katexModal.modal("hide");
+
+            this.$katexInputText.val("");
+
             Chat.updateKatexRenderedText();
         });
     }
@@ -131,7 +143,7 @@ class Chat {
         element.classList.add("message");
 
         header.innerText = message.senderName;
-        content.innerText = message.text;
+        content.innerHTML = Chat.convertStringToHtml(message.text);
 
         if (this.previousMessage != null && !this.wasPreviousANotification)
             if (message.sender == this.previousMessage.sender) {
@@ -216,30 +228,35 @@ class Chat {
     }
 
     private static convertStringToHtml(text) {
-        var equations = Chat.findEquations(text);
-        var resultHtml = "";
+        try {
+            var equations = Chat.findEquations(text);
+            var resultHtml = "";
 
-        var endOfPreviousEquation = -1;
+            var endOfPreviousEquation = -1;
 
-        for (var i = 0; i < equations.length; i++) {
-            var currentEquation = equations[i];
+            for (var i = 0; i < equations.length; i++) {
+                var currentEquation = equations[i];
 
-            var html = katex.renderToString(text.substring(currentEquation.first + 1, currentEquation.second));
+                var html = katex.renderToString(text.substring(currentEquation.first + 1, currentEquation.second));
 
-            resultHtml += text.substring(endOfPreviousEquation + 1, currentEquation.first);
+                resultHtml += text.substring(endOfPreviousEquation + 1, currentEquation.first);
 
-            resultHtml += html;
+                resultHtml += html;
 
-            endOfPreviousEquation = currentEquation.second;
+                endOfPreviousEquation = currentEquation.second;
+            }
+
+            resultHtml += text.substring(endOfPreviousEquation + 1, text.length);
+
+            if (equations.length == 0) {
+                resultHtml = text;
+            }
+
+            return resultHtml;
         }
-
-        resultHtml += text.substring(endOfPreviousEquation + 1, text.length);
-
-        if (equations.length == 0) {
-            resultHtml = text;
+        catch (e) {
+            return e.message;
         }
-
-        return resultHtml;
     }
 
     public static updateKatexRenderedText() {
@@ -247,15 +264,7 @@ class Chat {
         var $output = $(".katexModal .renderedText");
 
         var text = $input.val();
-        var html;
-
-        try {
-            html = Chat.convertStringToHtml(text);
-        }
-        catch (e) {
-            $output.text(e.message);
-            return;
-        }
+        var html = Chat.convertStringToHtml(text);
 
         $output.html(html);
     }
