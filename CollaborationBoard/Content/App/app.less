@@ -24,16 +24,24 @@
     display: flexbox;
 }
 
-@canvasSize: 2000px;
+@canvasSize: 700px;
 
 .canvasType {
     cursor: default;
-    box-shadow: 0px 0px 100px 0px rgba(0, 0, 0, 0.75);
     position: absolute;
     top: 0;
     left: 0;
     width: @canvasSize;
     height: @canvasSize;
+}
+
+#canvasContainer {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: @canvasSize;
+    height: @canvasSize;
+    background-color: #e8e8e8;
 }
 
 #bufferContainer {
@@ -98,12 +106,15 @@
 @messageWidth: 300px;
 @messageMargin: 10px;
 @sameUserMessageMargin: 0px;
+
 @inputHeight: 25px;
+@messengerTopBarHeight: 30px;
+@messengerMessagesHeight: 500px;
+
 @messengerBackColor: #e8e8e8;
 @messageColor: white;
 @messageShadowColor: #b4b4b4;
 @messageHeaderColor: #ffd800;
-
 @messengerMargin: 40px;
 @messengerSwitchButtonWidth: 50px;
 @messengerTransitionTime: 500ms;
@@ -112,21 +123,26 @@
 #messenger {
     -webkit-flex: 1 1 auto;
     justify-content: flex-start;
-    background-color: @messengerBackColor;
     position: absolute;
+    right: @messengerMargin;
+    bottom: 0;
     width: @messageWidth;
-    height: ~"calc(100vh - " @messengerMargin * 2 ~")";
-    top: @messengerMargin;
-    left: 0px;
-    -webkit-box-shadow: -1px 0px 20px 14px rgba(0,0,0,0.3);
     transition: margin @messengerTransitionTime;
+    background-color: @messengerBackColor;
+    height: ~"calc(" @inputHeight + @messengerTopBarHeight + @messengerMessagesHeight ~")";
+}
+
+#messengerTopBar {
+    width: 100%;
+    height: @messengerTopBarHeight;
+    background-color: #adadad;
 }
 
 #messageContainer {
     width: 100%;
-    height: ~"calc(100% - " @inputHeight ~")";
     flex-flow: column;
     overflow-y: scroll;
+    height: @messengerMessagesHeight;
     padding-bottom: @messageMargin;
 
     .message {
