@@ -7,6 +7,7 @@
 
     constructor(text: string, sender: string, senderName: string, color: string, dateSent: string) {
         this._text = text;
+        this._sender = sender;
         this._senderName = senderName;
         this._color = color;
         this._dateSent = dateSent;
@@ -21,7 +22,7 @@
     }
 
     public get sender() {
-        return this._senderName;
+        return this._sender;
     }
 
     public get color() {

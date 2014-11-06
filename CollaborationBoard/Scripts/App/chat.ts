@@ -39,6 +39,9 @@ class Chat {
     private defaultMessengerWidth: string;
     private hidden = false;
 
+    private newMessageNotSeen = false;
+    private messengerFlashLength = 500;
+
     constructor(app: Application) {
         this.app = app;
 
@@ -57,7 +60,20 @@ class Chat {
         this.previousMessage = null;
 
         this.inititalizeNetwork();
+        this.startMessageNotificationListener();
         this.addListeners();
+    }
+
+    private startMessageNotificationListener() {
+        setInterval(() => {
+            if (this.newMessageNotSeen) {
+                this.$messengerTopBar.toggleClass("flashing");
+            }
+            else {
+                this.$messengerTopBar.removeClass("flashing");
+            }
+
+        }, this.messengerFlashLength);
     }
 
     private inititalizeNetwork() {
@@ -87,6 +103,14 @@ class Chat {
                     this.app.hub.server.addMessage(newMessage.serialize());
                 }
             }
+        });
+
+        this.$messageInput.focus(e => {
+            this.newMessageNotSeen = false;
+        });
+
+        this.$messenger.click(e => {
+            this.newMessageNotSeen = false;
         });
 
         this.$messengerTopBar.click(e => {
@@ -163,6 +187,10 @@ class Chat {
         this.previousMessage = message;
 
         this.wasPreviousANotification = false;
+
+        if (message.sender != this.app.user.id) {
+            this.newMessageNotSeen = true;
+        }
     }
 
     private appendNotification(message: string, type: NotificationType) {
