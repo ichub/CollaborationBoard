@@ -26,6 +26,10 @@
         this.initializeStyle();
     }
 
+    public dispose() {
+        this.$bufferCanvas.remove();
+    }
+
     public createBuffer(): JQuery {
         var bufferContainer = $("#bufferContainer");
 
