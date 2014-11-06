@@ -77,6 +77,10 @@ class Canvas {
 
     private initializeNetwork(): void {
         this.app.hub.client.onDrawEvent = (event: DrawEvent) => {
+            if (!this.toolCollection[event.id]) {
+                this.toolCollection[event.id] = new DrawTool(this);
+            }
+
             this.toolCollection[event.id].onMouse(event);
         };
 
