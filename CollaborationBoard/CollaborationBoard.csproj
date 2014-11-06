@@ -232,6 +232,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Views\Shared\BoardCreationModal.cshtml" />
     <Content Include="Views\Password\Login.cshtml" />
+    <Content Include="Views\Board\Messenger.cshtml" />
     <TypeScriptCompile Include="Scripts\App\boardSnapshot.ts" />
     <TypeScriptCompile Include="Scripts\App\chat.ts" />
     <TypeScriptCompile Include="Scripts\App\cursor.ts" />
@@ -299,7 +300,7 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Shared\BoardError.cshtml" />
     <Content Include="Views\Board\Board.cshtml" />
-    <None Include="Views\Shared\LatexMessageModal.cshtml" />
+    <None Include="Views\Board\LatexMessageModal.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

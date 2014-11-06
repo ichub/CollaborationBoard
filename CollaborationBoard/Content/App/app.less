@@ -21,7 +21,7 @@
 }
 
 .flexBox {
-    display: flex;
+    display: flexbox;
 }
 
 @canvasSize: 2000px;
@@ -36,23 +36,17 @@
     height: @canvasSize;
 }
 
-#container {
-    .fullSize;
-    overflow: hidden;
-    cursor: default;
+#bufferContainer {
+    width: @canvasSize;
+    height: @canvasSize;
 
-    #bufferContainer {
-        width: @canvasSize;
-        height: @canvasSize;
-
-        .buffer {
-            .canvasType;
-        }
-    }
-
-    #finalDrawCanvas, #drawCanvas {
+    .buffer {
         .canvasType;
     }
+}
+
+#finalDrawCanvas, #drawCanvas {
+    .canvasType;
 }
 
 .cursorContainer {
@@ -126,163 +120,163 @@
     left: 0px;
     -webkit-box-shadow: -1px 0px 20px 14px rgba(0,0,0,0.3);
     transition: margin @messengerTransitionTime;
+}
 
-    #messageContainer {
-        width: 100%;
-        height: ~"calc(100% - " @inputHeight ~")";
-        flex-flow: column;
-        overflow-y: scroll;
-        padding-bottom: @messageMargin;
+#messageContainer {
+    width: 100%;
+    height: ~"calc(100% - " @inputHeight ~")";
+    flex-flow: column;
+    overflow-y: scroll;
+    padding-bottom: @messageMargin;
 
-        .message {
-            background-color: @messageColor;
-            display: inline-block;
-            margin-left: @messageMargin;
-            margin-right: @messageMargin;
-            margin-top: @messageMargin;
-            width: calc(@messageWidth - 2 * @messageMargin - 17px);
-            min-height: 0;
-            min-width: 0;
-
-            .content {
-                white-space: pre-wrap;
-                word-wrap: break-word;
-                padding: 3px;
-            }
-
-            .header {
-                height: 25px;
-                font-size: 15pt;
-                font-weight: bold;
-                width: 100%;
-                background-color: @messageHeaderColor;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-                overflow: hidden;
-                font-family: 'Open Sans Condensed';
-                color: rgba(0, 0, 0, 0.3);
-                padding-left: 5px;
-            }
-
-            .emptyHeader {
-                height: 0px;
-                padding: initial;
-            }
-
-            .footer {
-                height: 0px;
-                width: 100%;
-                background-color: @messageShadowColor;
-            }
-        }
-
-        .notification {
-            .message;
-
-            .header {
-                .message.header;
-                height: 2px;
-                padding: 0px;
-            }
-
-            .content {
-                .message.content;
-            }
-
-            .footer {
-                .message.footer;
-            }
-        }
-
-        .error {
-            .header {
-                background-color: #ffb0b0;
-            }
-        }
-
-        .info {
-            .header {
-                background-color: #b8c7ff;
-            }
-        }
-
-        .warning {
-            .header {
-                background-color: #feff76;
-            }
-        }
-
-        .messageUserRepeat {
-            margin-top: @sameUserMessageMargin;
-        }
-    }
-
-    #inputContainer {
-        width: 100%;
+    .message {
+        background-color: @messageColor;
         display: inline-block;
+        margin-left: @messageMargin;
+        margin-right: @messageMargin;
+        margin-top: @messageMargin;
+        width: calc(@messageWidth - 2 * @messageMargin - 17px);
+        min-height: 0;
+        min-width: 0;
 
-        #messageInput {
-            float: left;
-            height: @inputHeight;
-            outline: 0;
-            width: ~"calc(100%" - @latexButtonWidth~")";
-            border: none;
-            background-color: #f6f6f6;
-            padding-left: 5px;
-            resize: none;
+        .content {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            padding: 3px;
         }
 
-        #latexInputButton {
-            float: left;
-            width: @latexButtonWidth;
-            font-size: 13pt;
-            text-align: center;
-            background-color: #f6f6f6;
-            height: 100%;
+        .header {
+            height: 25px;
+            font-size: 15pt;
+            font-weight: bold;
+            width: 100%;
+            background-color: @messageHeaderColor;
+            white-space: nowrap;
+            text-overflow: ellipsis;
             overflow: hidden;
+            font-family: 'Open Sans Condensed';
+            color: rgba(0, 0, 0, 0.3);
+            padding-left: 5px;
         }
 
-        #latexInputButton:hover {
-            background-color: #e8e8e8;
+        .emptyHeader {
+            height: 0px;
+            padding: initial;
         }
 
-        #latexInputButton:active {
-            background-color: #ffffff;
-        }
-
-        #latexInputButton:hover:active {
-            background-color: #f1f1f1;
-        }
-
-        #messageInput:hover {
-            background-color: #e8e8e8;
-        }
-
-        #messageInput:active {
-            background-color: #ffffff;
-        }
-
-        #messageInput:hover:active {
-            background-color: #f1f1f1;
+        .footer {
+            height: 0px;
+            width: 100%;
+            background-color: @messageShadowColor;
         }
     }
 
-    #switchButton {
-        position: absolute;
-        top: 0px;
-        right: -@messengerSwitchButtonWidth;
-        background-color: red;
-        width: @messengerSwitchButtonWidth;
-        border: none;
-        font-size: 20pt;
-        text-align: center;
-        transition: background-color @messengerTransitionTime;
+    .notification {
+        .message;
 
-        #arrowToggle {
-            .noSelect;
-            transition: transform 1s;
+        .header {
+            .message.header;
+            height: 2px;
+            padding: 0px;
+        }
+
+        .content {
+            .message.content;
+        }
+
+        .footer {
+            .message.footer;
         }
     }
+
+    .error {
+        .header {
+            background-color: #ffb0b0;
+        }
+    }
+
+    .info {
+        .header {
+            background-color: #b8c7ff;
+        }
+    }
+
+    .warning {
+        .header {
+            background-color: #feff76;
+        }
+    }
+
+    .messageUserRepeat {
+        margin-top: @sameUserMessageMargin;
+    }
+}
+
+#inputContainer {
+    width: 100%;
+    display: inline-block;
+}
+
+#messageInput {
+    float: left;
+    height: @inputHeight;
+    outline: 0;
+    width: ~"calc(100%" - @latexButtonWidth~")";
+    border: none;
+    background-color: #f6f6f6;
+    padding-left: 5px;
+    resize: none;
+}
+
+#latexInputButton {
+    float: left;
+    width: @latexButtonWidth;
+    font-size: 13pt;
+    text-align: center;
+    background-color: #f6f6f6;
+    height: 100%;
+    overflow: hidden;
+}
+
+#latexInputButton:hover {
+    background-color: #e8e8e8;
+}
+
+#latexInputButton:active {
+    background-color: #ffffff;
+}
+
+#latexInputButton:hover:active {
+    background-color: #f1f1f1;
+}
+
+#messageInput:hover {
+    background-color: #e8e8e8;
+}
+
+#messageInput:active {
+    background-color: #ffffff;
+}
+
+#messageInput:hover:active {
+    background-color: #f1f1f1;
+}
+
+#switchButton {
+    position: absolute;
+    top: 0px;
+    right: -@messengerSwitchButtonWidth;
+    background-color: red;
+    width: @messengerSwitchButtonWidth;
+    border: none;
+    font-size: 20pt;
+    text-align: center;
+    transition: background-color @messengerTransitionTime;
+}
+
+#arrowToggle {
+    .noSelect;
+    transition: transform 1s;
 }
 
 .out .switchButton {
@@ -318,6 +312,7 @@
     .fullSize;
     .noSelect;
     background-color: rgba(0, 0, 0, 0.7);
+    z-index: 100;
 }
 
 #loadingBlind.fadeout {
@@ -328,31 +323,31 @@
 #latexBody {
     width: 100%;
     height: 300px;
+}
 
-    #normalText {
-        height: 100%;
-        width: 50%;
-        float: left;
+#normalText {
+    height: 100%;
+    width: 50%;
+    float: left;
+}
 
-        #latexInput {
-            width: 100%;
-            height: 100%;
-            resize: none;
-            outline: none;
-            border: 1px solid grey;
-        }
-    }
+#renderedText {
+    height: 100%;
+    width: 50%;
+    float: right;
+    padding: 10px;
+    font-size: 15pt;
+    border-right: 1px solid grey;
+    border-top: 1px solid grey;
+    border-bottom: 1px solid grey;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
 
-    #renderedText {
-        height: 100%;
-        width: 50%;
-        float: right;
-        padding: 10px;
-        font-size: 15pt;
-        border-right: 1px solid grey;
-        border-top: 1px solid grey;
-        border-bottom: 1px solid grey;
-        white-space: pre-wrap;
-        word-wrap: break-word;
-    }
+#latexInput {
+    width: 100%;
+    height: 100%;
+    resize: none;
+    outline: none;
+    border: 1px solid grey;
 }
