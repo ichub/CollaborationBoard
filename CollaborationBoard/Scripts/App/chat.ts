@@ -21,14 +21,14 @@ enum NotificationType {
 class Chat {
     public enabled = false;
 
-    private $messageContainer: JQuery;
-    private $messageInput: JQuery;
-    private $toggle: JQuery;
-    private $messenger: JQuery;
-    private $katexModal: JQuery;
-    private $katexToggle: JQuery;
-    private $katexInput: JQuery;
-    private $katexOutputText: JQuery;
+    private $messageContainer: JQuery; // element into which all messages are placed
+    private $messageInput: JQuery; // input element where the user types in messages
+    private $messengerVisibileToggle: JQuery; // element which when clicked toggles the visiblity of the chat messenger
+    private $messenger: JQuery; // the parent element which contains all messenger elements
+    private $latexPreviewModal: JQuery; // modal element which contains latex preview 
+    private $latexModalToggle: JQuery; // element that toggles the modal which contains the latex preview
+    private $latexInput: JQuery; // the input element inside the latex rendering modal which is used as input for latex rendering
+    private $latexOutput: JQuery; // the element which contains rendered latex 
 
     private previousMessage: Message;
     private wasPreviousANotification = false;
@@ -43,12 +43,12 @@ class Chat {
 
         this.$messageContainer = $("#messageContainer");
         this.$messageInput = $("#messageInput");
-        this.$toggle = $("#switchButton");
+        this.$messengerVisibileToggle = $("#switchButton");
         this.$messenger = $("#messenger");
-        this.$katexModal = $("#katexModal");
-        this.$katexToggle = $("#latexInputButton");
-        this.$katexInput = $("#katexInput");
-        this.$katexOutputText = $("#renderedText");
+        this.$latexPreviewModal = $("#latexModal");
+        this.$latexModalToggle = $("#latexInputButton");
+        this.$latexInput = $("#latexInput");
+        this.$latexOutput = $("#renderedText");
 
         this.defaultMessengerWidth = this.$messageContainer.width() + "px";
 
@@ -87,7 +87,7 @@ class Chat {
             }
         });
 
-        this.$toggle.click(e => {
+        this.$messengerVisibileToggle.click(e => {
             if (this.enabled) {
                 if (this.hidden) {
                     this.$messenger.removeClass("in");
@@ -102,26 +102,26 @@ class Chat {
             }
         });
 
-        this.$katexToggle.click(e => {
-            this.$katexInput.val(this.$messageInput.val());
+        this.$latexModalToggle.click(e => {
+            this.$latexInput.val(this.$messageInput.val());
 
-            this.updateKatexRenderedText();
+            this.updateRenderedLatex();
 
-            this.$katexModal.modal("show");
+            this.$latexPreviewModal.modal("show");
         });
 
-        this.$katexInput.keyup(e => {
-            this.updateKatexRenderedText();
+        this.$latexInput.keyup(e => {
+            this.updateRenderedLatex();
         });
 
-        $(".katexSave").click(e => {
-            this.$messageInput.val(this.$katexInput.val());
+        $("#latexSave").click(e => {
+            this.$messageInput.val(this.$latexInput.val());
 
-            this.$katexModal.modal("hide");
+            this.$latexPreviewModal.modal("hide");
 
-            this.$katexInput.val("");
+            this.$latexInput.val("");
 
-            this.updateKatexRenderedText();
+            this.updateRenderedLatex();
         });
     }
 
@@ -255,9 +255,9 @@ class Chat {
         }
     }
 
-    public updateKatexRenderedText() {
-        var $input = this.$katexInput;
-        var $output = this.$katexOutputText;
+    public updateRenderedLatex() {
+        var $input = this.$latexInput;
+        var $output = this.$latexOutput;
 
         var text = $input.val();
         var html = this.convertStringToHtml(text);

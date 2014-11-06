@@ -299,7 +299,7 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Shared\BoardError.cshtml" />
     <Content Include="Views\Board\Board.cshtml" />
-    <None Include="Views\Shared\KatexMessageModal.cshtml" />
+    <None Include="Views\Shared\LatexMessageModal.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
