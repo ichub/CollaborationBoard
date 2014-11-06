@@ -136,6 +136,7 @@
     width: 100%;
     height: @messengerTopBarHeight;
     background-color: #adadad;
+    cursor: pointer;
 }
 
 #messageContainer {
@@ -170,7 +171,6 @@
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
-            font-family: 'Open Sans Condensed';
             color: rgba(0, 0, 0, 0.3);
             padding-left: 5px;
         }
@@ -188,44 +188,27 @@
     }
 
     .notification {
-        .message;
-
-        .header {
-            .message.header;
-            height: 2px;
-            padding: 0px;
-        }
-
-        .content {
-            .message.content;
-        }
-
-        .footer {
-            .message.footer;
-        }
-    }
-
-    .error {
-        .header {
-            background-color: #ffb0b0;
-        }
-    }
-
-    .info {
-        .header {
-            background-color: #b8c7ff;
-        }
-    }
-
-    .warning {
-        .header {
-            background-color: #feff76;
-        }
+        width: @messageWidth;
+        margin: @messageMargin;
+        margin-bottom: 0px;
+        width: ~"calc(@{messageWidth} - 2 * @{messageMargin} - 17px)";
+        color: rgba(0, 0, 0, 0.5);
+        font-weight: bold;
+        font-size: 11pt;
+        text-align: center;
     }
 
     .messageUserRepeat {
         margin-top: @sameUserMessageMargin;
     }
+}
+
+.in > #messageContainer, .in > #inputContainer {
+    display: none;
+}
+
+#messenger.in {
+    height: @messengerTopBarHeight;
 }
 
 #inputContainer {
@@ -293,35 +276,6 @@
 #arrowToggle {
     .noSelect;
     transition: transform 1s;
-}
-
-.out .switchButton {
-    background-color: #75c8ef;
-}
-
-.in .switchButton {
-    background-color: #8df1ba;
-    opacity: 0.5;
-}
-
-.in .switchButton:hover {
-    opacity: 0.7;
-}
-
-#messenger.out {
-    margin-left: 0px;
-}
-
-#messenger.in {
-    margin-left: -@messageWidth;
-}
-
-.out .arrowToggle {
-    transform: rotate(0deg);
-}
-
-.in .arrowToggle {
-    transform: rotate(360deg);
 }
 
 #loadingBlind {

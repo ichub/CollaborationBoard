@@ -21,6 +21,7 @@ enum NotificationType {
 class Chat {
     public enabled = false;
 
+    private $messengerTopBar: JQuery; // the element which rests in the top part of the messenger. used to toggled visibility of the messenger
     private $messageContainer: JQuery; // element into which all messages are placed
     private $messageInput: JQuery; // input element where the user types in messages
     private $messengerVisibileToggle: JQuery; // element which when clicked toggles the visiblity of the chat messenger
@@ -41,6 +42,7 @@ class Chat {
     constructor(app: Application) {
         this.app = app;
 
+        this.$messengerTopBar = $("#messengerTopBar");
         this.$messageContainer = $("#messageContainer");
         this.$messageInput = $("#messageInput");
         this.$messengerVisibileToggle = $("#switchButton");
@@ -87,7 +89,7 @@ class Chat {
             }
         });
 
-        this.$messengerVisibileToggle.click(e => {
+        this.$messengerTopBar.click(e => {
             if (this.enabled) {
                 if (this.hidden) {
                     this.$messenger.removeClass("in");
@@ -166,12 +168,8 @@ class Chat {
     private appendNotification(message: string, type: NotificationType) {
         var element = document.createElement("div");
         var content = document.createElement("div");
-        var header = document.createElement("div");
-        var footer = document.createElement("div");
 
         content.classList.add("content");
-        footer.classList.add("footer");
-        header.classList.add("header");
 
         element.classList.add("notification");
 
@@ -189,9 +187,7 @@ class Chat {
 
         content.innerText = message;
 
-        element.appendChild(header);
         element.appendChild(content);
-        element.appendChild(footer);
 
         this.$messageContainer.append(element);
 
