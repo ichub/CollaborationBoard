@@ -115,7 +115,7 @@
 @messengerTransitionTime: 500ms;
 @latexButtonWidth: 25px;
 
-.messenger {
+#messenger {
     -webkit-flex: 1 1 auto;
     justify-content: flex-start;
     background-color: @messengerBackColor;
@@ -127,7 +127,7 @@
     -webkit-box-shadow: -1px 0px 20px 14px rgba(0,0,0,0.3);
     transition: margin @messengerTransitionTime;
 
-    .messageContainer {
+    #messageContainer {
         width: 100%;
         height: ~"calc(100% - " @inputHeight ~")";
         flex-flow: column;
@@ -217,11 +217,11 @@
         }
     }
 
-    .inputContainer {
+    #inputContainer {
         width: 100%;
         display: inline-block;
 
-        .input {
+        #messageInput {
             float: left;
             height: @inputHeight;
             outline: 0;
@@ -232,7 +232,7 @@
             resize: none;
         }
 
-        .latexInput {
+        #latexInputButton {
             float: left;
             width: @latexButtonWidth;
             font-size: 13pt;
@@ -242,32 +242,32 @@
             overflow: hidden;
         }
 
-        .latexInput:hover {
+        #latexInputButton:hover {
             background-color: #e8e8e8;
         }
 
-        .latexInput:active {
+        #latexInputButton:active {
             background-color: #ffffff;
         }
 
-        .latexInput:hover:active {
+        #latexInputButton:hover:active {
             background-color: #f1f1f1;
         }
 
-        .input:hover {
+        #messageInput:hover {
             background-color: #e8e8e8;
         }
 
-        .input:active {
+        #messageInput:active {
             background-color: #ffffff;
         }
 
-        .input:hover:active {
+        #messageInput:hover:active {
             background-color: #f1f1f1;
         }
     }
 
-    .switchButton {
+    #switchButton {
         position: absolute;
         top: 0px;
         right: -@messengerSwitchButtonWidth;
@@ -278,7 +278,7 @@
         text-align: center;
         transition: background-color @messengerTransitionTime;
 
-        .arrowToggle {
+        #arrowToggle {
             .noSelect;
             transition: transform 1s;
         }
@@ -298,11 +298,11 @@
     opacity: 0.7;
 }
 
-.out.messenger {
+#messenger.out {
     margin-left: 0px;
 }
 
-.in.messenger {
+#messenger.in {
     margin-left: -@messageWidth;
 }
 
@@ -314,27 +314,27 @@
     transform: rotate(360deg);
 }
 
-.loadingBlind {
+#loadingBlind {
     .fullSize;
     .noSelect;
     background-color: rgba(0, 0, 0, 0.7);
 }
 
-.fadeout {
+#loadingBlind.fadeout {
     transition: background-color 500ms;
     background-color: rgba(0, 0, 0, 0);
 }
 
-.katexBody {
+#katexBody {
     width: 100%;
     height: 300px;
 
-    .normalText {
+    #normalText {
         height: 100%;
         width: 50%;
         float: left;
 
-        .input {
+        #katexInput {
             width: 100%;
             height: 100%;
             resize: none;
@@ -343,7 +343,7 @@
         }
     }
 
-    .renderedText {
+    #renderedText {
         height: 100%;
         width: 50%;
         float: right;

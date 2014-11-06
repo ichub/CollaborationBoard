@@ -28,8 +28,6 @@ class Chat {
     private $katexModal: JQuery;
     private $katexToggle: JQuery;
     private $katexInput: JQuery;
-
-    private $katexInputText: JQuery;
     private $katexOutputText: JQuery;
 
     private previousMessage: Message;
@@ -43,16 +41,14 @@ class Chat {
     constructor(app: Application) {
         this.app = app;
 
-        this.$messageContainer = $(".messageContainer");
-        this.$messageInput = $(".input");
-        this.$toggle = $(".switchButton");
-        this.$messenger = $(".messenger");
-        this.$katexModal = $(".katexModal");
-        this.$katexToggle = $(".latexInput");
-        this.$katexInput = $(".normalText .input");
-
-        this.$katexInputText = $(".normalText .input");
-        this.$katexOutputText = $(".renderedText");
+        this.$messageContainer = $("#messageContainer");
+        this.$messageInput = $("#messageInput");
+        this.$toggle = $("#switchButton");
+        this.$messenger = $("#messenger");
+        this.$katexModal = $("#katexModal");
+        this.$katexToggle = $("#latexInputButton");
+        this.$katexInput = $("#katexInput");
+        this.$katexOutputText = $("#renderedText");
 
         this.defaultMessengerWidth = this.$messageContainer.width() + "px";
 
@@ -109,23 +105,23 @@ class Chat {
         this.$katexToggle.click(e => {
             this.$katexInput.val(this.$messageInput.val());
 
-            Chat.updateKatexRenderedText();
+            this.updateKatexRenderedText();
 
             this.$katexModal.modal("show");
         });
 
-        this.$katexInputText.keyup(e => {
-            Chat.updateKatexRenderedText();
+        this.$katexInput.keyup(e => {
+            this.updateKatexRenderedText();
         });
 
         $(".katexSave").click(e => {
-            this.$messageInput.val(this.$katexInputText.val());
+            this.$messageInput.val(this.$katexInput.val());
 
             this.$katexModal.modal("hide");
 
-            this.$katexInputText.val("");
+            this.$katexInput.val("");
 
-            Chat.updateKatexRenderedText();
+            this.updateKatexRenderedText();
         });
     }
 
@@ -143,7 +139,7 @@ class Chat {
         element.classList.add("message");
 
         header.innerText = message.senderName;
-        content.innerHTML = Chat.convertStringToHtml(message.text);
+        content.innerHTML = this.convertStringToHtml(message.text);
 
         if (this.previousMessage != null && !this.wasPreviousANotification)
             if (message.sender == this.previousMessage.sender) {
@@ -204,7 +200,7 @@ class Chat {
         this.wasPreviousANotification = true;
     }
 
-    private static findEquations(text) {
+    private findEquations(text) {
         var result = [];
         var first = -1;
 
@@ -227,9 +223,9 @@ class Chat {
         return result;
     }
 
-    private static convertStringToHtml(text) {
+    private convertStringToHtml(text) {
         try {
-            var equations = Chat.findEquations(text);
+            var equations = this.findEquations(text);
             var resultHtml = "";
 
             var endOfPreviousEquation = -1;
@@ -259,12 +255,12 @@ class Chat {
         }
     }
 
-    public static updateKatexRenderedText() {
-        var $input = $(".katexModal .normalText .input");
-        var $output = $(".katexModal .renderedText");
+    public updateKatexRenderedText() {
+        var $input = this.$katexInput;
+        var $output = this.$katexOutputText;
 
         var text = $input.val();
-        var html = Chat.convertStringToHtml(text);
+        var html = this.convertStringToHtml(text);
 
         $output.html(html);
     }

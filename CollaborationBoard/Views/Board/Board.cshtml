@@ -20,20 +20,20 @@
         <canvas id="finalDrawCanvas"></canvas>
         <div id="bufferContainer">
         </div>
-        <div class="messenger out">
-            <div class="messageContainer">
+        <div id="messenger" class="out">
+            <div id="messageContainer">
             </div>
-            <div class="inputContainer">
-                <input type="text" class="input" placeholder="Enter message here!" />
-                <div class="latexInput"><i class="fa fa-pencil"></i></div>
+            <div id="inputContainer">
+                <input type="text" id="messageInput" placeholder="Enter message here!" />
+                <div id="latexInputButton"><i class="fa fa-pencil"></i></div>
             </div>
-            <div class="switchButton"><i class="arrowToggle fa fa-arrows-h"></i></div>
+            <div id="switchButton"><i class="arrowToggle fa fa-arrows-h"></i></div>
         </div>
     </div>
 
     <div id="toolbox"></div>
 
-    <div class="loadingBlind"></div>
+    <div id="loadingBlind"></div>
 
     <script>
         var boardId = "@ViewBag.BoardId";

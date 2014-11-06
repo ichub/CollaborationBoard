@@ -39,7 +39,7 @@ class Application {
             this.chat.initializeFromSnapshot(snapshot);
 
             setTimeout(() => {
-                $(".loadingBlind").addClass("fadeout");
+                $("#loadingBlind").addClass("fadeout");
             }, 500);
         };
 
@@ -65,8 +65,8 @@ class Application {
     }
 
     private addEventListeners() {
-        $(".loadingBlind").on("webkitTransitionEnd", () => {
-            $(".loadingBlind").hide();
+        $("#loadingBlind").on("webkitTransitionEnd", () => {
+            $("#loadingBlind").hide();
         });
     }
 
