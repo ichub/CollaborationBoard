@@ -44,15 +44,6 @@
     <Reference Include="dotless.Core">
       <HintPath>..\packages\dotless.1.4.1.0\lib\dotless.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Exceptionless">
-      <HintPath>..\packages\Exceptionless.1.5.2092\lib\net45\Exceptionless.dll</HintPath>
-    </Reference>
-    <Reference Include="Exceptionless.Models">
-      <HintPath>..\packages\Exceptionless.1.5.2092\lib\net45\Exceptionless.Models.dll</HintPath>
-    </Reference>
-    <Reference Include="Exceptionless.Mvc">
-      <HintPath>..\packages\Exceptionless.Mvc.1.5.2092\lib\net45\Exceptionless.Mvc.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core">
       <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.1.1\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
     </Reference>
@@ -211,7 +202,6 @@
     <Compile Include="Source\Message.cs" />
     <Compile Include="Source\Point.cs" />
     <Compile Include="Source\RequestContext.cs" />
-    <Compile Include="Source\LoggingPipelineModule.cs" />
     <Compile Include="Source\User.cs" />
     <Compile Include="Source\UserManager.cs" />
     <Compile Include="Source\UserRandomizer.cs" />
