@@ -151,6 +151,12 @@ class Chat {
         });
     }
 
+    private formatDateForDisplay(dateString: string) {
+        var date = new Date(dateString);
+
+        return format("%s:%s %s", date.getHours(), date.getMinutes());
+    }
+
     private appendChatMessage(message: Message) {
         var element = document.createElement("div");
 
@@ -164,7 +170,6 @@ class Chat {
 
         element.classList.add("message");
 
-        header.innerText = message.senderName;
         content.innerHTML = this.convertStringToHtml(message.text);
 
         if (this.previousMessage != null && !this.wasPreviousANotification)
@@ -175,11 +180,23 @@ class Chat {
                 element.classList.add("messageUserRepeat");
             }
 
+        var name = document.createElement("div");
+        var date = document.createElement("div");
+
+        name.classList.add("name");
+        date.classList.add("date");
+
+        name.innerText = message.senderName;
+        date.innerText = this.formatDateForDisplay(message.dateSent);
+
+        header.appendChild(name);
+        header.appendChild(date);
+
         element.appendChild(header);
         element.appendChild(content);
         element.appendChild(footer);
 
-        $(header).css("background-color", message.color);
+        //$(header).css("background-color", message.color);
 
         this.$messageContainer.append(element);
         this.scrollDown();
