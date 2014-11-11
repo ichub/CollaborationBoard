@@ -1,4 +1,4 @@
-﻿class DrawTool {
+﻿class Tool {
     private canvas: Canvas;
     private $bufferCanvas: JQuery;
     private $finalCanvas: JQuery;
@@ -7,6 +7,7 @@
     private isMouseDown: boolean;
     private lastMouse: Point;
     private path: Array<Point>;
+    private currentBehavior: ToolBehavior;
 
     public constructor(canvas: Canvas) {
         this.canvas = canvas;
@@ -22,8 +23,7 @@
         this.addListeners();
         this.isMouseDown = false;
         this.lastMouse = null;
-
-        this.initializeStyle();
+        this.currentBehavior = new DrawBehavior(this.bufferContext, this.finalContext);
     }
 
     public dispose() {
@@ -85,10 +85,8 @@
         }
     }
 
-    private drawSmoothPath(path: Array<Point>): void {
-        for (var i = 0; i < path.length; i++) {
-            this.finalContext.fillRect(path[i].x - 2.5, path[i].y - 2.5, 5, 5);
-        }
+    private finalize(path: Array<Point>): void {
+        this.currentBehavior.finalize(path);
 
         this.clearPath();
     }
@@ -97,30 +95,21 @@
         this.path = [];
     }
 
-    private initializeStyle(): void {
-        this.bufferContext.lineCap = "round";
-        this.bufferContext.lineJoin = "round";
-        this.bufferContext.lineWidth = 5;
-
-        this.finalContext.lineCap = "round";
-        this.finalContext.lineJoin = "round";
-        this.finalContext.lineWidth = 5;
-    }
-
     private onMouseDown(event: DrawEvent): void {
+        this.path.push(event.point);
+
+        this.currentBehavior.onMouseDown(event);
     }
 
     private onMouseUp(event: DrawEvent): void {
+        this.currentBehavior.onMouseUp(event);
+
         this.bufferContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.drawSmoothPath(this.path);
+        this.finalize(this.path);
     }
 
     private onMouseDrag(event: DrawEvent): void {
-        this.bufferContext.beginPath();
-        this.bufferContext.moveTo(event.point.x, event.point.y);
-        this.bufferContext.lineTo(event.lastPoint.x, event.lastPoint.y);
-        this.bufferContext.stroke();
-        this.bufferContext.closePath();
+        this.currentBehavior.onMouseDrag(event);
     }
 
     private mouseDownWrapper(event: DrawEvent, sendToServer: boolean) {

@@ -40,7 +40,7 @@ class Canvas {
     public app: Application;
 
     private $container: JQuery;
-    private tool: DrawTool;
+    private tool: Tool;
     private toolCollection: Object;
     private cursors: any;
     private _enabled: boolean;
@@ -78,7 +78,7 @@ class Canvas {
     private initializeNetwork(): void {
         this.app.hub.client.onDrawEvent = (event: DrawEvent) => {
             if (!this.toolCollection[event.id]) {
-                this.toolCollection[event.id] = new DrawTool(this);
+                this.toolCollection[event.id] = new Tool(this);
             }
 
             this.toolCollection[event.id].onMouse(event);
@@ -112,7 +112,7 @@ class Canvas {
     private processLoadEvents(events: Array<DrawEvent>): void {
         for (var i = 0; i < events.length; i++) {
             if (!this.toolCollection[events[i].id]) {
-                this.toolCollection[events[i].id] = new DrawTool(this);
+                this.toolCollection[events[i].id] = new Tool(this);
             }
 
             this.toolCollection[events[i].id].onMouse(events[i]);
@@ -130,7 +130,7 @@ class Canvas {
 
     public initializeFromSnapshot(snapshot: BoardSnapshot): void {
         for (var i = 0; i < snapshot.neighbors.length; i++) {
-            this.toolCollection[snapshot.neighbors[i]] = new DrawTool(this);
+            this.toolCollection[snapshot.neighbors[i]] = new Tool(this);
         }
 
         this.processLoadEvents(snapshot.events);
@@ -141,7 +141,7 @@ class Canvas {
         console.log(format("user %s connected", user.id));
 
         if (this.toolCollection[user.id]) {
-            this.toolCollection[user.id] = new DrawTool(this);
+            this.toolCollection[user.id] = new Tool(this);
         }
     }
 
