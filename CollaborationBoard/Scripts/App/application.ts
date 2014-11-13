@@ -37,6 +37,7 @@ class Application {
             this._user = UserInfo.deserialize(user);
             this._canvas.enabled = true;
             this._chat.enabled = true;
+            this._canvas.addLocalUser();
             this._canvas.initializeFromSnapshot(snapshot);
             this._chat.initializeFromSnapshot(snapshot);
 

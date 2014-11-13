@@ -63,7 +63,6 @@ class Canvas {
 
         this.toolCollection = new Object();
 
-
         this._entities = new EntityCollection(this);
     }
 
@@ -78,7 +77,7 @@ class Canvas {
     private initializeNetwork(): void {
         this._app.hub.client.onDrawEvent = (event: DrawEvent) => {
             if (!this.toolCollection[event.id]) {
-                this.toolCollection[event.id] = new Tool(this);
+                this.toolCollection[event.id] = new Tool(this, true);
             }
 
             this.toolCollection[event.id].onMouse(event);
@@ -112,7 +111,7 @@ class Canvas {
     private processLoadEvents(events: Array<DrawEvent>): void {
         for (var i = 0; i < events.length; i++) {
             if (!this.toolCollection[events[i].id]) {
-                this.toolCollection[events[i].id] = new Tool(this);
+                this.toolCollection[events[i].id] = new Tool(this, true);
             }
 
             this.toolCollection[events[i].id].onMouse(events[i]);
@@ -130,11 +129,15 @@ class Canvas {
 
     public initializeFromSnapshot(snapshot: BoardSnapshot): void {
         for (var i = 0; i < snapshot.neighbors.length; i++) {
-            this.toolCollection[snapshot.neighbors[i]] = new Tool(this);
+            this.toolCollection[snapshot.neighbors[i]] = new Tool(this, true);
         }
 
         this.processLoadEvents(snapshot.events);
         this.processLoadEntities(snapshot);
+    }
+
+    public addLocalUser() {
+        this.toolCollection[this.app.user.id] = new Tool(this, false);
     }
 
     public onUserConnect(user: UserInfo): void {

@@ -1,5 +1,5 @@
 ﻿var Tool = (function () {
-    function Tool(canvas) {
+    function Tool(canvas, isRemoteTool) {
         this.canvas = canvas;
 
         this.$finalCanvas = canvas.$finalCanvas;
@@ -10,7 +10,10 @@
 
         this.path = [];
 
-        this.addListeners();
+        if (!isRemoteTool) {
+            this.addListeners();
+        }
+
         this.isMouseDown = false;
         this.lastMouse = null;
 

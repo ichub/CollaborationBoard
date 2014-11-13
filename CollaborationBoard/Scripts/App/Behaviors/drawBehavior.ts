@@ -3,7 +3,8 @@
         "lineCap": "round",
         "lineJoin": "round",
         "strokeStyle": "#000000",
-        "lineWidth": 20
+        "fillStyle": "#000000",
+        "lineWidth": 2
     };
 
     public bufferContext: CanvasRenderingContext2D;
@@ -23,6 +24,9 @@
     }
 
     public onMouseDown(event: DrawEvent) {
+        this.bufferContext.beginPath();
+        this.bufferContext.arc(event.point.x, event.point.y, this.styles.lineWidth / 2, 0, 2 * Math.PI, false);
+        this.bufferContext.fill();
     }
 
     public onMouseUp(event: DrawEvent) {
@@ -31,10 +35,18 @@
     public finalize(path: Array<Point>) {
         this.finalContext.beginPath();
 
+        this.finalContext.arc(path[0].x, path[0].y, this.styles.lineWidth / 2, 0, 2 * Math.PI, false);
+        this.finalContext.fill();
+
+        this.finalContext.closePath();
+
+        this.finalContext.beginPath();
+
         for (var i = 0; i < path.length - 1; i++) {
             this.finalContext.moveTo(path[i].x, path[i].y);
             this.finalContext.lineTo(path[i + 1].x, path[i + 1].y);
         }
+
         this.finalContext.stroke();
         this.finalContext.closePath();
     }

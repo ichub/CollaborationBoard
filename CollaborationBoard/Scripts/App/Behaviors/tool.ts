@@ -10,7 +10,7 @@
 
     private _behavior: ToolBehavior;
 
-    public constructor(canvas: Canvas) {
+    public constructor(canvas: Canvas, isRemoteTool: boolean) {
         this.canvas = canvas;
 
         this.$finalCanvas = canvas.$finalCanvas;
@@ -21,7 +21,10 @@
 
         this.path = [];
 
-        this.addListeners();
+        if (!isRemoteTool) {
+            this.addListeners();
+        }
+
         this.isMouseDown = false;
         this.lastMouse = null;
 
