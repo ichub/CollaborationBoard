@@ -144,7 +144,7 @@ class Canvas {
         console.log(format("user %s connected", user.id));
 
         if (this.toolCollection[user.id]) {
-            this.toolCollection[user.id] = new Tool(this);
+            this.toolCollection[user.id] = new Tool(this, false);
         }
     }
 
