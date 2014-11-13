@@ -1,15 +1,17 @@
-﻿class EraseBehavior implements ToolBehavior {
+﻿class DrawBehavior implements ToolBehavior {
+    styles = {
+        "lineCap": "round",
+        "lineJoin": "round",
+        "strokeStyle": "#000000",
+        "lineWidth": 20
+    };
+
     public bufferContext: CanvasRenderingContext2D;
     public finalContext: CanvasRenderingContext2D;
 
     constructor(tool: Tool) {
         this.bufferContext = tool.bufferContext;
         this.finalContext = tool.finalContext;
-
-        this.bufferContext.lineCap = "round";
-        this.bufferContext.lineJoin = "round";
-        this.bufferContext.strokeStyle = "#ffffff";
-        this.bufferContext.lineWidth = 20;
     }
 
     public onMouseDrag(event: DrawEvent) {
@@ -26,15 +28,7 @@
     public onMouseUp(event: DrawEvent) {
     }
 
-    public setStyle() {
-        this.finalContext.strokeStyle = "#ffffff";
-        this.finalContext.lineCap = "round";
-        this.finalContext.lineJoin = "round";
-        this.finalContext.lineWidth = 20;
-    }
-
     public finalize(path: Array<Point>) {
-
         this.finalContext.beginPath();
 
         for (var i = 0; i < path.length - 1; i++) {
@@ -44,4 +38,4 @@
         this.finalContext.stroke();
         this.finalContext.closePath();
     }
-} 
+}

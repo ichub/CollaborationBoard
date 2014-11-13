@@ -13,7 +13,7 @@
 
     public addListeners(): void {
         this.$eraser.click(e => {
-            this.app.canvas.userTool.currentBehavior = new EraseBehavior(this.app.canvas.userTool);
+            this.app.canvas.userTool.behavior = new EraseBehavior(this.app.canvas.userTool);
             this.$eraser.addClass("selected");
         });
     }

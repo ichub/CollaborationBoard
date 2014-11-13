@@ -1,8 +1,7 @@
 ﻿interface ToolBehavior {
+    styles: Object;
     bufferContext: CanvasRenderingContext2D;
     finalContext: CanvasRenderingContext2D;
-
-    setStyle();
 
     onMouseDown(event: DrawEvent);
     onMouseUp(event: DrawEvent);

@@ -35,7 +35,7 @@ namespace CollaborationBoard
             bundles.Add(new ScriptBundle("~/katex_script").Include("~/Scripts/katex.min.js"));
             bundles.Add(new StyleBundle("~/katex_css").Include("~/Content/katex.min.css"));
 
-            bundles.Add(new ScriptBundle("~/bundles/app_scripts").IncludeDirectory("~/Scripts/App/", "*.js"));
+            bundles.Add(new ScriptBundle("~/bundles/app_scripts").IncludeDirectory("~/Scripts/App/", "*.js", true));
             bundles.Add(new ScriptBundle("~/bundles/common_scripts").IncludeDirectory("~/Scripts/Common/", "*.js"));
 
             var lessBundle = new StyleBundle("~/bundles/app_styles").IncludeDirectory("~/Content/App/", "*.less").IncludeDirectory("~/Content/App/", "*.css");
