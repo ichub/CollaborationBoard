@@ -234,6 +234,7 @@
     <TypeScriptCompile Include="Scripts\App\textEntity.ts" />
     <TypeScriptCompile Include="Scripts\App\point.ts" />
     <TypeScriptCompile Include="Scripts\App\toolBehavior.ts" />
+    <TypeScriptCompile Include="Scripts\App\toolbox.ts" />
     <TypeScriptCompile Include="Scripts\App\userInfo.ts" />
     <TypeScriptCompile Include="Scripts\Common\misc.ts" />
     <Content Include="Scripts\bootstrap.js" />

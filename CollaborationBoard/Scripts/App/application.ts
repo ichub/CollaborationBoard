@@ -22,21 +22,23 @@ interface BoardServer {
 class Application {
     private _hub: HubProxy;
     private _user: UserInfo;
-    private canvas: Canvas;
-    private chat: Chat;
+    private _canvas: Canvas;
+    private _chat: Chat;
+    private toolBox: ToolBox;
     private boardId: string;
 
     public constructor() {
         this._hub = $.connection.boardHub;
-        this.canvas = new Canvas(this);
-        this.chat = new Chat(this);
+        this._canvas = new Canvas(this);
+        this._chat = new Chat(this);
+        this.toolBox = new ToolBox(this);
 
         this._hub.client.handshake = (user: UserInfo, snapshot: BoardSnapshot): void => {
             this._user = UserInfo.deserialize(user);
-            this.canvas.enabled = true;
-            this.chat.enabled = true;
-            this.canvas.initializeFromSnapshot(snapshot);
-            this.chat.initializeFromSnapshot(snapshot);
+            this._canvas.enabled = true;
+            this._chat.enabled = true;
+            this._canvas.initializeFromSnapshot(snapshot);
+            this._chat.initializeFromSnapshot(snapshot);
 
             setTimeout(() => {
                 $("#loadingBlind").addClass("fadeout");
@@ -46,15 +48,15 @@ class Application {
         this._hub.client.connect = (user: UserInfo): void => {
             user = UserInfo.deserialize(user);
 
-            this.canvas.onUserConnect(user);
-            this.chat.onUserConnect(user);
+            this._canvas.onUserConnect(user);
+            this._chat.onUserConnect(user);
         };
 
         this._hub.client.disconnect = (user: UserInfo): void => {
             user = UserInfo.deserialize(user);
 
-            this.canvas.onUserDisconnect(user);
-            this.chat.onUserDisconnect(user);
+            this._canvas.onUserDisconnect(user);
+            this._chat.onUserDisconnect(user);
         };
 
         this.addEventListeners();
@@ -76,6 +78,14 @@ class Application {
 
     public get user(): UserInfo {
         return this._user;
+    }
+
+    public get chat(): Chat {
+        return this._chat;
+    }
+
+    public get canvas(): Canvas {
+        return this._canvas;
     }
 }
 

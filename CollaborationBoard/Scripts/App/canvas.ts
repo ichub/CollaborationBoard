@@ -36,8 +36,8 @@ class DrawEvent {
 class Canvas {
     public $finalCanvas: JQuery;
 
-    public entities: EntityCollection;
-    public app: Application;
+    public _entities: EntityCollection;
+    public _app: Application;
 
     private $container: JQuery;
     private tool: Tool;
@@ -54,7 +54,7 @@ class Canvas {
         elem.width = this.$finalCanvas.width();
         elem.height = this.$finalCanvas.height();
 
-        this.app = manager;
+        this._app = manager;
         this.cursors = new Object();
         this._enabled = false;
 
@@ -64,7 +64,7 @@ class Canvas {
         this.toolCollection = new Object();
 
 
-        this.entities = new EntityCollection(this);
+        this._entities = new EntityCollection(this);
     }
 
     public get enabled(): boolean {
@@ -76,7 +76,7 @@ class Canvas {
     }
 
     private initializeNetwork(): void {
-        this.app.hub.client.onDrawEvent = (event: DrawEvent) => {
+        this._app.hub.client.onDrawEvent = (event: DrawEvent) => {
             if (!this.toolCollection[event.id]) {
                 this.toolCollection[event.id] = new Tool(this);
             }
@@ -84,7 +84,7 @@ class Canvas {
             this.toolCollection[event.id].onMouse(event);
         };
 
-        this.app.hub.client.onMouseMove = (cid: string, x: number, y: number): void=> {
+        this._app.hub.client.onMouseMove = (cid: string, x: number, y: number): void=> {
             if (!this.cursors[cid]) {
                 this.cursors[cid] = new Cursor();
             }
@@ -102,11 +102,11 @@ class Canvas {
     }
 
     public sendDrawEvent(event: DrawEvent): void {
-        this.app.hub.server.onDrawEvent(event);
+        this._app.hub.server.onDrawEvent(event);
     }
 
     private sendMouseMove(x: number, y: number): void {
-        this.app.hub.server.onMouseMove(x, y);
+        this._app.hub.server.onMouseMove(x, y);
     }
 
     private processLoadEvents(events: Array<DrawEvent>): void {
@@ -124,7 +124,7 @@ class Canvas {
             var entity = snapshot.textEntities[i];
             entity.position = Point.deserialize(entity.position);
 
-            this.entities.addTextEntity(entity.id, entity.text, entity.position);
+            this._entities.addTextEntity(entity.id, entity.text, entity.position);
         }
     }
 
@@ -159,5 +159,17 @@ class Canvas {
 
     public get height() {
         return this.$finalCanvas.height();
+    }
+
+    public get userTool(): Tool {
+        return this.toolCollection[this._app.user.id];
+    }
+
+    public get app(): Application {
+        return this._app;
+    }
+
+    public get entities(): EntityCollection {
+        return this._entities;
     }
 }

@@ -21,7 +21,7 @@
 }
 
 .flexBox {
-    display: flexbox;
+    display: flex;
 }
 
 @canvasSize: 2000px;
@@ -92,16 +92,41 @@
     background-color: red;
 }
 
-@toolboxWidth: 2000px;
+@toolboxWidth: 500px;
+@toolboxItemSize: 30px;
+@toolboxMargin: 2px;
+@toolboxIconSize: 15pt;
 
 #toolbox {
     position: absolute;
     top: 0px;
     left: ~"calc(100vw / 2" - @toolboxWidth / 2 ~")";
     width: @toolboxWidth;
-    height: 20px;
-    background-color: red;
-    display: none;
+    height: @toolboxItemSize + 2 * @toolboxMargin;
+    background-color: #f1f1f1;
+    padding: @toolboxMargin;
+
+    .toolBoxItem {
+        .flexBox;
+        float: left;
+        width: @toolboxItemSize;
+        height: @toolboxItemSize;
+        align-items: center;
+        justify-content: center;
+        font-size: @toolboxIconSize;
+    }
+
+    .toolBoxItem:hover {
+        background-color: #dddddd;
+    }
+
+    .toolBoxItem:active {
+        background-color: #cccccc;
+    }
+
+    .toolBoxItem.selected {
+        border: 1px solid #b4b4b4;
+    }
 }
 
 @messageWidth: 300px;

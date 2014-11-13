@@ -2,35 +2,36 @@
     private canvas: Canvas;
     private $bufferCanvas: JQuery;
     private $finalCanvas: JQuery;
-    private bufferContext: CanvasRenderingContext2D;
-    private finalContext: CanvasRenderingContext2D;
+    private _bufferContext: CanvasRenderingContext2D;
+    private _finalContext: CanvasRenderingContext2D;
     private isMouseDown: boolean;
     private lastMouse: Point;
     private path: Array<Point>;
-    private currentBehavior: ToolBehavior;
+
+    public currentBehavior: ToolBehavior;
 
     public constructor(canvas: Canvas) {
         this.canvas = canvas;
 
         this.$finalCanvas = canvas.$finalCanvas;
-        this.finalContext = (<HTMLCanvasElement> this.$finalCanvas.get(0)).getContext("2d");
+        this._finalContext = (<HTMLCanvasElement> this.$finalCanvas.get(0)).getContext("2d");
 
         this.$bufferCanvas = this.createBuffer();
-        this.bufferContext = (<HTMLCanvasElement> this.$bufferCanvas.get(0)).getContext("2d");
+        this._bufferContext = (<HTMLCanvasElement> this.$bufferCanvas.get(0)).getContext("2d");
 
         this.path = [];
 
         this.addListeners();
         this.isMouseDown = false;
         this.lastMouse = null;
-        this.currentBehavior = new DrawBehavior(this.bufferContext, this.finalContext);
+        this.currentBehavior = new DrawBehavior(this);
     }
 
     public dispose() {
         this.$bufferCanvas.remove();
     }
 
-    public createBuffer(): JQuery {
+    private createBuffer(): JQuery {
         var bufferContainer = $("#bufferContainer");
 
         var buffer = document.createElement("canvas");
@@ -73,19 +74,20 @@
         x[xCoords.length + 1] = xCoords[xCoords.length - 1];
         y[yCoords.length + 1] = yCoords[yCoords.length - 1];
         for (var i = 1; i < x.length; i++) {
-            this.bufferContext.beginPath();
-            this.bufferContext.moveTo(x[i], y[i]);
+            this._bufferContext.beginPath();
+            this._bufferContext.moveTo(x[i], y[i]);
             var controlPointX1 = (x[i] + x[i + 1] - x[i - 1]) / 4;
             var controlPointY1 = (y[i] + y[i + 1] - y[i - 1]) / 4;
             var controlPointX2 = (x[i + 1] + x[i] - x[i + 2]) / 4;
             var controlPointY2 = (y[i + 1] + y[i] - y[i + 2]) / 4;
-            this.bufferContext.bezierCurveTo(controlPointX1, controlPointY1, controlPointX2, controlPointY2, x[i + 1], y[i + 1]);
-            this.bufferContext.stroke();
-            this.bufferContext.closePath();
+            this._bufferContext.bezierCurveTo(controlPointX1, controlPointY1, controlPointX2, controlPointY2, x[i + 1], y[i + 1]);
+            this._bufferContext.stroke();
+            this._bufferContext.closePath();
         }
     }
 
     private finalize(path: Array<Point>): void {
+        this.currentBehavior.setStyle();
         this.currentBehavior.finalize(path);
 
         this.clearPath();
@@ -104,7 +106,7 @@
     private onMouseUp(event: DrawEvent): void {
         this.currentBehavior.onMouseUp(event);
 
-        this.bufferContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this._bufferContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.finalize(this.path);
     }
 
@@ -187,5 +189,13 @@
                 }
             });
         });
+    }
+
+    public get finalContext(): CanvasRenderingContext2D {
+        return this._finalContext;
+    }
+
+    public get bufferContext(): CanvasRenderingContext2D {
+        return this._bufferContext;
     }
 } 

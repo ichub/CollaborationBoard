@@ -27,15 +27,15 @@ class EntityCollection {
     }
 
     private initializeNetwork(): void {
-        this.canvas.app.hub.client.addTextEntity = (entity: TextEntity): void=> {
+        this.canvas._app.hub.client.addTextEntity = (entity: TextEntity): void=> {
             this.addTextEntityWithoutSync(entity.id, entity.text, Point.deserialize(entity.position));
         };
 
-        this.canvas.app.hub.client.entityMove = (id: string, to: Point): void => {
+        this.canvas._app.hub.client.entityMove = (id: string, to: Point): void => {
             this.getEntity<TextEntity>(id).position = Point.deserialize(to);
         };
 
-        this.canvas.app.hub.client.textEntityUpdateText = (id: string, text: string): void => {
+        this.canvas._app.hub.client.textEntityUpdateText = (id: string, text: string): void => {
             this.getEntity<TextEntity>(id).text = text;
         };
     }
@@ -47,7 +47,7 @@ class EntityCollection {
     }
 
     private generateId(type: EntityType): string {
-        return this.canvas.app.user.id.replace(/\-/g, "_") + "__" + (EntityCollection.entityCount++) + "__" + type.toString();
+        return this.canvas._app.user.id.replace(/\-/g, "_") + "__" + (EntityCollection.entityCount++) + "__" + type.toString();
     }
 
     private addTextEntityWithoutSync(id: string, text: string, position: Point): TextEntity {
@@ -61,6 +61,6 @@ class EntityCollection {
     public addTextEntity(id = this.generateId(EntityType.Text), text = "", position = new Point(0, 0)): void {
         var entity = this.addTextEntityWithoutSync(id, text, position);
 
-        this.canvas.app.hub.server.addTextEntity(entity.serialize());
+        this.canvas._app.hub.server.addTextEntity(entity.serialize());
     }
 } 

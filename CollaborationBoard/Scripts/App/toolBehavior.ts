@@ -2,6 +2,8 @@
     bufferContext: CanvasRenderingContext2D;
     finalContext: CanvasRenderingContext2D;
 
+    setStyle();
+
     onMouseDown(event: DrawEvent);
     onMouseUp(event: DrawEvent);
     onMouseDrag(event: DrawEvent);
