@@ -39,6 +39,8 @@
     };
 
     Tool.prototype.onMouse = function (event) {
+        this.setToolFromName(event.toolBehaviorName);
+
         switch (event.type) {
             case 0 /* MouseDown */:
                 this.mouseDownWrapper(event, false);
@@ -50,6 +52,10 @@
                 this.mouseUpWrapper(event, false);
                 break;
         }
+    };
+
+    Tool.prototype.setToolFromName = function (toolBehaviorName) {
+        this.canvas.toolBox.setTool(toolBehaviorName, false);
     };
 
     Tool.prototype.finalize = function (path) {
@@ -87,7 +93,7 @@
 
             this.lastMouse = new Point(event.point.x, event.point.y);
 
-            var event = new DrawEvent(0 /* MouseDown */, this.lastMouse, this.lastMouse);
+            var event = new DrawEvent(0 /* MouseDown */, this.lastMouse, this.lastMouse, event.toolBehaviorName);
             this.onMouseDown(event);
 
             if (sendToServer) {
@@ -100,7 +106,7 @@
         if (this.canvas.enabled && this.isMouseDown) {
             this.isMouseDown = false;
 
-            var event = new DrawEvent(2 /* MouseUp */, new Point(event.point.x, event.point.y), this.lastMouse);
+            var event = new DrawEvent(2 /* MouseUp */, new Point(event.point.x, event.point.y), this.lastMouse, event.toolBehaviorName);
 
             this.onMouseUp(event);
 
@@ -112,7 +118,7 @@
 
     Tool.prototype.mouseMoveWrapper = function (event, sendToServer) {
         if (this.canvas.enabled && this.isMouseDown) {
-            var event = new DrawEvent(1 /* MouseDrag */, new Point(event.point.x, event.point.y), this.lastMouse);
+            var event = new DrawEvent(1 /* MouseDrag */, new Point(event.point.x, event.point.y), this.lastMouse, event.toolBehaviorName);
 
             this.path.push(event.point);
 
@@ -132,7 +138,7 @@
             requestAnimationFrame(function () {
                 _this.lastMouse = new Point(e.clientX, e.clientY);
 
-                var event = new DrawEvent(0 /* MouseDown */, new Point(e.clientX, e.clientY), _this.lastMouse);
+                var event = new DrawEvent(0 /* MouseDown */, new Point(e.clientX, e.clientY), _this.lastMouse, _this.behavior.name);
 
                 _this.mouseDownWrapper(event, true);
             });
@@ -141,7 +147,7 @@
         $(document.body).mouseup(function (e) {
             requestAnimationFrame(function () {
                 if (_this.canvas.enabled && _this.isMouseDown) {
-                    var event = new DrawEvent(2 /* MouseUp */, new Point(e.clientX, e.clientY), _this.lastMouse);
+                    var event = new DrawEvent(2 /* MouseUp */, new Point(e.clientX, e.clientY), _this.lastMouse, _this.behavior.name);
 
                     _this.mouseUpWrapper(event, true);
                 }
@@ -151,7 +157,7 @@
         $(document.body).mousemove(function (e) {
             requestAnimationFrame(function () {
                 if (_this.canvas.enabled && _this.isMouseDown) {
-                    var event = new DrawEvent(1 /* MouseDrag */, new Point(e.clientX, e.clientY), _this.lastMouse);
+                    var event = new DrawEvent(1 /* MouseDrag */, new Point(e.clientX, e.clientY), _this.lastMouse, _this.behavior.name);
 
                     _this.mouseMoveWrapper(event, true);
                 }

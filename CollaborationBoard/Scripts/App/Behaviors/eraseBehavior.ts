@@ -1,4 +1,6 @@
 ﻿class EraseBehavior implements ToolBehavior {
+    public name = "erase";
+
     styles = {
         "lineCap": "round",
         "lineJoin": "round",

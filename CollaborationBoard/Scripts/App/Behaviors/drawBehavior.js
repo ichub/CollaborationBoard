@@ -1,5 +1,6 @@
 ﻿var DrawBehavior = (function () {
     function DrawBehavior(tool) {
+        this.name = "draw";
         this.styles = {
             "lineCap": "round",
             "lineJoin": "round",

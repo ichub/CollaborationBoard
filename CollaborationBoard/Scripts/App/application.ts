@@ -7,8 +7,6 @@ interface HubProxy {
     server: BoardServer;
 }
 
-declare var boardId;
-
 interface BoardClient {
     handshake(user: UserInfo, snapshot: BoardSnapshot): void;
     connect(user: UserInfo): void;
@@ -19,19 +17,19 @@ interface BoardServer {
     handshake(boardId: string): void;
 }
 
+declare var boardId;
+
 class Application {
     private _hub: HubProxy;
     private _user: UserInfo;
     private _canvas: Canvas;
     private _chat: Chat;
-    private toolBox: ToolBox;
     private boardId: string;
 
     public constructor() {
         this._hub = $.connection.boardHub;
         this._canvas = new Canvas(this);
         this._chat = new Chat(this);
-        this.toolBox = new ToolBox(this);
 
         this._hub.client.handshake = (user: UserInfo, snapshot: BoardSnapshot): void => {
             this._user = UserInfo.deserialize(user);

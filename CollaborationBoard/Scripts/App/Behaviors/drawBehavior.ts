@@ -1,4 +1,6 @@
 ﻿class DrawBehavior implements ToolBehavior {
+    public name = "draw";
+
     styles = {
         "lineCap": "round",
         "lineJoin": "round",

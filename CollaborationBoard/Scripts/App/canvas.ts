@@ -12,11 +12,13 @@ interface JQuery {
 interface BoardClient {
     onDrawEvent(event: DrawEvent);
     onMouseMove(cid: string, x: number, y: number);
+    onToolChange(userId: string, toolName: string): void;
 }
 
 interface BoardServer {
     onDrawEvent(event: DrawEvent);
     onMouseMove(x: number, y: number);
+    onToolChange(toolName: string): void;
 }
 
 class DrawEvent {
@@ -24,12 +26,14 @@ class DrawEvent {
     public id: string;
     public point: Point;
     public lastPoint: Point;
+    public toolBehaviorName: string;
 
-    constructor(type: DrawEventType, point: Point, lastPoint: Point) {
+    constructor(type: DrawEventType, point: Point, lastPoint: Point, toolBehaviorName: string) {
         this.type = type;
         this.point = point.round();
         this.lastPoint = lastPoint.round();
         this.id = "";
+        this.toolBehaviorName = toolBehaviorName;
     }
 }
 
@@ -45,6 +49,8 @@ class Canvas {
     private cursors: any;
     private _enabled: boolean;
 
+    public toolBox: ToolBox;
+
     public constructor(manager: Application) {
         this.$finalCanvas = $("#finalDrawCanvas");
         this.$container = this.$finalCanvas.parent();
@@ -56,6 +62,7 @@ class Canvas {
 
         this._app = manager;
         this.cursors = new Object();
+        this.toolBox = new ToolBox(this.app);
         this._enabled = false;
 
         this.initializeNetwork();
@@ -89,6 +96,12 @@ class Canvas {
             }
 
             this.cursors[cid].setPosition(x, y);
+        };
+
+        this.app.hub.client.onToolChange = (userId: string, toolName: string) => {
+            if (this.app.user.id == userId) {
+                this.toolBox.setTool(toolName, false);
+            }
         };
     }
 

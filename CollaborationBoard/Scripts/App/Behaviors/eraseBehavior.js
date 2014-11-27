@@ -1,5 +1,6 @@
 ﻿var EraseBehavior = (function () {
     function EraseBehavior(tool) {
+        this.name = "erase";
         this.styles = {
             "lineCap": "round",
             "lineJoin": "round",

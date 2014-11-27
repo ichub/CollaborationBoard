@@ -1,4 +1,5 @@
 ﻿interface ToolBehavior {
+    name: string;
     styles: Object;
     bufferContext: CanvasRenderingContext2D;
     finalContext: CanvasRenderingContext2D;

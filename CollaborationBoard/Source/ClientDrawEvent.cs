@@ -20,5 +20,8 @@ namespace CollaborationBoard
 
         [DataMember(Name = "type")]
         public int EventType { get; private set; }
+
+        [DataMember(Name="toolBehaviorName")]
+        public string ToolBehaviorName { get; private set; }
     }
 }
