@@ -225,7 +225,6 @@
     <Content Include="Views\Board\Messenger.cshtml" />
     <TypeScriptCompile Include="Scripts\App\boardSnapshot.ts" />
     <TypeScriptCompile Include="Scripts\App\chat.ts" />
-    <TypeScriptCompile Include="Scripts\App\cursor.ts" />
     <TypeScriptCompile Include="Scripts\App\Behaviors\drawBehavior.ts" />
     <TypeScriptCompile Include="Scripts\App\Behaviors\eraseBehavior.ts" />
     <TypeScriptCompile Include="Scripts\App\Behaviors\tool.ts" />

@@ -60,13 +60,6 @@ namespace CollaborationBoard
             context.NeighborClients.onDrawEvent(e);
         }
 
-        public void OnMouseMove(double x, double y)
-        {
-            var context = new RequestContext(this);
-
-            context.NeighborClients.onMouseMove(context.Caller.Id, x, y);
-        }
-
         public void OnToolChange(string toolName)
         {
             var context = new RequestContext(this);

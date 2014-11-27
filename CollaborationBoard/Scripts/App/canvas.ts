@@ -11,13 +11,11 @@ interface JQuery {
 
 interface BoardClient {
     onDrawEvent(event: DrawEvent);
-    onMouseMove(cid: string, x: number, y: number);
     onToolChange(userId: string, toolName: string): void;
 }
 
 interface BoardServer {
     onDrawEvent(event: DrawEvent);
-    onMouseMove(x: number, y: number);
     onToolChange(toolName: string): void;
 }
 
@@ -46,7 +44,6 @@ class Canvas {
     private $container: JQuery;
     private tool: Tool;
     private toolCollection: Object;
-    private cursors: any;
     private _enabled: boolean;
 
     public toolBox: ToolBox;
@@ -61,12 +58,10 @@ class Canvas {
         elem.height = this.$finalCanvas.height();
 
         this._app = manager;
-        this.cursors = new Object();
         this.toolBox = new ToolBox(this.app);
         this._enabled = false;
 
         this.initializeNetwork();
-        this.addListeners();
 
         this.toolCollection = new Object();
 
@@ -90,14 +85,6 @@ class Canvas {
             this.toolCollection[event.id].onMouse(event);
         };
 
-        this._app.hub.client.onMouseMove = (cid: string, x: number, y: number): void=> {
-            if (!this.cursors[cid]) {
-                this.cursors[cid] = new Cursor();
-            }
-
-            this.cursors[cid].setPosition(x, y);
-        };
-
         this.app.hub.client.onToolChange = (userId: string, toolName: string) => {
             if (this.app.user.id == userId) {
                 this.toolBox.setTool(toolName, false);
@@ -105,20 +92,8 @@ class Canvas {
         };
     }
 
-    private addListeners(): void {
-        //this.$canvas.mousemove((e: JQueryMouseEventObject): void=> {
-        //    if (this.enabled) {
-        //        this.sendMouseMove(e.clientX, e.clientY);
-        //    }
-        //});
-    }
-
     public sendDrawEvent(event: DrawEvent): void {
         this._app.hub.server.onDrawEvent(event);
-    }
-
-    private sendMouseMove(x: number, y: number): void {
-        this._app.hub.server.onMouseMove(x, y);
     }
 
     private processLoadEvents(events: Array<DrawEvent>): void {
