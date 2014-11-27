@@ -27,16 +27,16 @@ class DrawEvent {
 
 class Canvas {
     public $finalCanvas: JQuery;
+    public $container: JQuery;
 
-    public _entities: EntityCollection;
-    public _app: Application;
-
-    private $container: JQuery;
-    private tool: Tool;
-    private toolCollection: Object;
-    private _enabled: boolean;
-
+    public entitites: EntityCollection;
+    public app: Application;
+    public tool: Tool;
+    public toolCollection: Object;
     public toolBox: ToolBox;
+    public enabled: boolean;
+    public width: number;
+    public height: number;
 
     public constructor(manager: Application) {
         this.$finalCanvas = $("#finalDrawCanvas");
@@ -47,27 +47,22 @@ class Canvas {
         elem.width = this.$finalCanvas.width();
         elem.height = this.$finalCanvas.height();
 
-        this._app = manager;
+        this.app = manager;
         this.toolBox = new ToolBox(this.app);
-        this._enabled = false;
+        this.enabled = false;
 
         this.initializeNetwork();
 
         this.toolCollection = new Object();
 
-        this._entities = new EntityCollection(this);
-    }
+        this.entitites = new EntityCollection(this);
 
-    public get enabled(): boolean {
-        return this._enabled;
-    }
-
-    public set enabled(value: boolean) {
-        this._enabled = value;
+        this.width = this.$container.width();
+        this.height = this.$container.height();
     }
 
     private initializeNetwork(): void {
-        this._app.hub.client.onDrawEvent = (event: DrawEvent) => {
+        this.app.hub.client.onDrawEvent = (event: DrawEvent) => {
             if (!this.toolCollection[event.id]) {
                 this.toolCollection[event.id] = new Tool(this, true);
             }
@@ -83,7 +78,7 @@ class Canvas {
     }
 
     public sendDrawEvent(event: DrawEvent): void {
-        this._app.hub.server.onDrawEvent(event);
+        this.app.hub.server.onDrawEvent(event);
     }
 
     private processLoadEvents(events: Array<DrawEvent>): void {
@@ -101,7 +96,7 @@ class Canvas {
             var entity = snapshot.textEntities[i];
             entity.position = Point.deserialize(entity.position);
 
-            this._entities.addTextEntity(entity.id, entity.text, entity.position);
+            this.entitites.addTextEntity(entity.id, entity.text, entity.position);
         }
     }
 
@@ -134,23 +129,7 @@ class Canvas {
         delete this.toolCollection[user.id];
     }
 
-    public get width() {
-        return this.$finalCanvas.width();
-    }
-
-    public get height() {
-        return this.$finalCanvas.height();
-    }
-
     public get userTool(): Tool {
-        return this.toolCollection[this._app.user.id];
-    }
-
-    public get app(): Application {
-        return this._app;
-    }
-
-    public get entities(): EntityCollection {
-        return this._entities;
+        return this.toolCollection[this.app.user.id];
     }
 }

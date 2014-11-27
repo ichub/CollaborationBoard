@@ -1,37 +1,21 @@
 ﻿class UserInfo {
-    private _displayName: string;
-    private _displayColor: string;
-    private _id: string;
-    private _boardId: string;
+    public displayName: string;
+    public displayColor: string;
+    public id: string;
+    public boardId: string;
 
     constructor(displayName: string, displayColor: string, cid: string, boardId: string) {
-        this._displayColor = displayColor,
-        this._displayName = displayName,
-        this._id = cid;
-        this._boardId = boardId;
-    }
-
-    public get displayName() {
-        return this._displayName;
-    }
-
-    public get displayColor() {
-        return this._displayColor;
-    }
-
-    public get id() {
-        return this._id;
-    }
-
-    public get boardId() {
-        return this._boardId;
+        this.displayColor = displayColor,
+        this.displayName = displayName,
+        this.id = cid;
+        this.boardId = boardId;
     }
 
     public serialize(): any {
         return {
-            displayName: this._displayName,
-            displayColor: this._displayColor,
-            id: this._id,
+            displayName: this.displayName,
+            displayColor: this.displayColor,
+            id: this.id,
         }
     }
 

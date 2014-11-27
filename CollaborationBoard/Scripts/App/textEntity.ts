@@ -21,7 +21,7 @@
         super.addListeners();
 
         this.$element.on("keyup", (event: JQueryEventObject) => {
-            this.canvas._app.hub.server.textEntityUpdateText(this.id, this.text);
+            this.canvas.app.hub.server.textEntityUpdateText(this.id, this.text);
         });
     }
 

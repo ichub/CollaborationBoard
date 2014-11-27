@@ -1,44 +1,24 @@
 ﻿class Message {
-    private _text: string;
-    private _senderName: string;
-    private _sender: string;
-    private _color: string;
-    private _dateSent: string;
+    public text: string;
+    public senderName: string;
+    public sender: string;
+    public color: string;
+    public dateSent: string;
 
     constructor(text: string, sender: string, senderName: string, color: string, dateSent: string) {
-        this._text = text;
-        this._sender = sender;
-        this._senderName = senderName;
-        this._color = color;
-        this._dateSent = dateSent;
-    }
-
-    public get text() {
-        return this._text;
-    }
-
-    public get senderName() {
-        return this._senderName;
-    }
-
-    public get sender() {
-        return this._sender;
-    }
-
-    public get color() {
-        return this._color;
-    }
-
-    public get dateSent() {
-        return this._dateSent;
+        this.text = text;
+        this.sender = sender;
+        this.senderName = senderName;
+        this.color = color;
+        this.dateSent = dateSent;
     }
 
     public serialize(): any {
         return {
-            text: this._text,
-            sender: this._sender,
-            senderName: this._senderName,
-            color: this._color
+            text: this.text,
+            sender: this.sender,
+            senderName: this.senderName,
+            color: this.color
         };
     }
 

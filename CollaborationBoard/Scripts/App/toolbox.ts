@@ -1,7 +1,7 @@
 ﻿class ToolBox {
-    private app: Application;
-    private $toolBox: JQuery;
-    private $eraser: JQuery;
+    public app: Application;
+    public $toolBox: JQuery;
+    public $eraser: JQuery;
 
     constructor(app: Application) {
         this.app = app;

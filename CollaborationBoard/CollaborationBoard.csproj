@@ -231,6 +231,7 @@
     <TypeScriptCompile Include="Scripts\App\entity.ts" />
     <TypeScriptCompile Include="Scripts\App\entityCollection.ts" />
     <TypeScriptCompile Include="Scripts\App\message.ts" />
+    <TypeScriptCompile Include="Scripts\App\signalRhub.ts" />
     <TypeScriptCompile Include="Scripts\App\textEntity.ts" />
     <TypeScriptCompile Include="Scripts\App\point.ts" />
     <TypeScriptCompile Include="Scripts\App\Behaviors\toolBehavior.ts" />
