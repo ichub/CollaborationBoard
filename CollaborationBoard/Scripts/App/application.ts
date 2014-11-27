@@ -1,23 +1,4 @@
-﻿interface SignalR {
-    boardHub: HubProxy;
-}
-
-interface HubProxy {
-    client: BoardClient;
-    server: BoardServer;
-}
-
-interface BoardClient {
-    handshake(user: UserInfo, snapshot: BoardSnapshot): void;
-    connect(user: UserInfo): void;
-    disconnect(user: UserInfo): void;
-}
-
-interface BoardServer {
-    handshake(boardId: string): void;
-}
-
-declare var boardId;
+﻿declare var boardId;
 
 class Application {
     private _hub: HubProxy;

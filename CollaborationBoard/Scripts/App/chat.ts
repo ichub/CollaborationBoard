@@ -1,12 +1,4 @@
-﻿interface BoardClient {
-    addMessage(message: Message);
-}
-
-interface BoardServer {
-    addMessage(message: Message);
-}
-
-interface JQuery {
+﻿interface JQuery {
     modal(...args);
 }
 

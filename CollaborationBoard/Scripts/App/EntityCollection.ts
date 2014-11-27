@@ -1,14 +1,4 @@
-﻿interface BoardClient {
-    addTextEntity(entity: TextEntity);
-    textEntityUpdateText(id: string, text: string);
-    entityMove(id: string, to: Point);
-}
-
-interface BoardServer {
-    addTextEntity(entity: TextEntity);
-    textEntityUpdateText(id: string, text: string);
-    entityMove(id: string, to: Point);
-}
+﻿
 
 enum EntityType {
     Text

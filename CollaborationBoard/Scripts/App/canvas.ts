@@ -9,16 +9,6 @@ interface JQuery {
     resizable();
 }
 
-interface BoardClient {
-    onDrawEvent(event: DrawEvent);
-    onToolChange(userId: string, toolName: string): void;
-}
-
-interface BoardServer {
-    onDrawEvent(event: DrawEvent);
-    onToolChange(toolName: string): void;
-}
-
 class DrawEvent {
     public type: DrawEventType;
     public id: string;
