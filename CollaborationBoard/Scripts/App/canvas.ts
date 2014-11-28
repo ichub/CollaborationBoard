@@ -104,7 +104,7 @@ class Canvas {
     }
 
     public addLocalUser() {
-        this.toolCollection[this.app.user.id] = new LocalTool(this);
+        this.toolCollection[this.app.user.id] = new LocalTool(this.app.user.id, this);
     }
 
     public onUserConnect(user: UserInfo): void {
@@ -121,9 +121,9 @@ class Canvas {
         delete this.toolCollection[user.id];
     }
 
-    public addUserToolIfDoesNotExist(userid: string) {
-        if (!this.toolCollection[userid]) {
-            this.toolCollection[userid] = new Tool(this);
+    public addUserToolIfDoesNotExist(userId: string) {
+        if (!this.toolCollection[userId]) {
+            this.toolCollection[userId] = new Tool(userId, this);
         }
     }
 

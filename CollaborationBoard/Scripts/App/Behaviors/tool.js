@@ -5,7 +5,8 @@
     d.prototype = new __();
 };
 var Tool = (function () {
-    function Tool(canvas) {
+    function Tool(userId, canvas) {
+        this.userId = userId;
         this.canvas = canvas;
 
         this.$finalCanvas = canvas.$finalCanvas;
@@ -59,13 +60,19 @@ var Tool = (function () {
     };
 
     Tool.prototype.setToolFromName = function (toolBehaviorName) {
-        switch (toolBehaviorName) {
-            case "erase":
-                this.setBehavior(new EraseBehavior(this));
-                break;
-            case "draw":
-                this.setBehavior(new DrawBehavior(this));
-                break;
+        if (toolBehaviorName != this.behavior.name) {
+            if (this.userId == this.canvas.app.user.id) {
+                this.canvas.toolBox.setTool(toolBehaviorName, false);
+            } else {
+                switch (toolBehaviorName) {
+                    case "erase":
+                        this.setBehavior(new EraseBehavior(this));
+                        break;
+                    case "draw":
+                        this.setBehavior(new DrawBehavior(this));
+                        break;
+                }
+            }
         }
     };
 
@@ -160,8 +167,8 @@ var Tool = (function () {
 
 var LocalTool = (function (_super) {
     __extends(LocalTool, _super);
-    function LocalTool(canvas) {
-        _super.call(this, canvas);
+    function LocalTool(userId, canvas) {
+        _super.call(this, userId, canvas);
 
         this.addListeners();
     }

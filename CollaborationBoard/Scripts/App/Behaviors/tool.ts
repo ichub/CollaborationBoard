@@ -1,4 +1,5 @@
 ﻿class Tool {
+    public userId: string;
     public canvas: Canvas;
     public $bufferCanvas: JQuery;
     public $finalCanvas: JQuery;
@@ -10,7 +11,8 @@
 
     public behavior: ToolBehavior;
 
-    public constructor(canvas: Canvas) {
+    public constructor(userId: string, canvas: Canvas) {
+        this.userId = userId;
         this.canvas = canvas;
 
         this.$finalCanvas = canvas.$finalCanvas;
@@ -65,13 +67,20 @@
     }
 
     public setToolFromName(toolBehaviorName: string) {
-        switch (toolBehaviorName) {
-            case "erase":
-                this.setBehavior(new EraseBehavior(this));
-                break;
-            case "draw":
-                this.setBehavior(new DrawBehavior(this));
-                break;
+        if (toolBehaviorName != this.behavior.name) {
+            if (this.userId == this.canvas.app.user.id) {
+                this.canvas.toolBox.setTool(toolBehaviorName, false);
+            }
+            else {
+                switch (toolBehaviorName) {
+                    case "erase":
+                        this.setBehavior(new EraseBehavior(this));
+                        break;
+                    case "draw":
+                        this.setBehavior(new DrawBehavior(this));
+                        break;
+                }
+            }
         }
     }
 
@@ -165,8 +174,8 @@
 }
 
 class LocalTool extends Tool {
-    constructor(canvas: Canvas) {
-        super(canvas);
+    constructor(userId: string, canvas: Canvas) {
+        super(userId, canvas);
 
         this.addListeners();
     }
