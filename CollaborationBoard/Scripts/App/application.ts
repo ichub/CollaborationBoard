@@ -14,9 +14,6 @@ class Application {
 
         this.hub.client.handshake = (user: UserInfo, snapshot: BoardSnapshot): void => {
             this.user = UserInfo.deserialize(user);
-            this.canvas.enabled = true;
-            this.chat.enabled = true;
-            this.canvas.addLocalUser();
             this.canvas.initializeFromSnapshot(snapshot);
             this.chat.initializeFromSnapshot(snapshot);
 

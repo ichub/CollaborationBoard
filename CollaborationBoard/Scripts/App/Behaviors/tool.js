@@ -1,23 +1,27 @@
-﻿var Tool = (function () {
-    function Tool(canvas, isRemoteTool) {
+﻿var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+var Tool = (function () {
+    function Tool(canvas) {
         this.canvas = canvas;
 
         this.$finalCanvas = canvas.$finalCanvas;
-        this._finalContext = this.$finalCanvas.get(0).getContext("2d");
+        this.finalContext = this.$finalCanvas.get(0).getContext("2d");
 
         this.$bufferCanvas = this.createBuffer();
-        this._bufferContext = this.$bufferCanvas.get(0).getContext("2d");
+        this.bufferContext = this.$bufferCanvas.get(0).getContext("2d");
 
         this.path = [];
-
-        if (!isRemoteTool) {
-            this.addListeners();
-        }
 
         this.isMouseDown = false;
         this.lastMouse = null;
 
         this.behavior = new DrawBehavior(this);
+
+        this.setBehavior(new DrawBehavior(this));
     }
     Tool.prototype.dispose = function () {
         this.$bufferCanvas.remove();
@@ -55,13 +59,20 @@
     };
 
     Tool.prototype.setToolFromName = function (toolBehaviorName) {
-        this.canvas.toolBox.setTool(toolBehaviorName, false);
+        switch (toolBehaviorName) {
+            case "erase":
+                this.setBehavior(new EraseBehavior(this));
+                break;
+            case "draw":
+                this.setBehavior(new DrawBehavior(this));
+                break;
+        }
     };
 
     Tool.prototype.finalize = function (path) {
         this.applyStyles(this.finalContext);
 
-        this._behavior.finalize(path);
+        this.behavior.finalize(path);
 
         this.clearPath();
     };
@@ -73,18 +84,18 @@
     Tool.prototype.onMouseDown = function (event) {
         this.path.push(event.point);
 
-        this._behavior.onMouseDown(event);
+        this.behavior.onMouseDown(event);
     };
 
     Tool.prototype.onMouseUp = function (event) {
-        this._behavior.onMouseUp(event);
+        this.behavior.onMouseUp(event);
 
-        this._bufferContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.bufferContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.finalize(this.path);
     };
 
     Tool.prototype.onMouseDrag = function (event) {
-        this._behavior.onMouseDrag(event);
+        this.behavior.onMouseDrag(event);
     };
 
     Tool.prototype.mouseDownWrapper = function (event, sendToServer) {
@@ -132,7 +143,29 @@
         }
     };
 
-    Tool.prototype.addListeners = function () {
+    Tool.prototype.applyStyles = function (context) {
+        for (var style in this.behavior.styles) {
+            context[style] = this.behavior.styles[style];
+        }
+    };
+
+    Tool.prototype.setBehavior = function (behavior) {
+        this.behavior = behavior;
+
+        this.applyStyles(this.finalContext);
+        this.applyStyles(this.bufferContext);
+    };
+    return Tool;
+})();
+
+var LocalTool = (function (_super) {
+    __extends(LocalTool, _super);
+    function LocalTool(canvas) {
+        _super.call(this, canvas);
+
+        this.addListeners();
+    }
+    LocalTool.prototype.addListeners = function () {
         var _this = this;
         $("#bufferContainer").mousedown(function (e) {
             requestAnimationFrame(function () {
@@ -164,43 +197,6 @@
             });
         });
     };
-
-    Tool.prototype.applyStyles = function (context) {
-        for (var style in this._behavior.styles) {
-            context[style] = this._behavior.styles[style];
-        }
-    };
-
-    Object.defineProperty(Tool.prototype, "finalContext", {
-        get: function () {
-            return this._finalContext;
-        },
-        enumerable: true,
-        configurable: true
-    });
-
-    Object.defineProperty(Tool.prototype, "bufferContext", {
-        get: function () {
-            return this._bufferContext;
-        },
-        enumerable: true,
-        configurable: true
-    });
-
-    Object.defineProperty(Tool.prototype, "behavior", {
-        get: function () {
-            return this._behavior;
-        },
-        set: function (behavior) {
-            this._behavior = behavior;
-
-            this.applyStyles(this.finalContext);
-            this.applyStyles(this.bufferContext);
-        },
-        enumerable: true,
-        configurable: true
-    });
-
-    return Tool;
-})();
+    return LocalTool;
+})(Tool);
 //# sourceMappingURL=tool.js.map

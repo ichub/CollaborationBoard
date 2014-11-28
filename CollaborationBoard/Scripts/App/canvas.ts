@@ -31,7 +31,6 @@ class Canvas {
 
     public entitites: EntityCollection;
     public app: Application;
-    public tool: Tool;
     public toolCollection: Object;
     public toolBox: ToolBox;
     public enabled: boolean;
@@ -63,9 +62,7 @@ class Canvas {
 
     private initializeNetwork(): void {
         this.app.hub.client.onDrawEvent = (event: DrawEvent) => {
-            if (!this.toolCollection[event.id]) {
-                this.toolCollection[event.id] = new Tool(this, true);
-            }
+            this.addUserToolIfDoesNotExist(event.id);
 
             this.toolCollection[event.id].onMouse(event);
         };
@@ -83,9 +80,7 @@ class Canvas {
 
     private processLoadEvents(events: Array<DrawEvent>): void {
         for (var i = 0; i < events.length; i++) {
-            if (!this.toolCollection[events[i].id]) {
-                this.toolCollection[events[i].id] = new Tool(this, true);
-            }
+            this.addUserToolIfDoesNotExist(events[i].id);
 
             this.toolCollection[events[i].id].onMouse(events[i]);
         }
@@ -101,24 +96,21 @@ class Canvas {
     }
 
     public initializeFromSnapshot(snapshot: BoardSnapshot): void {
-        for (var i = 0; i < snapshot.neighbors.length; i++) {
-            this.toolCollection[snapshot.neighbors[i]] = new Tool(this, true);
-        }
+        this.addLocalUser();
+        this.enabled = true;
 
         this.processLoadEvents(snapshot.events);
         this.processLoadEntities(snapshot);
     }
 
     public addLocalUser() {
-        this.toolCollection[this.app.user.id] = new Tool(this, false);
+        this.toolCollection[this.app.user.id] = new LocalTool(this);
     }
 
     public onUserConnect(user: UserInfo): void {
         console.log(format("user %s connected", user.id));
 
-        if (this.toolCollection[user.id]) {
-            this.toolCollection[user.id] = new Tool(this, false);
-        }
+        this.addUserToolIfDoesNotExist(user.id);
     }
 
     public onUserDisconnect(user: UserInfo): void {
@@ -127,6 +119,12 @@ class Canvas {
         this.toolCollection[user.id].dispose();
 
         delete this.toolCollection[user.id];
+    }
+
+    public addUserToolIfDoesNotExist(userid: string) {
+        if (!this.toolCollection[userid]) {
+            this.toolCollection[userid] = new Tool(this);
+        }
     }
 
     public get userTool(): Tool {

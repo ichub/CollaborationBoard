@@ -299,6 +299,7 @@ class Chat {
     }
 
     public initializeFromSnapshot(snapshot: BoardSnapshot) {
+        this.enabled = true;
 
         snapshot.messages.forEach(message => {
             message = Message.deserialize(message);

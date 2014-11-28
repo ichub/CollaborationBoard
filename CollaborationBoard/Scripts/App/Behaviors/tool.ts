@@ -1,41 +1,39 @@
 ﻿class Tool {
-    private canvas: Canvas;
-    private $bufferCanvas: JQuery;
-    private $finalCanvas: JQuery;
-    private _bufferContext: CanvasRenderingContext2D;
-    private _finalContext: CanvasRenderingContext2D;
-    private isMouseDown: boolean;
-    private lastMouse: Point;
-    private path: Array<Point>;
+    public canvas: Canvas;
+    public $bufferCanvas: JQuery;
+    public $finalCanvas: JQuery;
+    public bufferContext: CanvasRenderingContext2D;
+    public finalContext: CanvasRenderingContext2D;
+    public isMouseDown: boolean;
+    public lastMouse: Point;
+    public path: Array<Point>;
 
-    private _behavior: ToolBehavior;
+    public behavior: ToolBehavior;
 
-    public constructor(canvas: Canvas, isRemoteTool: boolean) {
+    public constructor(canvas: Canvas) {
         this.canvas = canvas;
 
         this.$finalCanvas = canvas.$finalCanvas;
-        this._finalContext = (<HTMLCanvasElement> this.$finalCanvas.get(0)).getContext("2d");
+        this.finalContext = (<HTMLCanvasElement> this.$finalCanvas.get(0)).getContext("2d");
 
         this.$bufferCanvas = this.createBuffer();
-        this._bufferContext = (<HTMLCanvasElement> this.$bufferCanvas.get(0)).getContext("2d");
+        this.bufferContext = (<HTMLCanvasElement> this.$bufferCanvas.get(0)).getContext("2d");
 
         this.path = [];
-
-        if (!isRemoteTool) {
-            this.addListeners();
-        }
 
         this.isMouseDown = false;
         this.lastMouse = null;
 
         this.behavior = new DrawBehavior(this);
+
+        this.setBehavior(new DrawBehavior(this));
     }
 
     public dispose() {
         this.$bufferCanvas.remove();
     }
 
-    private createBuffer(): JQuery {
+    public createBuffer(): JQuery {
         var bufferContainer = $("#bufferContainer");
 
         var buffer = document.createElement("canvas");
@@ -66,41 +64,48 @@
         }
     }
 
-    private setToolFromName(toolBehaviorName: string) {
-        this.canvas.toolBox.setTool(toolBehaviorName, false);
+    public setToolFromName(toolBehaviorName: string) {
+        switch (toolBehaviorName) {
+            case "erase":
+                this.setBehavior(new EraseBehavior(this));
+                break;
+            case "draw":
+                this.setBehavior(new DrawBehavior(this));
+                break;
+        }
     }
 
-    private finalize(path: Array<Point>): void {
+    public finalize(path: Array<Point>): void {
         this.applyStyles(this.finalContext);
 
-        this._behavior.finalize(path);
+        this.behavior.finalize(path);
 
         this.clearPath();
     }
 
-    private clearPath(): void {
+    public clearPath(): void {
         this.path = [];
     }
 
-    private onMouseDown(event: DrawEvent): void {
+    public onMouseDown(event: DrawEvent): void {
         this.path.push(event.point);
 
-        this._behavior.onMouseDown(event);
+        this.behavior.onMouseDown(event);
     }
 
-    private onMouseUp(event: DrawEvent): void {
+    public onMouseUp(event: DrawEvent): void {
 
-        this._behavior.onMouseUp(event);
+        this.behavior.onMouseUp(event);
 
-        this._bufferContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.bufferContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.finalize(this.path);
     }
 
-    private onMouseDrag(event: DrawEvent): void {
-        this._behavior.onMouseDrag(event);
+    public onMouseDrag(event: DrawEvent): void {
+        this.behavior.onMouseDrag(event);
     }
 
-    private mouseDownWrapper(event: DrawEvent, sendToServer: boolean) {
+    public mouseDownWrapper(event: DrawEvent, sendToServer: boolean) {
         if (this.canvas.enabled) {
             this.isMouseDown = true;
 
@@ -115,7 +120,7 @@
         }
     }
 
-    private mouseUpWrapper(event: DrawEvent, sendToServer: boolean) {
+    public mouseUpWrapper(event: DrawEvent, sendToServer: boolean) {
         if (this.canvas.enabled && this.isMouseDown) {
             this.isMouseDown = false;
 
@@ -129,7 +134,7 @@
         }
     }
 
-    private mouseMoveWrapper(event: DrawEvent, sendToServer: boolean) {
+    public mouseMoveWrapper(event: DrawEvent, sendToServer: boolean) {
         if (this.canvas.enabled && this.isMouseDown) {
             var event = new DrawEvent(DrawEventType.MouseDrag, new Point(event.point.x, event.point.y), this.lastMouse, event.toolBehaviorName);
 
@@ -143,6 +148,27 @@
                 this.canvas.sendDrawEvent(event);
             }
         }
+    }
+
+    public applyStyles(context: CanvasRenderingContext2D) {
+        for (var style in this.behavior.styles) {
+            context[style] = this.behavior.styles[style];
+        }
+    }
+
+    public setBehavior(behavior: ToolBehavior) {
+        this.behavior = behavior;
+
+        this.applyStyles(this.finalContext);
+        this.applyStyles(this.bufferContext);
+    }
+}
+
+class LocalTool extends Tool {
+    constructor(canvas: Canvas) {
+        super(canvas);
+
+        this.addListeners();
     }
 
     private addListeners(): void {
@@ -176,29 +202,4 @@
             });
         });
     }
-
-    private applyStyles(context: CanvasRenderingContext2D) {
-        for (var style in this._behavior.styles) {
-            context[style] = this._behavior.styles[style];
-        }
-    }
-
-    public get finalContext(): CanvasRenderingContext2D {
-        return this._finalContext;
-    }
-
-    public get bufferContext(): CanvasRenderingContext2D {
-        return this._bufferContext;
-    }
-
-    public get behavior(): ToolBehavior {
-        return this._behavior;
-    }
-
-    public set behavior(behavior: ToolBehavior) {
-        this._behavior = behavior;
-
-        this.applyStyles(this.finalContext);
-        this.applyStyles(this.bufferContext);
-    }
-} 
+}
