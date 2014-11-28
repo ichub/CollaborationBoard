@@ -19,7 +19,7 @@
     }
 
     private deselectAllTools(): void {
-        var children = this.$eraser.children();
+        var children = this.$toolBox.children();
 
         for (var i = 0; i < children.length; i++) {
             children[i].classList.remove("selected");
@@ -40,6 +40,7 @@
     public setDrawTool(updateServer: boolean): void {
         this.deselectAllTools();
 
+        this.$drawer.addClass("selected");
         this.app.canvas.userTool.setBehavior(new DrawBehavior(this.app.canvas.userTool));
 
         if (updateServer) {
