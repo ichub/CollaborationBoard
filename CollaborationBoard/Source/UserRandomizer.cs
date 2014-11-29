@@ -28,10 +28,14 @@ namespace CollaborationBoard
 
             names = new List<string>()
             {
-                "Constitution",
-                "Bill of Rights",
-                "Anonymous",
-                "Proletariat",
+                "Bill",
+                "Joe",
+                "Cindy",
+                "Alex",
+                "Sarah",
+                "Alice",
+                "Jackie",
+                "Carlton"
             };
         }
 
