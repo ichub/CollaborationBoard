@@ -88,7 +88,7 @@
 #toolbox {
     position: absolute;
     top: 0px;
-    left: ~"calc(100vw / 2" - @toolboxWidth / 2 ~")";
+    left: ~"calc(100vw / 2 - @{toolboxWidth} / 2)";
     width: @toolboxWidth;
     height: @toolboxItemSize + 2 * @toolboxMargin;
     background-color: #f1f1f1;
@@ -143,7 +143,7 @@
     width: @messageWidth;
     transition: margin @messengerTransitionTime;
     background-color: @messengerBackColor;
-    height: ~"calc(" @inputHeight + @messengerTopBarHeight + @messengerMessagesHeight ~")";
+    height: ~"calc(@{inputHeight} + @{messengerTopBarHeight} + @{messengerMessagesHeight})";
 }
 
 #messengerTopBar {
@@ -170,7 +170,7 @@
         margin-left: @messageMargin;
         margin-right: @messageMargin;
         margin-top: @messageMargin;
-        width: calc(@messageWidth - 2 * @messageMargin - 17px);
+        width: ~"calc(@{messageWidth} - 2 * @{messageMargin} - 17px)";
         min-height: 0;
         min-width: 0;
 
@@ -252,7 +252,7 @@
     float: left;
     height: @inputHeight;
     outline: 0;
-    width: ~"calc(100%" - @latexButtonWidth~")";
+    width: ~"calc(100% @{latexButtonWidth})";
     border: none;
     background-color: #f6f6f6;
     padding-left: 5px;
