@@ -161,3 +161,8 @@ $RECYCLE.BIN/
 
 # private configuration files
 *.private
+
+/CollaborationBoard/Scripts/App/**/*.js
+/CollaborationBoard/Scripts/App/**/*.map
+/CollaborationBoard/Scripts/Common/**/*.js
+/CollaborationBoard/Scripts/Common/**/*.map
