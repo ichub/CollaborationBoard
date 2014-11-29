@@ -17,6 +17,7 @@ interface BoardClient {
     addTextEntity(entity: TextEntity);
     textEntityUpdateText(id: string, text: string);
     entityMove(id: string, to: Point);
+    onNameChange(oldName: string, newName: string);
 }
 
 interface BoardServer {
@@ -27,4 +28,5 @@ interface BoardServer {
     addTextEntity(entity: TextEntity);
     textEntityUpdateText(id: string, text: string);
     entityMove(id: string, to: Point);
+    changeName(newName: string);
 }

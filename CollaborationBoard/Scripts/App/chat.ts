@@ -22,6 +22,10 @@ class Chat {
     private $latexModalToggle: JQuery; // element that toggles the modal which contains the latex preview
     private $latexInput: JQuery; // the input element inside the latex rendering modal which is used as input for latex rendering
     private $latexOutput: JQuery; // the element which contains rendered latex 
+    private $nameChangeModal: JQuery;
+    private $nameChangeInput: JQuery;
+    private $nameChangeToggle: JQuery;
+    private $saveNameButton: JQuery;
 
     private previousMessage: Message;
     private wasPreviousANotification = false;
@@ -46,6 +50,10 @@ class Chat {
         this.$latexModalToggle = $("#latexInputButton");
         this.$latexInput = $("#latexInput");
         this.$latexOutput = $("#renderedText");
+        this.$nameChangeModal = $("#nameChangeModal");
+        this.$nameChangeInput = $("#nameChangeInput");
+        this.$nameChangeToggle = $("#nameChangeToggle");
+        this.$saveNameButton = $("#saveNameButton");
 
         this.defaultMessengerWidth = this.$messageContainer.width() + "px";
 
@@ -73,6 +81,10 @@ class Chat {
             message = Message.deserialize(message);
 
             this.appendChatMessage(message);
+        };
+
+        this.app.hub.client.onNameChange = (oldName: string, newName: string) => {
+            this.appendNotification(format("User %s changed their name to %s", oldName, newName), NotificationType.Info);
         };
     }
 
@@ -140,6 +152,23 @@ class Chat {
             this.$latexInput.val("");
 
             this.updateRenderedLatex();
+        });
+
+        this.$nameChangeToggle.click(e => {
+            this.$nameChangeModal.modal("show");
+
+            e.stopPropagation();
+        });
+
+        this.$saveNameButton.click(e => {
+            var newName = this.$nameChangeInput.val();
+
+            this.app.user.displayName = newName;
+            this.app.hub.server.changeName(newName);
+
+            this.appendNotification(format("You changed your to %s", newName), NotificationType.Info);
+
+            this.$nameChangeModal.modal("hide");
         });
     }
 

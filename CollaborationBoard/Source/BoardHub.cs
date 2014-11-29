@@ -123,5 +123,14 @@ namespace CollaborationBoard
 
             return base.OnDisconnected(stopCalled);
         }
+
+        public void ChangeName(string newName)
+        {
+            var context = new RequestContext(this);
+
+            context.NeighborClients.onNameChange(context.Caller.DisplayName, newName);
+
+            context.Caller.DisplayName = newName;
+        }
     }
 }

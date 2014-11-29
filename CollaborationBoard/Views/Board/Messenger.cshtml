@@ -1,9 +1,29 @@
 ﻿<div id="messenger" class="out">
-    <div id="messengerTopBar"></div>
+    <div id="messengerTopBar">
+        <div id="nameChangeToggle" class="iconButton"><i class="fa fa-users"></i></div>
+    </div>
     <div id="messageContainer">
     </div>
     <div id="inputContainer">
         <input type="text" id="messageInput" placeholder="Enter message here!" />
         <div id="latexInputButton"><i class="fa fa-pencil"></i></div>
+    </div>
+</div>
+
+<div id="nameChangeModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Choose a new name</h4>
+            </div>
+            <div class="modal-body">
+                <input id="nameChangeInput" type="text" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="saveNameButton" type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
     </div>
 </div>

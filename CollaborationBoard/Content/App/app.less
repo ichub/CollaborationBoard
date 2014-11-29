@@ -93,8 +93,9 @@
     height: @toolboxItemSize + 2 * @toolboxMargin;
     background-color: #f1f1f1;
     padding: @toolboxMargin;
+}
 
-    .toolBoxItem {
+.iconButton {
         .flexBox;
         float: left;
         width: @toolboxItemSize;
@@ -104,18 +105,17 @@
         font-size: @toolboxIconSize;
     }
 
-    .toolBoxItem:hover {
+    .iconButton:hover {
         background-color: #dddddd;
     }
 
-    .toolBoxItem:active {
+    .iconButton:active {
         background-color: #cccccc;
     }
 
-    .toolBoxItem.selected {
+    .iconButton.selected {
         border: 1px solid #b4b4b4;
     }
-}
 
 @messageWidth: 300px;
 @messageMargin: 10px;
