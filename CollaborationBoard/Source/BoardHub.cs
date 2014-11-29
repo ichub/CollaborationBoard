@@ -16,7 +16,7 @@ namespace CollaborationBoard
 
             message.Sender = context.Caller.Id;
             message.SenderName = context.Caller.DisplayName;
-            message.DateSent = DateTime.Now.ToUniversalTime().ToLongTimeString();
+            message.DateSent = DateTime.Now.ToUniversalTime();
 
             context.Board.AddMessage(message);
 

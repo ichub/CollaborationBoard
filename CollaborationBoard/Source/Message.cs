@@ -22,6 +22,6 @@ namespace CollaborationBoard
         public string Color { get; set; }
 
         [DataMember(Name="dateSent")]
-        public string DateSent { get; set; }
+        public DateTime DateSent { get; set; }
     }
 }

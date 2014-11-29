@@ -175,7 +175,7 @@ class Chat {
     private formatDateForDisplay(dateString: string) {
         var date = new Date(dateString);
 
-        return format("%s:%s %s", date.getHours(), date.getMinutes());
+        return date.toLocaleTimeString();
     }
 
     private appendChatMessage(message: Message) {
