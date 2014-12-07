@@ -55,8 +55,6 @@ namespace CollaborationBoard
             bundles.Add(new ScriptBundle("~/signalr", "/signalr/hubs"));
             bundles.UseCdn = true;
 
-            bundles.Add(new StyleBundle("~/fonts", "http://fonts.googleapis.com/css?family=Open+Sans"));
-
             BundleTable.EnableOptimizations = true;
 
 #if DEBUG
