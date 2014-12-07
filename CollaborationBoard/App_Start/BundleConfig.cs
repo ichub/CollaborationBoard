@@ -27,10 +27,17 @@ namespace CollaborationBoard
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
-            bundles.Add(new StyleBundle("~/bundles/css").Include(
+
+            var globalStyleBundle = new StyleBundle("~/bundles/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css",
-                      "~/Content/jquery-ui.css"));
+                      "~/Content/site.less",
+                      "~/Content/jquery-ui.css",
+                      "~/Content/bootstrapStyle.less");
+
+            globalStyleBundle.Transforms.Add(new LessTransform());
+            globalStyleBundle.Transforms.Add(new CssMinify());
+
+            bundles.Add(globalStyleBundle);
 
             bundles.Add(new ScriptBundle("~/katex_script").Include("~/Scripts/katex.min.js"));
             bundles.Add(new StyleBundle("~/katex_css").Include("~/Content/katex.min.css"));

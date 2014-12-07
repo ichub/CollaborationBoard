@@ -219,7 +219,8 @@
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
+    <Content Include="Content\bootstrapStyle.less" />
+    <None Include="Content\site.less" />
     <Content Include="Views\Shared\BoardCreationModal.cshtml" />
     <Content Include="Views\Password\Login.cshtml" />
     <Content Include="Views\Board\Messenger.cshtml" />

@@ -1,6 +1,27 @@
-﻿body {
+﻿@mainColor: #779ecb;
+@darkerMainColor: #698ab1;
+@darkestMainColor: #556f8e;
+@lighterMainColor: #aecdf2;
+@lightestMainColor: #c9e2ff;
+@accentColor: #ffd800;
+
+.shadow {
+    -webkit-box-shadow: 0px 0px 83px -25px rgba(0,0,0,0.75);
+}
+
+.bigShadow {
+    -webkit-box-shadow: 0px 0px 1000px -25px rgba(0,0,0,0.75);
+    
+}
+
+
+body {
     margin: 0;
     overflow: hidden;
+}
+
+#nameChangeModal label {
+    margin-top: 7px !important;
 }
 
 .noSelect {
@@ -91,31 +112,36 @@
     left: ~"calc(100vw / 2 - @{toolboxWidth} / 2)";
     width: @toolboxWidth;
     height: @toolboxItemSize + 2 * @toolboxMargin;
-    background-color: #f1f1f1;
+    background-color: @mainColor;
     padding: @toolboxMargin;
 }
 
 .iconButton {
-        .flexBox;
-        float: left;
-        width: @toolboxItemSize;
-        height: @toolboxItemSize;
-        align-items: center;
-        justify-content: center;
-        font-size: @toolboxIconSize;
-    }
+    .flexBox;
+    cursor: pointer;
+    float: left;
+    width: @toolboxItemSize;
+    height: @toolboxItemSize;
+    align-items: center;
+    justify-content: center;
+    font-size: @toolboxIconSize;
+}
 
-    .iconButton:hover {
-        background-color: #dddddd;
-    }
+.iconButton:hover {
+    background-color: @darkerMainColor;
+}
 
-    .iconButton:active {
-        background-color: #cccccc;
-    }
+.iconButton:active {
+    background-color: @darkestMainColor;
+}
 
-    .iconButton.selected {
-        border: 1px solid #b4b4b4;
-    }
+.iconButton.selected {
+    background-color: @darkestMainColor;
+}
+
+.toolButton {
+    .iconButton;
+}
 
 @messageWidth: 300px;
 @messageMargin: 10px;
@@ -135,6 +161,7 @@
 @latexButtonWidth: 25px;
 
 #messenger {
+    .shadow;
     -webkit-flex: 1 1 auto;
     justify-content: flex-start;
     position: absolute;
@@ -149,12 +176,12 @@
 #messengerTopBar {
     width: 100%;
     height: @messengerTopBarHeight;
-    background-color: #adadad;
+    background-color: @mainColor;
     cursor: pointer;
 }
 
 #messengerTopBar.flashing {
-    background-color: #ffd800;
+    background-color: @accentColor;
 }
 
 #messageContainer {
@@ -256,7 +283,7 @@
     outline: 0;
     width: ~"calc(100% - @{latexButtonWidth})";
     border: none;
-    background-color: #f6f6f6;
+    background-color: white;
     padding-left: 5px;
     resize: none;
 }
@@ -266,33 +293,17 @@
     width: @latexButtonWidth;
     font-size: 13pt;
     text-align: center;
-    background-color: #f6f6f6;
+    background-color: white;
     height: 100%;
     overflow: hidden;
 }
 
 #latexInputButton:hover {
-    background-color: #e8e8e8;
+    background-color: @lightestMainColor;
 }
 
 #latexInputButton:active {
-    background-color: #ffffff;
-}
-
-#latexInputButton:hover:active {
-    background-color: #f1f1f1;
-}
-
-#messageInput:hover {
-    background-color: #e8e8e8;
-}
-
-#messageInput:active {
-    background-color: #ffffff;
-}
-
-#messageInput:hover:active {
-    background-color: #f1f1f1;
+    background-color: @lighterMainColor;
 }
 
 #switchButton {
