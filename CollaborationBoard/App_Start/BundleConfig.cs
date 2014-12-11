@@ -18,8 +18,6 @@ namespace CollaborationBoard
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate.unobtrusive.js"));
 
-            // Use the development version of Modernizr to develop with and learn from. Then, when you're
-            // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-2.6.2.js"));
 
@@ -29,10 +27,7 @@ namespace CollaborationBoard
 
 
             var globalStyleBundle = new StyleBundle("~/bundles/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/site.less",
-                      "~/Content/jquery-ui.css",
-                      "~/Content/bootstrapStyle.less");
+                      "~/Content/styles.less");
 
             globalStyleBundle.Transforms.Add(new LessTransform());
             globalStyleBundle.Transforms.Add(new CssMinify());
@@ -44,11 +39,6 @@ namespace CollaborationBoard
 
             bundles.Add(new ScriptBundle("~/bundles/app_scripts").IncludeDirectory("~/Scripts/App/", "*.js", true));
             bundles.Add(new ScriptBundle("~/bundles/common_scripts").IncludeDirectory("~/Scripts/Common/", "*.js"));
-
-            var lessBundle = new StyleBundle("~/bundles/app_styles").IncludeDirectory("~/Content/App/", "*.less").IncludeDirectory("~/Content/App/", "*.css");
-            lessBundle.Transforms.Add(new LessTransform());
-            lessBundle.Transforms.Add(new CssMinify());
-            bundles.Add(lessBundle);
 
             bundles.Add(new StyleBundle("~/bundles/font_awesome").Include("~/Content/font-awesome.css"));
 
