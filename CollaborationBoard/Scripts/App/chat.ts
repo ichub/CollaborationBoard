@@ -217,8 +217,6 @@ class Chat {
         element.appendChild(content);
         element.appendChild(footer);
 
-        //$(header).css("background-color", message.color);
-
         this.$messageContainer.append(element);
         this.scrollDown();
 

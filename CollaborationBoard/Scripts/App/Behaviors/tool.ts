@@ -26,8 +26,6 @@
         this.isMouseDown = false;
         this.lastMouse = null;
 
-        this.behavior = new DrawBehavior(this);
-
         this.setBehavior(new DrawBehavior(this));
     }
 
