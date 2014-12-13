@@ -161,6 +161,9 @@
         for (var style in this.behavior.styles) {
             context[style] = this.behavior.styles[style];
         }
+
+        context.fillStyle = this.behavior.color;
+        context.strokeStyle = this.behavior.color;
     }
 
     public setBehavior(behavior: ToolBehavior) {

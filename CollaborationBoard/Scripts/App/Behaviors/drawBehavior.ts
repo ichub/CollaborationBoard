@@ -1,11 +1,10 @@
 ﻿class DrawBehavior implements ToolBehavior {
     public name = "draw";
+    public color = "green";
 
     styles = {
         "lineCap": "round",
         "lineJoin": "round",
-        "strokeStyle": "#000000",
-        "fillStyle": "#000000",
         "lineWidth": 2
     };
 

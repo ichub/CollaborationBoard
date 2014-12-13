@@ -1,5 +1,6 @@
 ﻿interface ToolBehavior {
     name: string;
+    color: string;
     styles: Object;
     bufferContext: CanvasRenderingContext2D;
     finalContext: CanvasRenderingContext2D;
