@@ -4,6 +4,7 @@
     public $eraser: JQuery;
     public $drawer: JQuery;
     public $colors: JQuery;
+    public $thickness: JQuery;
 
     private colors = [
         "#E35252",
@@ -39,6 +40,7 @@
         this.$eraser = $("#eraser");
         this.$drawer = $("#drawer");
         this.$colors = $("#colors");
+        this.$thickness = $("#thickness");
 
         this.addListeners();
 
@@ -76,11 +78,17 @@
         this.$drawer.click(() => { this.setDrawTool(true); });
 
         this.$colors.click(() => { this.toggleColorPicker(); });
+        this.$thickness.click(() => { this.toggleThicknessPicker(); });
     }
 
     private toggleColorPicker() {
         this.$colors.toggleClass("selected");
         $("#colorPicker").toggleClass("hidden");
+    }
+
+    private toggleThicknessPicker() {
+        this.$thickness.toggleClass("selected");
+        $("#thicknessPicker").toggleClass("hidden");
     }
 
     private deselectAllTools(): void {
