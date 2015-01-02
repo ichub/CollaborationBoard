@@ -1,6 +1,6 @@
 ﻿class DrawBehavior implements ToolBehavior {
     public name = "draw";
-    public color = "green";
+    public color = "black";
 
     styles = {
         "lineCap": "round",
@@ -14,6 +14,8 @@
     constructor(tool: Tool) {
         this.bufferContext = tool.bufferContext;
         this.finalContext = tool.finalContext;
+
+        this.color = tool.canvas.toolBox.currentColor;
     }
 
     public onMouseDrag(event: DrawEvent) {

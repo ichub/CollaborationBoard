@@ -5,6 +5,7 @@
     public $drawer: JQuery;
     public $colors: JQuery;
     public $thickness: JQuery;
+    public currentColor: string;
 
     private colors = [
         "#E35252",
@@ -36,6 +37,9 @@
 
     constructor(app: Application) {
         this.app = app;
+
+        this.currentColor = "black";
+
         this.$toolBox = $("#toolbox");
         this.$eraser = $("#eraser");
         this.$drawer = $("#drawer");
@@ -68,7 +72,14 @@
 
     private addColorPickerListener(element: HTMLDivElement, color: string) {
         $(element).click(() => {
-            this.app.canvas.userTool.behavior.color = color;
+            console.log(color);
+
+            this.currentColor = color;
+
+            if (this.app.canvas.userTool.behavior.name != "erase") {
+                this.app.canvas.userTool.behavior.color = color;
+            }
+
             this.app.canvas.userTool.applyStyles(this.app.canvas.userTool.bufferContext);
         });
     }

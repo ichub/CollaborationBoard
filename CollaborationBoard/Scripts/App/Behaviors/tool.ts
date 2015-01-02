@@ -8,6 +8,7 @@
     public isMouseDown: boolean;
     public lastMouse: Point;
     public path: Array<Point>;
+    public color: string;
 
     public behavior: ToolBehavior;
 
@@ -101,7 +102,6 @@
     }
 
     public onMouseUp(event: DrawEvent): void {
-
         this.behavior.onMouseUp(event);
 
         this.bufferContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -171,6 +171,9 @@
 
         this.applyStyles(this.finalContext);
         this.applyStyles(this.bufferContext);
+    }
+
+    private createEvent(type: DrawEventType, point: Point, lastPoint: Point, toolBehaviorName: string) {
     }
 }
 
