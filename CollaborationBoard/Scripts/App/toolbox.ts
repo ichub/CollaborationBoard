@@ -72,8 +72,6 @@
 
     private addColorPickerListener(element: HTMLDivElement, color: string) {
         $(element).click(() => {
-            console.log(color);
-
             this.currentColor = color;
 
             if (this.app.canvas.userTool.behavior.name != "erase") {

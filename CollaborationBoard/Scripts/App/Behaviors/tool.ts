@@ -8,7 +8,6 @@
     public isMouseDown: boolean;
     public lastMouse: Point;
     public path: Array<Point>;
-    public color: string;
 
     public behavior: ToolBehavior;
 
@@ -50,7 +49,7 @@
     }
 
     public onMouse(event: DrawEvent): void {
-        this.setToolFromName(event.toolBehaviorName);
+        this.setToolFromSnapshot(event.toolBehaviorName, event.color);
 
         switch (event.type) {
             case DrawEventType.MouseDown:
@@ -65,7 +64,7 @@
         }
     }
 
-    public setToolFromName(toolBehaviorName: string) {
+    public setToolFromSnapshot(toolBehaviorName: string, color: string) {
         if (toolBehaviorName != this.behavior.name) {
             if (this.userId == this.canvas.app.user.id) {
                 this.canvas.toolBox.setTool(toolBehaviorName, false);
@@ -81,6 +80,8 @@
                 }
             }
         }
+
+        this.behavior.color = color;
     }
 
     public finalize(path: Array<Point>): void {
@@ -118,7 +119,7 @@
 
             this.lastMouse = new Point(event.point.x, event.point.y);
 
-            var event = new DrawEvent(DrawEventType.MouseDown, this.lastMouse, this.lastMouse, event.toolBehaviorName);
+            var event = this.createEvent(DrawEventType.MouseDown, this.lastMouse, this.lastMouse);
             this.onMouseDown(event);
 
             if (sendToServer) {
@@ -131,7 +132,7 @@
         if (this.canvas.enabled && this.isMouseDown) {
             this.isMouseDown = false;
 
-            var event = new DrawEvent(DrawEventType.MouseUp, new Point(event.point.x, event.point.y), this.lastMouse, event.toolBehaviorName);
+            var event = this.createEvent(DrawEventType.MouseUp, new Point(event.point.x, event.point.y), this.lastMouse);
 
             this.onMouseUp(event);
 
@@ -143,7 +144,7 @@
 
     public mouseMoveWrapper(event: DrawEvent, sendToServer: boolean) {
         if (this.canvas.enabled && this.isMouseDown) {
-            var event = new DrawEvent(DrawEventType.MouseDrag, new Point(event.point.x, event.point.y), this.lastMouse, event.toolBehaviorName);
+            var event = this.createEvent(DrawEventType.MouseDrag, new Point(event.point.x, event.point.y), this.lastMouse);
 
             this.path.push(event.point);
 
@@ -173,7 +174,8 @@
         this.applyStyles(this.bufferContext);
     }
 
-    private createEvent(type: DrawEventType, point: Point, lastPoint: Point, toolBehaviorName: string) {
+    public createEvent(type: DrawEventType, point: Point, lastPoint: Point) {
+        return new DrawEvent(type, point, lastPoint, this.behavior.name, this.behavior.color);
     }
 }
 
@@ -189,7 +191,7 @@ class LocalTool extends Tool {
             requestAnimationFrame(() => {
                 this.lastMouse = new Point(e.clientX, e.clientY);
 
-                var event = new DrawEvent(DrawEventType.MouseDown, new Point(e.clientX, e.clientY), this.lastMouse, this.behavior.name);
+                var event = this.createEvent(DrawEventType.MouseDown, new Point(e.clientX, e.clientY), this.lastMouse);
 
                 this.mouseDownWrapper(event, true);
             });
@@ -198,7 +200,7 @@ class LocalTool extends Tool {
         $(document.body).mouseup(e => {
             requestAnimationFrame(() => {
                 if (this.canvas.enabled && this.isMouseDown) {
-                    var event = new DrawEvent(DrawEventType.MouseUp, new Point(e.clientX, e.clientY), this.lastMouse, this.behavior.name);
+                    var event = this.createEvent(DrawEventType.MouseUp, new Point(e.clientX, e.clientY), this.lastMouse);
 
                     this.mouseUpWrapper(event, true);
                 }
@@ -208,7 +210,7 @@ class LocalTool extends Tool {
         $(document.body).mousemove(e => {
             requestAnimationFrame(() => {
                 if (this.canvas.enabled && this.isMouseDown) {
-                    var event = new DrawEvent(DrawEventType.MouseDrag, new Point(e.clientX, e.clientY), this.lastMouse, this.behavior.name);
+                    var event = this.createEvent(DrawEventType.MouseDrag, new Point(e.clientX, e.clientY), this.lastMouse);
 
                     this.mouseMoveWrapper(event, true);
                 }
