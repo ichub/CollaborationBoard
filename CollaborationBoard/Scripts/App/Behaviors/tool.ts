@@ -201,7 +201,10 @@ class LocalTool extends Tool {
         $(document.body).mouseup(e => {
             requestAnimationFrame(() => {
                 if (this.canvas.enabled && this.isMouseDown) {
-                    var event = this.createEvent(DrawEventType.MouseUp, new Point(e.offsetX, e.offsetY), this.lastMouse);
+                    var canvasPosition = this.$finalCanvas.offset();
+                    var mousePoint = new Point(e.clientX - canvasPosition.left, e.clientY - canvasPosition.top);
+
+                    var event = this.createEvent(DrawEventType.MouseUp, mousePoint, this.lastMouse);
 
                     this.mouseUpWrapper(event, true);
                 }
@@ -211,7 +214,10 @@ class LocalTool extends Tool {
         $(document.body).mousemove(e => {
             requestAnimationFrame(() => {
                 if (this.canvas.enabled && this.isMouseDown) {
-                    var event = this.createEvent(DrawEventType.MouseDrag, new Point(e.offsetX, e.offsetY), this.lastMouse);
+                    var canvasPosition = this.$finalCanvas.offset();
+                    var mousePoint = new Point(e.clientX - canvasPosition.left, e.clientY - canvasPosition.top);
+
+                    var event = this.createEvent(DrawEventType.MouseDrag, mousePoint, this.lastMouse);
 
                     this.mouseMoveWrapper(event, true);
                 }
