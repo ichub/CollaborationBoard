@@ -11,7 +11,7 @@
 }
 
 .bigShadow {
-    -webkit-box-shadow: 0px 0px 1000px -25px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 0px 50px 5px rgba(0,0,0,0.5);
 }
 
 body {
@@ -44,29 +44,33 @@ body {
     display: flex;
 }
 
-@canvasSize: 2000px;
+@canvasWidth: 1000px;
+@canvasHeight: 700px;
 
 .canvasType {
     cursor: default;
     position: absolute;
     top: 0;
     left: 0;
-    width: @canvasSize;
-    height: @canvasSize;
+    width: @canvasWidth;
+    height: @canvasHeight;
 }
 
 #canvasContainer {
+    .bigShadow;
     position: absolute;
-    top: 0px;
-    left: 0px;
-    width: @canvasSize;
-    height: @canvasSize;
+    top: 50%;
+    left: 50%;
+    margin-left: ~"calc(@{canvasWidth} / -2)";
+    margin-top: ~"calc(@{canvasHeight} / -2)";
+    width: @canvasWidth;
+    height: @canvasHeight;
     background-color: white;
 }
 
 #bufferContainer {
-    width: @canvasSize;
-    height: @canvasSize;
+    width: @canvasWidth;
+    height: @canvasHeight;
 
     .buffer {
         .canvasType;
@@ -107,8 +111,9 @@ body {
 
 #toolbox {
     .noSelect;
+    .bigShadow;
     position: absolute;
-    top: 0px;
+    top: 15px;
     left: ~"calc(100vw / 2 - @{toolboxWidth} / 2)";
     width: @toolboxWidth;
     height: @toolboxItemSize + 2 * @toolboxMargin;
@@ -161,7 +166,7 @@ body {
 @latexButtonWidth: 25px;
 
 #messenger {
-    .shadow;
+    .bigShadow;
     -webkit-flex: 1 1 auto;
     justify-content: flex-start;
     position: absolute;
@@ -405,4 +410,13 @@ body {
 
 #thicknessPicker.hidden {
     display: none;
+}
+
+#canvasBackground {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: #3f4953;
 }

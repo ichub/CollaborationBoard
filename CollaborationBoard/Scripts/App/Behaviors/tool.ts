@@ -82,6 +82,7 @@
         }
 
         this.behavior.color = color;
+        this.applyStyles(this.bufferContext);
     }
 
     public finalize(path: Array<Point>): void {
@@ -191,7 +192,7 @@ class LocalTool extends Tool {
             requestAnimationFrame(() => {
                 this.lastMouse = new Point(e.clientX, e.clientY);
 
-                var event = this.createEvent(DrawEventType.MouseDown, new Point(e.clientX, e.clientY), this.lastMouse);
+                var event = this.createEvent(DrawEventType.MouseDown, new Point(e.offsetX, e.offsetY), this.lastMouse);
 
                 this.mouseDownWrapper(event, true);
             });
@@ -200,7 +201,7 @@ class LocalTool extends Tool {
         $(document.body).mouseup(e => {
             requestAnimationFrame(() => {
                 if (this.canvas.enabled && this.isMouseDown) {
-                    var event = this.createEvent(DrawEventType.MouseUp, new Point(e.clientX, e.clientY), this.lastMouse);
+                    var event = this.createEvent(DrawEventType.MouseUp, new Point(e.offsetX, e.offsetY), this.lastMouse);
 
                     this.mouseUpWrapper(event, true);
                 }
@@ -210,7 +211,7 @@ class LocalTool extends Tool {
         $(document.body).mousemove(e => {
             requestAnimationFrame(() => {
                 if (this.canvas.enabled && this.isMouseDown) {
-                    var event = this.createEvent(DrawEventType.MouseDrag, new Point(e.clientX, e.clientY), this.lastMouse);
+                    var event = this.createEvent(DrawEventType.MouseDrag, new Point(e.offsetX, e.offsetY), this.lastMouse);
 
                     this.mouseMoveWrapper(event, true);
                 }
