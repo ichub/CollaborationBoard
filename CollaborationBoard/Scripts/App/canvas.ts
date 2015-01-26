@@ -16,6 +16,7 @@ class DrawEvent {
     public lastPoint: Point;
     public toolBehaviorName: string;
     public color: string;
+    public isDragging: boolean;
 
     constructor(type: DrawEventType, point: Point, lastPoint: Point, toolBehaviorName: string, color: string) {
         this.type = type;
@@ -39,6 +40,11 @@ class Canvas {
     public width: number;
     public height: number;
 
+    private draggingMode: boolean;
+    private dragStarted: boolean;
+    private mouseOffset;
+    private canvasOffset;
+
     public constructor(manager: Application) {
         this.$finalCanvas = $("#finalDrawCanvas");
         this.$container = this.$finalCanvas.parent();
@@ -60,6 +66,56 @@ class Canvas {
 
         this.width = this.$container.width();
         this.height = this.$container.height();
+
+        $(document.body).keydown(e => {
+            if (e.keyCode == 18 /* alt */) {
+                this.userTool.release();
+
+                this.draggingMode = true;
+                this.enabled = false;
+            }
+        });
+
+        $(document.body).keyup(e => {
+            if (e.keyCode == 18 /* alt */) {
+                this.draggingMode = false;
+                this.dragStarted = false;
+                this.enabled = true;
+            }
+        });
+
+        this.$container.mousedown(e => {
+            if (this.draggingMode) {
+                this.dragStarted = true;
+                this.mouseOffset = {
+                    x: e.clientX,
+                    y: e.clientY
+                };
+
+                this.canvasOffset = {
+                    x: this.$container.offset().left,
+                    y: this.$container.offset().top,
+                }
+            }
+        });
+
+        $(document.body).mousemove(e => {
+            if (this.dragStarted) {
+                var newCanvasX = this.canvasOffset.x + e.clientX - this.mouseOffset.x;
+                var newCanvasY = this.canvasOffset.y + e.clientY - this.mouseOffset.y;
+
+                this.$container.offset({
+                    top: newCanvasY,
+                    left: newCanvasX
+                });
+            }
+        });
+
+        $(document.body).mouseup(e => {
+            if (this.dragStarted) {
+                this.dragStarted = false;
+            }
+        });
     }
 
     private initializeNetwork(): void {

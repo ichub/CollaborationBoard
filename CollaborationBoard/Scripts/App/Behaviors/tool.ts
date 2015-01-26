@@ -178,6 +178,10 @@
     public createEvent(type: DrawEventType, point: Point, lastPoint: Point) {
         return new DrawEvent(type, point, lastPoint, this.behavior.name, this.behavior.color);
     }
+
+    public release() {
+        this.onMouse(this.createEvent(DrawEventType.MouseUp, this.lastMouse, this.lastMouse));
+    }
 }
 
 class LocalTool extends Tool {
