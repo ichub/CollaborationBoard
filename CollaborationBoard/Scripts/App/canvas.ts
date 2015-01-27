@@ -42,6 +42,7 @@ class Canvas {
 
     private draggingMode: boolean;
     private dragStarted: boolean;
+    private boundsPadding = 300;
     private mouseOffset;
     private canvasOffset;
 
@@ -67,8 +68,15 @@ class Canvas {
         this.width = this.$container.width();
         this.height = this.$container.height();
 
+
+        this.initializeCanvasDragging();
+    }
+
+    private initializeCanvasDragging() {
         $(document.body).keydown(e => {
-            if (e.keyCode == 18 /* alt */) {
+            if (!this.draggingMode && e.keyCode == 18 /* alt */) {
+                this.setPossibleDraggingCursor();
+
                 this.userTool.release();
 
                 this.draggingMode = true;
@@ -78,6 +86,8 @@ class Canvas {
 
         $(document.body).keyup(e => {
             if (e.keyCode == 18 /* alt */) {
+                this.setDefaultCursor();
+
                 this.draggingMode = false;
                 this.dragStarted = false;
                 this.enabled = true;
@@ -86,6 +96,8 @@ class Canvas {
 
         this.$container.mousedown(e => {
             if (this.draggingMode) {
+                this.setDefinitelyDraggingCursor();
+
                 this.dragStarted = true;
                 this.mouseOffset = {
                     x: e.clientX,
@@ -101,21 +113,57 @@ class Canvas {
 
         $(document.body).mousemove(e => {
             if (this.dragStarted) {
-                var newCanvasX = this.canvasOffset.x + e.clientX - this.mouseOffset.x;
-                var newCanvasY = this.canvasOffset.y + e.clientY - this.mouseOffset.y;
 
-                this.$container.offset({
-                    top: newCanvasY,
-                    left: newCanvasX
-                });
+                var newPosition = {
+                    left: this.canvasOffset.x + e.clientX - this.mouseOffset.x,
+                    top: this.canvasOffset.y + e.clientY - this.mouseOffset.y
+                }
+
+                this.$container.offset(newPosition);
+
+                if (this.isOutOfBounds(newPosition)) {
+                    this.moveIntoBounds();
+                }
             }
         });
 
         $(document.body).mouseup(e => {
             if (this.dragStarted) {
+                this.setPossibleDraggingCursor();
+
                 this.dragStarted = false;
             }
         });
+
+        $(document.body).resize(e => {
+            this.moveIntoBounds();
+        });
+    }
+
+    private isOutOfBounds(pos: JQueryCoordinates) {
+        return pos.left + this.boundsPadding > window.innerWidth ||
+            pos.top + this.boundsPadding > window.innerHeight ||
+            pos.top + this.height - this.boundsPadding < 0 ||
+            pos.left + this.width - this.boundsPadding < 0;
+    }
+
+    private moveIntoBounds() {
+        this.$container.offset({
+            left: Math.max(this.boundsPadding - this.width, Math.min(window.innerWidth - this.boundsPadding, this.$container.offset().left)),
+            top: Math.max(this.boundsPadding - this.height, Math.min(window.innerHeight - this.boundsPadding, this.$container.offset().top))
+        });
+    }
+
+    private setPossibleDraggingCursor() {
+        this.$container.css("cursor", "-webkit-grab");
+    }
+
+    private setDefinitelyDraggingCursor() {
+        this.$container.css("cursor", "-webkit-grabbing");
+    }
+
+    private setDefaultCursor() {
+        this.$container.css("cursor", "pointer");
     }
 
     private initializeNetwork(): void {

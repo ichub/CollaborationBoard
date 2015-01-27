@@ -48,7 +48,7 @@ body {
 @canvasHeight: 700px;
 
 .canvasType {
-    cursor: default;
+    cursor: inherit;
     position: absolute;
     top: 0;
     left: 0;
@@ -58,6 +58,7 @@ body {
 
 #canvasContainer {
     .bigShadow;
+    cursor: pointer;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -71,6 +72,7 @@ body {
 #bufferContainer {
     width: @canvasWidth;
     height: @canvasHeight;
+    cursor: inherit;
 
     .buffer {
         .canvasType;

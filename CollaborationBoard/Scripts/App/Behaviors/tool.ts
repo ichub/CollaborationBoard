@@ -115,22 +115,20 @@
     }
 
     public mouseDownWrapper(event: DrawEvent, sendToServer: boolean) {
-        if (this.canvas.enabled) {
-            this.isMouseDown = true;
+        this.isMouseDown = true;
 
-            this.lastMouse = new Point(event.point.x, event.point.y);
+        this.lastMouse = new Point(event.point.x, event.point.y);
 
-            var event = this.createEvent(DrawEventType.MouseDown, this.lastMouse, this.lastMouse);
-            this.onMouseDown(event);
+        var event = this.createEvent(DrawEventType.MouseDown, this.lastMouse, this.lastMouse);
+        this.onMouseDown(event);
 
-            if (sendToServer) {
-                this.canvas.sendDrawEvent(event);
-            }
+        if (sendToServer) {
+            this.canvas.sendDrawEvent(event);
         }
     }
 
     public mouseUpWrapper(event: DrawEvent, sendToServer: boolean) {
-        if (this.canvas.enabled && this.isMouseDown) {
+        if (this.isMouseDown) {
             this.isMouseDown = false;
 
             var event = this.createEvent(DrawEventType.MouseUp, new Point(event.point.x, event.point.y), this.lastMouse);
@@ -144,7 +142,7 @@
     }
 
     public mouseMoveWrapper(event: DrawEvent, sendToServer: boolean) {
-        if (this.canvas.enabled && this.isMouseDown) {
+        if (this.isMouseDown) {
             var event = this.createEvent(DrawEventType.MouseDrag, new Point(event.point.x, event.point.y), this.lastMouse);
 
             this.path.push(event.point);
@@ -194,11 +192,13 @@ class LocalTool extends Tool {
     private addListeners(): void {
         $("#bufferContainer").mousedown(e => {
             requestAnimationFrame(() => {
-                this.lastMouse = new Point(e.clientX, e.clientY);
+                if (this.canvas.enabled) {
+                    this.lastMouse = new Point(e.clientX, e.clientY);
 
-                var event = this.createEvent(DrawEventType.MouseDown, new Point(e.offsetX, e.offsetY), this.lastMouse);
+                    var event = this.createEvent(DrawEventType.MouseDown, new Point(e.offsetX, e.offsetY), this.lastMouse);
 
-                this.mouseDownWrapper(event, true);
+                    this.mouseDownWrapper(event, true);
+                }
             });
         });
 
