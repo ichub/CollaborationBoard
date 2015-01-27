@@ -138,6 +138,12 @@ class Canvas {
         $(document.body).resize(e => {
             this.moveIntoBounds();
         });
+
+        $(document.body).keydown(e => {
+            if (!this.dragStarted && e.keyCode == 82 /* r */) {
+                this.resetPosition();
+            }
+        });
     }
 
     private isOutOfBounds(pos: JQueryCoordinates) {
@@ -151,6 +157,13 @@ class Canvas {
         this.$container.offset({
             left: Math.max(this.boundsPadding - this.width, Math.min(window.innerWidth - this.boundsPadding, this.$container.offset().left)),
             top: Math.max(this.boundsPadding - this.height, Math.min(window.innerHeight - this.boundsPadding, this.$container.offset().top))
+        });
+    }
+
+    private resetPosition() {
+        this.$container.css({
+            top: "",
+            left: ""
         });
     }
 
