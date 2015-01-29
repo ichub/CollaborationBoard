@@ -54,7 +54,7 @@
         this.createColors();
     }
 
-    public createColors() {
+    public createColors(): void {
         var $colorPicker = $("#colorPicker");
 
         $colorPicker.offset({
@@ -73,7 +73,7 @@
         }
     }
 
-    private addColorPickerListener(element: HTMLDivElement, color: string) {
+    private addColorPickerListener(element: HTMLDivElement, color: string): void {
         $(element).click(() => {
             this.currentColor = color;
 
@@ -99,12 +99,12 @@
         });
     }
 
-    private toggleColorPicker() {
+    private toggleColorPicker(): void {
         this.$colors.toggleClass("selected");
         $("#colorPicker").toggleClass("hidden");
     }
 
-    private toggleThicknessPicker() {
+    private toggleThicknessPicker(): void {
         this.$thickness.toggleClass("selected");
         $("#thicknessPicker").toggleClass("hidden");
     }

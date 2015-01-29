@@ -25,7 +25,7 @@
         this.setBehavior(new DrawBehavior(this));
     }
 
-    public dispose() {
+    public dispose(): void {
         this.$bufferCanvas.remove();
     }
 
@@ -60,7 +60,7 @@
         }
     }
 
-    public setToolFromSnapshot(toolBehaviorName: string, color: string) {
+    public setToolFromSnapshot(toolBehaviorName: string, color: string): void {
         if (toolBehaviorName != this.behavior.name) {
             if (this.userId == this.canvas.app.user.id) {
                 this.canvas.toolBox.setTool(toolBehaviorName, false);
@@ -110,7 +110,7 @@
         this.behavior.onMouseDrag(event);
     }
 
-    public mouseDownWrapper(event: DrawEvent, sendToServer: boolean) {
+    public mouseDownWrapper(event: DrawEvent, sendToServer: boolean): void {
         this.isMouseDown = true;
 
         this.lastMouse = new Point(event.point.x, event.point.y);
@@ -123,7 +123,7 @@
         }
     }
 
-    public mouseUpWrapper(event: DrawEvent, sendToServer: boolean) {
+    public mouseUpWrapper(event: DrawEvent, sendToServer: boolean): void {
         if (this.isMouseDown) {
             this.isMouseDown = false;
 
@@ -137,7 +137,7 @@
         }
     }
 
-    public mouseMoveWrapper(event: DrawEvent, sendToServer: boolean) {
+    public mouseMoveWrapper(event: DrawEvent, sendToServer: boolean): void {
         if (this.isMouseDown) {
             var event = this.createEvent(DrawEventType.MouseDrag, new Point(event.point.x, event.point.y), this.lastMouse);
 
@@ -153,7 +153,7 @@
         }
     }
 
-    public applyStyles(context: CanvasRenderingContext2D) {
+    public applyStyles(context: CanvasRenderingContext2D): void {
         for (var style in this.behavior.styles) {
             context[style] = this.behavior.styles[style];
         }
@@ -162,18 +162,18 @@
         context.strokeStyle = this.behavior.color;
     }
 
-    public setBehavior(behavior: ToolBehavior) {
+    public setBehavior(behavior: ToolBehavior): void {
         this.behavior = behavior;
 
         this.applyStyles(this.finalContext);
         this.applyStyles(this.bufferContext);
     }
 
-    public createEvent(type: DrawEventType, point: Point, lastPoint: Point) {
+    public createEvent(type: DrawEventType, point: Point, lastPoint: Point): DrawEvent {
         return new DrawEvent(type, point, lastPoint, this.behavior.name, this.behavior.color);
     }
 
-    public release() {
+    public release(): void {
         if (this.lastMouse != null) {
             this.onMouse(this.createEvent(DrawEventType.MouseUp, this.lastMouse, this.lastMouse));
         }
@@ -227,7 +227,7 @@ class LocalTool extends Tool {
         });
     }
 
-    public clear() {
+    public clear(): void {
         this.release();
 
         this.bufferContext.clearRect(0, 0, this.canvas.width, this.canvas.height);

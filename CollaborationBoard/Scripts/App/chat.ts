@@ -64,7 +64,7 @@ class Chat {
         this.addListeners();
     }
 
-    private startMessageNotificationListener() {
+    private startMessageNotificationListener(): void {
         setInterval(() => {
             if (this.newMessageNotSeen) {
                 this.$messengerTopBar.toggleClass("flashing");
@@ -76,7 +76,7 @@ class Chat {
         }, this.messengerFlashLength);
     }
 
-    private inititalizeNetwork() {
+    private inititalizeNetwork(): void {
         this.app.hub.client.addMessage = (message: Message) => {
             if (this.networkInputEnabled) {
                 message = Message.deserialize(message);
@@ -92,11 +92,11 @@ class Chat {
         };
     }
 
-    private scrollDown() {
+    private scrollDown(): void {
         this.$messageContainer.prop("scrollTop", this.$messageContainer.prop("scrollHeight"));
     }
 
-    private addListeners() {
+    private addListeners(): void {
         this.$messageInput.keydown(e => {
             if (this.localInputEnabled && e.keyCode == 13) {
                 var text = this.$messageInput.val();
@@ -176,13 +176,13 @@ class Chat {
         });
     }
 
-    private formatDateForDisplay(dateString: string) {
+    private formatDateForDisplay(dateString: string): string {
         var date = new Date(dateString);
 
         return date.toLocaleTimeString();
     }
 
-    private appendChatMessage(message: Message) {
+    private appendChatMessage(message: Message): void {
         var element = document.createElement("div");
 
         var header = document.createElement("div");
@@ -233,7 +233,7 @@ class Chat {
         }
     }
 
-    private appendNotification(message: string, type: NotificationType) {
+    private appendNotification(message: string, type: NotificationType): void {
         var element = document.createElement("div");
         var content = document.createElement("div");
 
@@ -264,7 +264,7 @@ class Chat {
         this.wasPreviousANotification = true;
     }
 
-    private findEquations(text) {
+    private findEquations(text): Array<{ first: number; second: number }> {
         var result = [];
         var first = -1;
 
@@ -287,7 +287,7 @@ class Chat {
         return result;
     }
 
-    private convertStringToHtml(text) {
+    private convertStringToHtml(text): string {
         try {
             var equations = this.findEquations(text);
             var resultHtml = "";
@@ -319,7 +319,7 @@ class Chat {
         }
     }
 
-    public updateRenderedLatex() {
+    public updateRenderedLatex(): void {
         var $input = this.$latexInput;
         var $output = this.$latexOutput;
 
@@ -329,7 +329,7 @@ class Chat {
         $output.html(html);
     }
 
-    public initializeFromSnapshot(snapshot: BoardSnapshot) {
+    public initializeFromSnapshot(snapshot: BoardSnapshot): void {
         this.localInputEnabled = true;
 
         snapshot.messages.forEach(message => {

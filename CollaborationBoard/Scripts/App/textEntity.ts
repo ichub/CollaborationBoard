@@ -12,7 +12,7 @@
     public serialize(): any {
         var ser = super.serialize();
 
-        ser.text = this.text;
+        (<any> ser).text = this.text;
 
         return ser;
     }

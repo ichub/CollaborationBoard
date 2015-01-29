@@ -1,4 +1,11 @@
-﻿class Message {
+﻿interface ISerializedMessage {
+    text: string;
+    sender: string;
+    senderName: string;
+    color: string
+}
+
+class Message {
     public text: string;
     public senderName: string;
     public sender: string;
@@ -13,7 +20,7 @@
         this.dateSent = dateSent;
     }
 
-    public serialize(): any {
+    public serialize(): ISerializedMessage {
         return {
             text: this.text,
             sender: this.sender,

@@ -25,7 +25,7 @@ interface BoardServer {
     handshake(boardId: string): void;
     onDrawEvent(event: DrawEvent);
     onToolChange(toolName: string): void;
-    addMessage(message: Message);
+    addMessage(message: ISerializedMessage);
     addTextEntity(entity: TextEntity);
     textEntityUpdateText(id: string, text: string);
     entityMove(id: string, to: Point);

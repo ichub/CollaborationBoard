@@ -27,15 +27,15 @@
         this.addListeners();
     }
 
-    public addListeners() {
+    public addListeners(): void  {
 
     }
 
-    public get id() {
+    public get id(): string {
         return this._id;
     }
 
-    public serialize(): any {
+    public serialize(): { id: string; position: Point } {
         return {
             id: this._id,
             position: this.position,
@@ -56,11 +56,11 @@
         this._canvas.app.hub.server.entityMove(this.id, Point.fromOffset(ui.offset));
     }
 
-    public get $element() {
+    public get $element(): JQuery {
         return this._$element;
     }
 
-    public get canvas() {
+    public get canvas(): Canvas {
         return this._canvas;
     }
 } 

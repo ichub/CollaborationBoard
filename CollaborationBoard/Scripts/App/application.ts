@@ -53,7 +53,7 @@ class Application {
         });
     }
 
-    private addEventListeners() {
+    private addEventListeners(): void {
         $("#loadingBlind").on("webkitTransitionEnd", () => {
             $("#loadingBlind").hide();
         });

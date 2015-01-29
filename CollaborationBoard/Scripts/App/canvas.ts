@@ -50,7 +50,7 @@ class Canvas {
         this.initializeCanvasDragging();
     }
 
-    private initializeCanvasDragging() {
+    private initializeCanvasDragging(): void  {
         $(document.body).keydown(e => {
             if (!this.draggingMode && e.keyCode == 18 /* alt */) {
                 this.setPossibleDraggingCursor();
@@ -124,36 +124,36 @@ class Canvas {
         });
     }
 
-    private isOutOfBounds(pos: JQueryCoordinates) {
+    private isOutOfBounds(pos: JQueryCoordinates): boolean{
         return pos.left + this.boundsPadding > window.innerWidth ||
             pos.top + this.boundsPadding > window.innerHeight ||
             pos.top + this.height - this.boundsPadding < 0 ||
             pos.left + this.width - this.boundsPadding < 0;
     }
 
-    private moveIntoBounds() {
+    private moveIntoBounds(): void  {
         this.$container.offset({
             left: Math.max(this.boundsPadding - this.width, Math.min(window.innerWidth - this.boundsPadding, this.$container.offset().left)),
             top: Math.max(this.boundsPadding - this.height, Math.min(window.innerHeight - this.boundsPadding, this.$container.offset().top))
         });
     }
 
-    private resetPosition() {
+    private resetPosition(): void  {
         this.$container.css({
             top: "",
             left: ""
         });
     }
 
-    private setPossibleDraggingCursor() {
+    private setPossibleDraggingCursor(): void {
         this.$container.css("cursor", "-webkit-grab");
     }
 
-    private setDefinitelyDraggingCursor() {
+    private setDefinitelyDraggingCursor(): void {
         this.$container.css("cursor", "-webkit-grabbing");
     }
 
-    private setDefaultCursor() {
+    private setDefaultCursor(): void {
         this.$container.css("cursor", "pointer");
     }
 
@@ -193,7 +193,7 @@ class Canvas {
         }
     }
 
-    private processLoadEntities(snapshot: BoardSnapshot) {
+    private processLoadEntities(snapshot: BoardSnapshot): void  {
         for (var i = 0; i < snapshot.textEntities.length; i++) {
             var entity = snapshot.textEntities[i];
             entity.position = Point.deserialize(entity.position);
@@ -212,7 +212,7 @@ class Canvas {
         this.processLoadEntities(snapshot);
     }
 
-    public addLocalUser() {
+    public addLocalUser(): void  {
         this.toolCollection[this.app.user.id] = new LocalTool(this.app.user.id, this);
     }
 
@@ -230,7 +230,7 @@ class Canvas {
         delete this.toolCollection[user.id];
     }
 
-    public addUserToolIfDoesNotExist(userId: string) {
+    public addUserToolIfDoesNotExist(userId: string): void  {
         if (!this.toolCollection[userId]) {
             this.toolCollection[userId] = new Tool(userId, this);
         }
@@ -240,7 +240,7 @@ class Canvas {
         return <LocalTool> this.toolCollection[this.app.user.id];
     }
 
-    public clear() {
+    public clear(): void  {
         this.userTool.clear();
     }
 }
