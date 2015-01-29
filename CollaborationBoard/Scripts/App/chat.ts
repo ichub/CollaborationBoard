@@ -11,8 +11,8 @@ enum NotificationType {
 }
 
 class Chat {
-    public localInputEnabled = false;
-    public networkInputEnabled = true;
+    public localInputEnabled: boolean = false;
+    public networkInputEnabled: boolean = true;
 
     private $messengerTopBar: JQuery; // the element which rests in the top part of the messenger. used to toggled visibility of the messenger
     private $messageContainer: JQuery; // element into which all messages are placed
@@ -29,13 +29,12 @@ class Chat {
     private $saveNameButton: JQuery;
 
     private previousMessage: Message;
-    private wasPreviousANotification = false;
+    private wasPreviousANotification: boolean = false;
 
     private app: Application;
 
     private defaultMessengerWidth: string;
-    private hidden = false;
-
+    private hidden: boolean = false;
     private newMessageNotSeen = false;
     private messengerFlashLength = 500;
 

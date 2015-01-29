@@ -1,15 +1,13 @@
 ﻿declare var boardId;
 
 class Application {
-    public hub: HubProxy;
+    public hub: HubProxy = $.connection.boardHub;
     public user: UserInfo;
     public canvas: Canvas;
     public chat: Chat;
     public boardId: string;
-    public connected: boolean;
 
     public constructor() {
-        this.hub = $.connection.boardHub;
         this.canvas = new Canvas(this);
         this.chat = new Chat(this);
 

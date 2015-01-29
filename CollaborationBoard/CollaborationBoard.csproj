@@ -332,6 +332,7 @@
     <TypeScriptCompile Include="Scripts\App\Behaviors\drawBehavior.ts" />
     <TypeScriptCompile Include="Scripts\App\Behaviors\eraseBehavior.ts" />
     <TypeScriptCompile Include="Scripts\App\Behaviors\tool.ts" />
+    <TypeScriptCompile Include="Scripts\App\drawEvent.ts" />
     <TypeScriptCompile Include="Scripts\App\entity.ts" />
     <TypeScriptCompile Include="Scripts\App\entityCollection.ts" />
     <TypeScriptCompile Include="Scripts\App\message.ts" />

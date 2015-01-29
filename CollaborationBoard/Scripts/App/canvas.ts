@@ -9,47 +9,26 @@ interface JQuery {
     resizable();
 }
 
-class DrawEvent {
-    public type: DrawEventType;
-    public id: string;
-    public point: Point;
-    public lastPoint: Point;
-    public toolBehaviorName: string;
-    public color: string;
-    public isDragging: boolean;
-
-    constructor(type: DrawEventType, point: Point, lastPoint: Point, toolBehaviorName: string, color: string) {
-        this.type = type;
-        this.point = point.round();
-        this.lastPoint = lastPoint.round();
-        this.id = "";
-        this.toolBehaviorName = toolBehaviorName;
-        this.color = color;
-    }
-}
-
 class Canvas {
     public $finalCanvas: JQuery;
     public $container: JQuery;
 
     public entitites: EntityCollection;
     public app: Application;
-    public toolCollection: Object;
+    public toolCollection: { [id: string]: Tool; } = {};
     public toolBox: ToolBox;
-    public localInputEnabled: boolean;
-    public networkInputEnabled: boolean;
+    public localInputEnabled: boolean = false;
+    public networkInputEnabled: boolean = true;
     public width: number;
     public height: number;
 
-    private draggingMode: boolean;
-    private dragStarted: boolean;
-    private boundsPadding = 300;
-    private mouseOffset;
-    private canvasOffset;
+    private draggingMode: boolean = false;
+    private dragStarted: boolean = false;
+    private boundsPadding: number = 300;
+    private mouseOffset: { x: number; y: number } = { x: 0, y: 0 };
+    private canvasOffset: { x: number; y: number } = { x: 0, y: 0 };
 
     public constructor(manager: Application) {
-        this.networkInputEnabled = true;
-
         this.$finalCanvas = $("#finalDrawCanvas");
         this.$container = this.$finalCanvas.parent();
 
@@ -60,11 +39,8 @@ class Canvas {
 
         this.app = manager;
         this.toolBox = new ToolBox(this.app);
-        this.localInputEnabled = false;
 
         this.initializeNetwork();
-
-        this.toolCollection = new Object();
 
         this.entitites = new EntityCollection(this);
 

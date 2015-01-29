@@ -5,9 +5,10 @@
     public $finalCanvas: JQuery;
     public bufferContext: CanvasRenderingContext2D;
     public finalContext: CanvasRenderingContext2D;
-    public isMouseDown: boolean;
-    public lastMouse: Point;
-    public path: Array<Point>;
+
+    public isMouseDown: boolean = false;
+    public lastMouse: Point = null;
+    public path: Array<Point> = [];
 
     public behavior: ToolBehavior;
 
@@ -20,11 +21,6 @@
 
         this.$bufferCanvas = this.createBuffer();
         this.bufferContext = (<HTMLCanvasElement> this.$bufferCanvas.get(0)).getContext("2d");
-
-        this.path = [];
-
-        this.isMouseDown = false;
-        this.lastMouse = null;
 
         this.setBehavior(new DrawBehavior(this));
     }
