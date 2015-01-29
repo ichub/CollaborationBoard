@@ -237,7 +237,7 @@ class Canvas {
     }
 
     public get userTool(): LocalTool {
-        return this.toolCollection[this.app.user.id];
+        return <LocalTool> this.toolCollection[this.app.user.id];
     }
 
     public clear() {
