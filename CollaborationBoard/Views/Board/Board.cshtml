@@ -27,17 +27,19 @@
         <div id="eraser" class="iconButton"><i class="fa fa-eraser"></i></div>
         <div id="colors" class="iconButton"><i class="fa fa-tint"></i></div>
         <div id="thickness" class="iconButton"><i class="fa fa-sliders"></i></div>
+        <div id="clear" class="iconButton"><i class="fa fa-times"></i></div>
     </div>
 
     <div id="colorPicker" class="hidden">
-        
+
     </div>
 
     <div id="thicknessPicker" class="hidden">
 
     </div>
 
-    <div id="loadingBlind"></div>
+    <div id="loadingBlind" class="blind"></div>
+    <div id="disconnectedBlind" class="blind"><div id="disconnectedText">You were disconnected due to a network error. <br /> Refresh the page to reconnect.</div></div>
 
     @Html.Partial("LatexMessageModal")
     @Html.Partial("Messenger")

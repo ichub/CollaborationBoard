@@ -6,6 +6,7 @@ class Application {
     public canvas: Canvas;
     public chat: Chat;
     public boardId: string;
+    public connected: boolean;
 
     public constructor() {
         this.hub = $.connection.boardHub;
@@ -40,6 +41,17 @@ class Application {
 
         $.connection.hub.start().done((): void => {
             this.hub.server.handshake(boardId);
+        });
+
+        $.connection.hub.reconnecting(() => {
+            this.canvas.userTool.release();
+
+            this.canvas.networkInputEnabled = false;
+            this.canvas.localInputEnabled = false;
+            this.chat.networkInputEnabled = false;
+            this.chat.localInputEnabled = false;
+
+            $("#disconnectedBlind").css("visibility", "initial");
         });
     }
 

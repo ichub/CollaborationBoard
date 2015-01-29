@@ -36,7 +36,8 @@ class Canvas {
     public app: Application;
     public toolCollection: Object;
     public toolBox: ToolBox;
-    public enabled: boolean;
+    public localInputEnabled: boolean;
+    public networkInputEnabled: boolean;
     public width: number;
     public height: number;
 
@@ -47,6 +48,8 @@ class Canvas {
     private canvasOffset;
 
     public constructor(manager: Application) {
+        this.networkInputEnabled = true;
+
         this.$finalCanvas = $("#finalDrawCanvas");
         this.$container = this.$finalCanvas.parent();
 
@@ -57,7 +60,7 @@ class Canvas {
 
         this.app = manager;
         this.toolBox = new ToolBox(this.app);
-        this.enabled = false;
+        this.localInputEnabled = false;
 
         this.initializeNetwork();
 
@@ -67,7 +70,6 @@ class Canvas {
 
         this.width = this.$container.width();
         this.height = this.$container.height();
-
 
         this.initializeCanvasDragging();
     }
@@ -80,7 +82,7 @@ class Canvas {
                 this.userTool.release();
 
                 this.draggingMode = true;
-                this.enabled = false;
+                this.localInputEnabled = false;
             }
         });
 
@@ -90,7 +92,7 @@ class Canvas {
 
                 this.draggingMode = false;
                 this.dragStarted = false;
-                this.enabled = true;
+                this.localInputEnabled = true;
             }
         });
 
@@ -180,15 +182,25 @@ class Canvas {
     }
 
     private initializeNetwork(): void {
-        this.app.hub.client.onDrawEvent = (event: DrawEvent) => {
-            this.addUserToolIfDoesNotExist(event.id);
+        this.app.hub.client.onClear = (id: string) => {
+            if (this.networkInputEnabled) {
+                this.clear();
+            }
+        };
 
-            this.toolCollection[event.id].onMouse(event);
+        this.app.hub.client.onDrawEvent = (event: DrawEvent) => {
+            if (this.networkInputEnabled) {
+                this.addUserToolIfDoesNotExist(event.id);
+
+                this.toolCollection[event.id].onMouse(event);
+            }
         };
 
         this.app.hub.client.onToolChange = (userId: string, toolName: string) => {
-            if (this.app.user.id == userId) {
-                this.toolBox.setTool(toolName, false);
+            if (this.networkInputEnabled) {
+                if (this.app.user.id == userId) {
+                    this.toolBox.setTool(toolName, false);
+                }
             }
         };
     }
@@ -212,11 +224,13 @@ class Canvas {
 
             this.entitites.addTextEntity(entity.id, entity.text, entity.position);
         }
+
+        this.userTool.release();
     }
 
     public initializeFromSnapshot(snapshot: BoardSnapshot): void {
         this.addLocalUser();
-        this.enabled = true;
+        this.localInputEnabled = true;
 
         this.processLoadEvents(snapshot.events);
         this.processLoadEntities(snapshot);
@@ -246,7 +260,11 @@ class Canvas {
         }
     }
 
-    public get userTool(): Tool {
+    public get userTool(): LocalTool {
         return this.toolCollection[this.app.user.id];
+    }
+
+    public clear() {
+        this.userTool.clear();
     }
 }

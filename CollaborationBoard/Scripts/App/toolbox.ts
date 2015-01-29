@@ -5,6 +5,8 @@
     public $drawer: JQuery;
     public $colors: JQuery;
     public $thickness: JQuery;
+    public $clear: JQuery;
+
     public currentColor: string;
 
     private colors = [
@@ -45,6 +47,7 @@
         this.$drawer = $("#drawer");
         this.$colors = $("#colors");
         this.$thickness = $("#thickness");
+        this.$clear = $("#clear");
 
         this.addListeners();
 
@@ -88,6 +91,12 @@
 
         this.$colors.click(() => { this.toggleColorPicker(); });
         this.$thickness.click(() => { this.toggleThicknessPicker(); });
+
+        this.$clear.click(() => {
+            this.app.hub.server.onClear();
+
+            this.app.canvas.clear();
+        });
     }
 
     private toggleColorPicker() {

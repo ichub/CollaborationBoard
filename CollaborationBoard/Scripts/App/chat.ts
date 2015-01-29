@@ -11,7 +11,8 @@ enum NotificationType {
 }
 
 class Chat {
-    public enabled = false;
+    public localInputEnabled = false;
+    public networkInputEnabled = true;
 
     private $messengerTopBar: JQuery; // the element which rests in the top part of the messenger. used to toggled visibility of the messenger
     private $messageContainer: JQuery; // element into which all messages are placed
@@ -78,13 +79,17 @@ class Chat {
 
     private inititalizeNetwork() {
         this.app.hub.client.addMessage = (message: Message) => {
-            message = Message.deserialize(message);
+            if (this.networkInputEnabled) {
+                message = Message.deserialize(message);
 
-            this.appendChatMessage(message);
+                this.appendChatMessage(message);
+            }
         };
 
         this.app.hub.client.onNameChange = (oldName: string, newName: string) => {
-            this.appendNotification(format("User %s changed their name to %s", oldName, newName), NotificationType.Info);
+            if (this.networkInputEnabled) {
+                this.appendNotification(format("User %s changed their name to %s", oldName, newName), NotificationType.Info);
+            }
         };
     }
 
@@ -94,7 +99,7 @@ class Chat {
 
     private addListeners() {
         this.$messageInput.keydown(e => {
-            if (this.enabled && e.keyCode == 13) {
+            if (this.localInputEnabled && e.keyCode == 13) {
                 var text = this.$messageInput.val();
 
                 if (text.length != 0) {
@@ -118,7 +123,7 @@ class Chat {
         });
 
         this.$messengerTopBar.click(e => {
-            if (this.enabled) {
+            if (this.localInputEnabled) {
                 if (this.hidden) {
                     this.$messenger.removeClass("in");
                     this.$messenger.addClass("out");
@@ -326,7 +331,7 @@ class Chat {
     }
 
     public initializeFromSnapshot(snapshot: BoardSnapshot) {
-        this.enabled = true;
+        this.localInputEnabled = true;
 
         snapshot.messages.forEach(message => {
             message = Message.deserialize(message);

@@ -67,6 +67,15 @@ namespace CollaborationBoard
             context.NeighborClients.onToolChange(context.Caller.Id, toolName);
         }
 
+        public void OnClear()
+        {
+            var context = new RequestContext(this);
+
+            context.Board.Clear();
+
+            context.NeighborClients.onClear(context.Caller.Id);
+        }
+
         public void Handshake(string boardId)
         {
             string sessionId = Context.RequestCookies["ASP.NET_SessionId"].Value;

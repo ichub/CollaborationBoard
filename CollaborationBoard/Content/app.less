@@ -333,16 +333,29 @@ body {
     transition: transform 1s;
 }
 
-#loadingBlind {
+.blind {
     .fullSize;
     .noSelect;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.8);
     z-index: 100;
 }
 
 #loadingBlind.fadeout {
     transition: background-color 500ms;
     background-color: rgba(0, 0, 0, 0);
+}
+
+#disconnectedBlind {
+    visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#disconnectedText {
+    color: white;
+    font-size: 20pt;
+    text-align: center;
 }
 
 #latexBody {

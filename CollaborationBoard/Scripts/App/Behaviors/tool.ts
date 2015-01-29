@@ -178,7 +178,9 @@
     }
 
     public release() {
-        this.onMouse(this.createEvent(DrawEventType.MouseUp, this.lastMouse, this.lastMouse));
+        if (this.lastMouse != null) {
+            this.onMouse(this.createEvent(DrawEventType.MouseUp, this.lastMouse, this.lastMouse));
+        }
     }
 }
 
@@ -192,7 +194,7 @@ class LocalTool extends Tool {
     private addListeners(): void {
         $("#bufferContainer").mousedown(e => {
             requestAnimationFrame(() => {
-                if (this.canvas.enabled) {
+                if (this.canvas.localInputEnabled) {
                     this.lastMouse = new Point(e.clientX, e.clientY);
 
                     var event = this.createEvent(DrawEventType.MouseDown, new Point(e.offsetX, e.offsetY), this.lastMouse);
@@ -204,7 +206,7 @@ class LocalTool extends Tool {
 
         $(document.body).mouseup(e => {
             requestAnimationFrame(() => {
-                if (this.canvas.enabled && this.isMouseDown) {
+                if (this.canvas.localInputEnabled && this.isMouseDown) {
                     var canvasPosition = this.$finalCanvas.offset();
                     var mousePoint = new Point(e.clientX - canvasPosition.left, e.clientY - canvasPosition.top);
 
@@ -217,7 +219,7 @@ class LocalTool extends Tool {
 
         $(document.body).mousemove(e => {
             requestAnimationFrame(() => {
-                if (this.canvas.enabled && this.isMouseDown) {
+                if (this.canvas.localInputEnabled && this.isMouseDown) {
                     var canvasPosition = this.$finalCanvas.offset();
                     var mousePoint = new Point(e.clientX - canvasPosition.left, e.clientY - canvasPosition.top);
 
@@ -227,5 +229,12 @@ class LocalTool extends Tool {
                 }
             });
         });
+    }
+
+    public clear() {
+        this.release();
+
+        this.bufferContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.finalContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 }

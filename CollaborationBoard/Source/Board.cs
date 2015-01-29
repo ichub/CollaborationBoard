@@ -62,7 +62,6 @@ namespace CollaborationBoard
         public string Password { get; private set; }
         public string Title { get; private set; }
 
-
         public Board(string id)
         {
             this.Id = id;
@@ -126,6 +125,11 @@ namespace CollaborationBoard
         public void AddMessage(Message message)
         {
             this.messages.Add(message);
+        }
+
+        public void Clear()
+        {
+            this.events.Clear();
         }
     }
 }
