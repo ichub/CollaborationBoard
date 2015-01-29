@@ -101,6 +101,8 @@ class Chat {
             if (this.localInputEnabled && e.keyCode == 13) {
                 var text = this.$messageInput.val();
 
+                text = $("<p></p>").text(text).html(); // escape HTML to prevent injection
+
                 if (text.length != 0) {
                     this.$messageInput.val("");
 
