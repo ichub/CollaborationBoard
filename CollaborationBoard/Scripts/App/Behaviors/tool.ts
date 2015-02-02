@@ -187,44 +187,50 @@ class LocalTool extends Tool {
         this.addListeners();
     }
 
+    private handleUserClick(e: JQueryMouseEventObject): void {
+        requestAnimationFrame(() => {
+            if (this.canvas.localInputEnabled) {
+                this.lastMouse = new Point(e.clientX, e.clientY);
+
+                var event = this.createEvent(DrawEventType.MouseDown, new Point(e.offsetX, e.offsetY), this.lastMouse);
+
+                this.mouseDownWrapper(event, true);
+            }
+        });
+    }
+
+    private handleUserRelease(e: JQueryMouseEventObject): void {
+        requestAnimationFrame(() => {
+            if (this.canvas.localInputEnabled && this.isMouseDown) {
+                var canvasPosition = this.$finalCanvas.offset();
+                var mousePoint = new Point(e.clientX - canvasPosition.left, e.clientY - canvasPosition.top);
+
+                var event = this.createEvent(DrawEventType.MouseUp, mousePoint, this.lastMouse);
+
+                this.mouseUpWrapper(event, true);
+            }
+        });
+    }
+
+    private handleUserMove(e: JQueryMouseEventObject): void {
+        requestAnimationFrame(() => {
+            if (this.canvas.localInputEnabled && this.isMouseDown) {
+                var canvasPosition = this.$finalCanvas.offset();
+                var mousePoint = new Point(e.clientX - canvasPosition.left, e.clientY - canvasPosition.top);
+
+                var event = this.createEvent(DrawEventType.MouseDrag, mousePoint, this.lastMouse);
+
+                this.mouseMoveWrapper(event, true);
+            }
+        });
+    }
+
     private addListeners(): void {
-        $("#bufferContainer").mousedown(e => {
-            requestAnimationFrame(() => {
-                if (this.canvas.localInputEnabled) {
-                    this.lastMouse = new Point(e.clientX, e.clientY);
+        $("#bufferContainer").mousedown(e => this.handleUserClick(e));
 
-                    var event = this.createEvent(DrawEventType.MouseDown, new Point(e.offsetX, e.offsetY), this.lastMouse);
+        $(document.body).mouseup(e => this.handleUserRelease(e));
 
-                    this.mouseDownWrapper(event, true);
-                }
-            });
-        });
-
-        $(document.body).mouseup(e => {
-            requestAnimationFrame(() => {
-                if (this.canvas.localInputEnabled && this.isMouseDown) {
-                    var canvasPosition = this.$finalCanvas.offset();
-                    var mousePoint = new Point(e.clientX - canvasPosition.left, e.clientY - canvasPosition.top);
-
-                    var event = this.createEvent(DrawEventType.MouseUp, mousePoint, this.lastMouse);
-
-                    this.mouseUpWrapper(event, true);
-                }
-            });
-        });
-
-        $(document.body).mousemove(e => {
-            requestAnimationFrame(() => {
-                if (this.canvas.localInputEnabled && this.isMouseDown) {
-                    var canvasPosition = this.$finalCanvas.offset();
-                    var mousePoint = new Point(e.clientX - canvasPosition.left, e.clientY - canvasPosition.top);
-
-                    var event = this.createEvent(DrawEventType.MouseDrag, mousePoint, this.lastMouse);
-
-                    this.mouseMoveWrapper(event, true);
-                }
-            });
-        });
+        $(document.body).mousemove(e => this.handleUserMove(e));
     }
 
     public clear(): void {

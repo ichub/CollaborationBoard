@@ -59,123 +59,125 @@ class Chat {
 
         this.previousMessage = null;
 
-        this.inititalizeNetwork();
-        this.startMessageNotificationListener();
-        this.addListeners();
+        this.$messageInput.keydown(e => { this.onMessageKeyDown(e); });
+        this.$messageInput.focus(e => { this.onMessengerFocus(e); });
+        this.$messenger.click(e => { this.onMessengerClick(e); });
+        this.$messengerTopBar.click(e => { this.onTopBarClick(e); });
+        this.$latexModalToggle.click(e => { this.onLatexModalToggle(e); });
+        this.$latexInput.keyup(e => { this.onLatexModalKeyUp(e); });
+        this.$nameChangeToggle.click(e => { this.onNameChangeToggle(e); });
+        this.$saveNameButton.click(e => { this.onSaveNameClick(e); });
+        $("#latexSave").click(e => { this.onLatexSaveClick(e); });
+        setInterval(() => { this.onMessageFlash(); }, this.messengerFlashLength);
+        this.app.hub.client.addMessage = (message: Message) => { this.onMessage(message); };
+        this.app.hub.client.onNameChange = (oldName: string, newName: string) => { this.onNameChange(oldName, newName); };
     }
 
-    private startMessageNotificationListener(): void {
-        setInterval(() => {
-            if (this.newMessageNotSeen) {
-                this.$messengerTopBar.toggleClass("flashing");
-            }
-            else {
-                this.$messengerTopBar.removeClass("flashing");
-            }
-
-        }, this.messengerFlashLength);
+    private onMessageFlash() {
+        if (this.newMessageNotSeen) {
+            this.$messengerTopBar.toggleClass("flashing");
+        }
+        else {
+            this.$messengerTopBar.removeClass("flashing");
+        }
     }
 
-    private inititalizeNetwork(): void {
-        this.app.hub.client.addMessage = (message: Message) => {
-            if (this.networkInputEnabled) {
-                message = Message.deserialize(message);
+    private onMessage(message: Message) {
+        if (this.networkInputEnabled) {
+            message = Message.deserialize(message);
 
-                this.appendChatMessage(message);
-            }
-        };
+            this.appendChatMessage(message);
+        }
+    }
 
-        this.app.hub.client.onNameChange = (oldName: string, newName: string) => {
-            if (this.networkInputEnabled) {
-                this.appendNotification(format("User %s changed their name to %s", oldName, newName), NotificationType.Info);
-            }
-        };
+    private onNameChange(oldName: string, newName: string) {
+        if (this.networkInputEnabled) {
+            this.appendNotification(format("User %s changed their name to %s", oldName, newName), NotificationType.Info);
+        }
     }
 
     private scrollDown(): void {
         this.$messageContainer.prop("scrollTop", this.$messageContainer.prop("scrollHeight"));
     }
 
-    private addListeners(): void {
-        this.$messageInput.keydown(e => {
-            if (this.localInputEnabled && e.keyCode == 13) {
-                var text = this.$messageInput.val();
+    private onMessageKeyDown(e: JQueryKeyEventObject): void {
+        if (this.localInputEnabled && e.keyCode == 13) {
+            var text = this.$messageInput.val();
 
-                text = $("<p></p>").text(text).html(); // escape HTML to prevent injection
+            text = $("<p></p>").text(text).html(); // escape HTML to prevent injection
 
-                if (text.length != 0) {
-                    this.$messageInput.val("");
+            if (text.length != 0) {
+                this.$messageInput.val("");
 
-                    var newMessage = new Message(text, this.app.user.id, this.app.user.displayName, this.app.user.displayColor, new Date().toString());
+                var newMessage = new Message(text, this.app.user.id, this.app.user.displayName, this.app.user.displayColor, new Date().toString());
 
-                    this.appendChatMessage(newMessage);
+                this.appendChatMessage(newMessage);
 
-                    this.app.hub.server.addMessage(newMessage.serialize());
-                }
+                this.app.hub.server.addMessage(newMessage.serialize());
             }
-        });
+        }
+    }
 
-        this.$messageInput.focus(e => {
-            this.newMessageNotSeen = false;
-        });
+    private onMessengerFocus(e: JQueryEventObject) {
+        this.newMessageNotSeen = false;
+    }
 
-        this.$messenger.click(e => {
-            this.newMessageNotSeen = false;
-        });
+    private onMessengerClick(e: JQueryMouseEventObject) {
+        this.newMessageNotSeen = false;
+    }
 
-        this.$messengerTopBar.click(e => {
-            if (this.localInputEnabled) {
-                if (this.hidden) {
-                    this.$messenger.removeClass("in");
-                    this.$messenger.addClass("out");
-                }
-                else {
-                    this.$messenger.removeClass("out");
-                    this.$messenger.addClass("in");
-                }
-
-                this.hidden = !this.hidden;
+    private onTopBarClick(e: JQueryMouseEventObject) {
+        if (this.localInputEnabled) {
+            if (this.hidden) {
+                this.$messenger.removeClass("in");
+                this.$messenger.addClass("out");
             }
-        });
+            else {
+                this.$messenger.removeClass("out");
+                this.$messenger.addClass("in");
+            }
 
-        this.$latexModalToggle.click(e => {
-            this.$latexInput.val(this.$messageInput.val());
+            this.hidden = !this.hidden;
+        }
+    }
 
-            this.updateRenderedLatex();
+    private onLatexModalToggle(e: JQueryMouseEventObject) {
+        this.$latexInput.val(this.$messageInput.val());
 
-            this.$latexPreviewModal.modal("show");
-        });
+        this.updateRenderedLatex();
 
-        this.$latexInput.keyup(e => {
-            this.updateRenderedLatex();
-        });
+        this.$latexPreviewModal.modal("show");
+    }
 
-        $("#latexSave").click(e => {
-            this.$messageInput.val(this.$latexInput.val());
+    private onLatexModalKeyUp(e: JQueryKeyEventObject) {
+        this.updateRenderedLatex();
+    }
 
-            this.$latexPreviewModal.modal("hide");
+    private onLatexSaveClick(e: JQueryMouseEventObject) {
+        this.$messageInput.val(this.$latexInput.val());
 
-            this.$latexInput.val("");
+        this.$latexPreviewModal.modal("hide");
 
-            this.updateRenderedLatex();
-        });
+        this.$latexInput.val("");
 
-        this.$nameChangeToggle.click(e => {
-            this.$nameChangeModal.modal("show");
+        this.updateRenderedLatex();
+    }
 
-            e.stopPropagation();
-        });
+    private onNameChangeToggle(e: JQueryMouseEventObject) {
+        this.$nameChangeModal.modal("show");
 
-        this.$saveNameButton.click(e => {
-            var newName = this.$nameChangeInput.val();
+        e.stopPropagation();
+    }
 
-            this.app.user.displayName = newName;
-            this.app.hub.server.changeName(newName);
+    private onSaveNameClick(e: JQueryMouseEventObject) {
+        var newName = this.$nameChangeInput.val();
 
-            this.appendNotification(format("You changed your to %s", newName), NotificationType.Info);
+        this.app.user.displayName = newName;
+        this.app.hub.server.changeName(newName);
 
-            this.$nameChangeModal.modal("hide");
-        });
+        this.appendNotification(format("You changed your to %s", newName), NotificationType.Info);
+
+        this.$nameChangeModal.modal("hide");
     }
 
     private formatDateForDisplay(dateString: string): string {

@@ -40,105 +40,109 @@ class Canvas {
         this.app = manager;
         this.toolBox = new ToolBox(this.app);
 
-        this.initializeNetwork();
-
         this.entitites = new EntityCollection(this);
 
         this.width = this.$container.width();
         this.height = this.$container.height();
 
-        this.initializeCanvasDragging();
+        this.$container.mousedown(e => { this.onMouseDown(e); });
+
+        $(document.body).keydown(e => { this.onKeyDown(e); });
+        $(document.body).keyup(e => { this.onKeyUp(e); });
+        $(document.body).mousemove(e => { this.onMouseMove(e); });
+        $(document.body).mouseup(e => { this.onMouseUp(e); });
+        $(document.body).resize(e => { this.onResize(); });
+        $(document.body).keydown(e => { this.onKeyDown(e); });
+
+        this.app.hub.client.onClear = (id: string) => { this.onClear(id); };
+        this.app.hub.client.onDrawEvent = (event: DrawEvent) => { this.onDrawEvent(event); };
+        this.app.hub.client.onToolChange = (userId: string, toolName: string) => { this.onToolChange(userId, toolName); };
     }
 
-    private initializeCanvasDragging(): void  {
-        $(document.body).keydown(e => {
-            if (!this.draggingMode && e.keyCode == 18 /* alt */) {
-                this.setPossibleDraggingCursor();
+    private onKeyDown(e: JQueryKeyEventObject) {
+        if (!this.draggingMode && e.keyCode == 18 /* alt */) {
+            this.setPossibleDraggingCursor();
 
-                this.userTool.release();
+            this.userTool.release();
 
-                this.draggingMode = true;
-                this.localInputEnabled = false;
+            this.draggingMode = true;
+            this.localInputEnabled = false;
+        }
+
+        if (!this.dragStarted && e.keyCode == 82 /* r */) {
+            this.resetPosition();
+        }
+    }
+
+    private onKeyUp(e: JQueryKeyEventObject) {
+        if (e.keyCode == 18 /* alt */) {
+            this.setDefaultCursor();
+
+            this.draggingMode = false;
+            this.dragStarted = false;
+            this.localInputEnabled = true;
+        }
+    }
+
+    private onMouseDown(e: JQueryMouseEventObject) {
+        if (this.draggingMode) {
+            this.setDefinitelyDraggingCursor();
+
+            this.dragStarted = true;
+            this.mouseOffset = {
+                x: e.clientX,
+                y: e.clientY
+            };
+
+            this.canvasOffset = {
+                x: this.$container.offset().left,
+                y: this.$container.offset().top,
             }
-        });
+        }
+    }
 
-        $(document.body).keyup(e => {
-            if (e.keyCode == 18 /* alt */) {
-                this.setDefaultCursor();
-
-                this.draggingMode = false;
-                this.dragStarted = false;
-                this.localInputEnabled = true;
+    private onMouseMove(e: JQueryMouseEventObject) {
+        if (this.dragStarted) {
+            var newPosition = {
+                left: this.canvasOffset.x + e.clientX - this.mouseOffset.x,
+                top: this.canvasOffset.y + e.clientY - this.mouseOffset.y
             }
-        });
-
-        this.$container.mousedown(e => {
-            if (this.draggingMode) {
-                this.setDefinitelyDraggingCursor();
-
-                this.dragStarted = true;
-                this.mouseOffset = {
-                    x: e.clientX,
-                    y: e.clientY
-                };
-
-                this.canvasOffset = {
-                    x: this.$container.offset().left,
-                    y: this.$container.offset().top,
-                }
-            }
-        });
-
-        $(document.body).mousemove(e => {
-            if (this.dragStarted) {
-
-                var newPosition = {
-                    left: this.canvasOffset.x + e.clientX - this.mouseOffset.x,
-                    top: this.canvasOffset.y + e.clientY - this.mouseOffset.y
-                }
 
                 this.$container.offset(newPosition);
 
-                if (this.isOutOfBounds(newPosition)) {
-                    this.moveIntoBounds();
-                }
+            if (this.isOutOfBounds(newPosition)) {
+                this.moveIntoBounds();
             }
-        });
-
-        $(document.body).mouseup(e => {
-            if (this.dragStarted) {
-                this.setPossibleDraggingCursor();
-
-                this.dragStarted = false;
-            }
-        });
-
-        $(document.body).resize(e => {
-            this.moveIntoBounds();
-        });
-
-        $(document.body).keydown(e => {
-            if (!this.dragStarted && e.keyCode == 82 /* r */) {
-                this.resetPosition();
-            }
-        });
+        }
     }
 
-    private isOutOfBounds(pos: JQueryCoordinates): boolean{
+    private onMouseUp(e: JQueryMouseEventObject) {
+        if (this.dragStarted) {
+            this.setPossibleDraggingCursor();
+
+            this.dragStarted = false;
+        }
+    }
+
+    private onResize() {
+        this.moveIntoBounds();
+    }
+
+    private isOutOfBounds(pos: JQueryCoordinates): boolean {
         return pos.left + this.boundsPadding > window.innerWidth ||
             pos.top + this.boundsPadding > window.innerHeight ||
             pos.top + this.height - this.boundsPadding < 0 ||
             pos.left + this.width - this.boundsPadding < 0;
     }
 
-    private moveIntoBounds(): void  {
+    private moveIntoBounds(): void {
         this.$container.offset({
             left: Math.max(this.boundsPadding - this.width, Math.min(window.innerWidth - this.boundsPadding, this.$container.offset().left)),
             top: Math.max(this.boundsPadding - this.height, Math.min(window.innerHeight - this.boundsPadding, this.$container.offset().top))
         });
     }
 
-    private resetPosition(): void  {
+    private resetPosition(): void {
         this.$container.css({
             top: "",
             left: ""
@@ -157,28 +161,26 @@ class Canvas {
         this.$container.css("cursor", "pointer");
     }
 
-    private initializeNetwork(): void {
-        this.app.hub.client.onClear = (id: string) => {
-            if (this.networkInputEnabled) {
-                this.clear();
-            }
-        };
+    private onClear(id: string) {
+        if (this.networkInputEnabled) {
+            this.clear();
+        }
+    }
 
-        this.app.hub.client.onDrawEvent = (event: DrawEvent) => {
-            if (this.networkInputEnabled) {
-                this.addUserToolIfDoesNotExist(event.id);
+    private onDrawEvent(event: DrawEvent) {
+        if (this.networkInputEnabled) {
+            this.addUserToolIfDoesNotExist(event.id);
 
-                this.toolCollection[event.id].onMouse(event);
-            }
-        };
+            this.toolCollection[event.id].onMouse(event);
+        }
+    }
 
-        this.app.hub.client.onToolChange = (userId: string, toolName: string) => {
-            if (this.networkInputEnabled) {
-                if (this.app.user.id == userId) {
-                    this.toolBox.setTool(toolName, false);
-                }
+    private onToolChange(userId: string, toolName: string) {
+        if (this.networkInputEnabled) {
+            if (this.app.user.id == userId) {
+                this.toolBox.setTool(toolName, false);
             }
-        };
+        }
     }
 
     public sendDrawEvent(event: DrawEvent): void {
@@ -193,7 +195,7 @@ class Canvas {
         }
     }
 
-    private processLoadEntities(snapshot: BoardSnapshot): void  {
+    private processLoadEntities(snapshot: BoardSnapshot): void {
         for (var i = 0; i < snapshot.textEntities.length; i++) {
             var entity = snapshot.textEntities[i];
             entity.position = Point.deserialize(entity.position);
@@ -212,7 +214,7 @@ class Canvas {
         this.processLoadEntities(snapshot);
     }
 
-    public addLocalUser(): void  {
+    public addLocalUser(): void {
         this.toolCollection[this.app.user.id] = new LocalTool(this.app.user.id, this);
     }
 
@@ -230,7 +232,7 @@ class Canvas {
         delete this.toolCollection[user.id];
     }
 
-    public addUserToolIfDoesNotExist(userId: string): void  {
+    public addUserToolIfDoesNotExist(userId: string): void {
         if (!this.toolCollection[userId]) {
             this.toolCollection[userId] = new Tool(userId, this);
         }
@@ -240,7 +242,7 @@ class Canvas {
         return <LocalTool> this.toolCollection[this.app.user.id];
     }
 
-    public clear(): void  {
+    public clear(): void {
         this.userTool.clear();
     }
 }

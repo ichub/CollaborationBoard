@@ -49,9 +49,15 @@
         this.$thickness = $("#thickness");
         this.$clear = $("#clear");
 
-        this.addListeners();
-
         this.createColors();
+
+        this.$eraser.click(() => { this.setEraseTool(true); });
+        this.$drawer.click(() => { this.setDrawTool(true); });
+
+        this.$colors.click(() => { this.toggleColorPicker(); });
+        this.$thickness.click(() => { this.toggleThicknessPicker(); });
+
+        this.$clear.click(() => { this.clear(); });
     }
 
     public createColors(): void {
@@ -85,18 +91,9 @@
         });
     }
 
-    public addListeners(): void {
-        this.$eraser.click(() => { this.setEraseTool(true); });
-        this.$drawer.click(() => { this.setDrawTool(true); });
-
-        this.$colors.click(() => { this.toggleColorPicker(); });
-        this.$thickness.click(() => { this.toggleThicknessPicker(); });
-
-        this.$clear.click(() => {
-            this.app.hub.server.onClear();
-
-            this.app.canvas.clear();
-        });
+    private clear() {
+        this.app.hub.server.onClear();
+        this.app.canvas.clear();
     }
 
     private toggleColorPicker(): void {
