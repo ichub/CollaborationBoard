@@ -34,9 +34,6 @@ namespace CollaborationBoard
         [DataMember(Name = "displayName")]
         public string DisplayName { get; set; }
 
-        [DataMember(Name = "displayColor")]
-        public string DisplayColor { get; set; }
-
         [IgnoreDataMember]
         public IReadOnlyList<string> ConnectionIds
         {
