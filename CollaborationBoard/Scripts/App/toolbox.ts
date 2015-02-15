@@ -107,7 +107,7 @@
     }
 
     private deselectAllTools(): void {
-        var children = this.$toolBox.children();
+        var children = this.$toolBox.find("#tools").children();
 
         for (var i = 0; i < children.length; i++) {
             children[i].classList.remove("selected");

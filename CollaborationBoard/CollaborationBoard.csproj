@@ -346,6 +346,7 @@
     <TypeScriptCompile Include="Scripts\App\Behaviors\toolBehavior.ts" />
     <TypeScriptCompile Include="Scripts\App\toolbox.ts" />
     <TypeScriptCompile Include="Scripts\App\userInfo.ts" />
+    <TypeScriptCompile Include="Scripts\App\validator.ts" />
     <TypeScriptCompile Include="Scripts\Common\misc.ts" />
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="fonts\fontawesome-webfont.ttf" />

@@ -6,6 +6,7 @@ class Application {
     public canvas: Canvas;
     public chat: Chat;
     public boardId: string;
+    public validator: Validator;
 
     public constructor() {
         this.canvas = new Canvas(this);
