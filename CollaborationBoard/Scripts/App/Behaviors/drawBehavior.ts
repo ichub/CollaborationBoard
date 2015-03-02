@@ -1,11 +1,10 @@
 ﻿class DrawBehavior implements ToolBehavior {
     public name = "draw";
+    public color = "black";
 
     styles = {
         "lineCap": "round",
         "lineJoin": "round",
-        "strokeStyle": "#000000",
-        "fillStyle": "#000000",
         "lineWidth": 2
     };
 
@@ -15,9 +14,11 @@
     constructor(tool: Tool) {
         this.bufferContext = tool.bufferContext;
         this.finalContext = tool.finalContext;
+
+        this.color = tool.canvas.toolBox.currentColor;
     }
 
-    public onMouseDrag(event: DrawEvent) {
+    public onMouseDrag(event: DrawEvent): void {
         this.bufferContext.beginPath();
         this.bufferContext.moveTo(event.point.x, event.point.y);
         this.bufferContext.lineTo(event.lastPoint.x, event.lastPoint.y);
@@ -25,16 +26,16 @@
         this.bufferContext.closePath();
     }
 
-    public onMouseDown(event: DrawEvent) {
+    public onMouseDown(event: DrawEvent): void {
         this.bufferContext.beginPath();
         this.bufferContext.arc(event.point.x, event.point.y, this.styles.lineWidth / 2, 0, 2 * Math.PI, false);
         this.bufferContext.fill();
     }
 
-    public onMouseUp(event: DrawEvent) {
+    public onMouseUp(event: DrawEvent): void {
     }
 
-    public finalize(path: Array<Point>) {
+    public finalize(path: Array<Point>): void {
         this.finalContext.beginPath();
 
         this.finalContext.arc(path[0].x, path[0].y, this.styles.lineWidth / 2, 0, 2 * Math.PI, false);

@@ -1,10 +1,10 @@
 ﻿class EraseBehavior implements ToolBehavior {
     public name = "erase";
+    public color = "white";
 
     styles = {
         "lineCap": "round",
         "lineJoin": "round",
-        "strokeStyle": "#ffffff",
         "lineWidth": 20
     };
 
@@ -16,7 +16,7 @@
         this.finalContext = tool.finalContext;
     }
 
-    public onMouseDrag(event: DrawEvent) {
+    public onMouseDrag(event: DrawEvent): void {
         this.bufferContext.beginPath();
         this.bufferContext.moveTo(event.point.x, event.point.y);
         this.bufferContext.lineTo(event.lastPoint.x, event.lastPoint.y);
@@ -24,13 +24,13 @@
         this.bufferContext.closePath();
     }
 
-    public onMouseDown(event: DrawEvent) {
+    public onMouseDown(event: DrawEvent): void {
     }
 
-    public onMouseUp(event: DrawEvent) {
+    public onMouseUp(event: DrawEvent): void {
     }
 
-    public finalize(path: Array<Point>) {
+    public finalize(path: Array<Point>): void {
         this.finalContext.beginPath();
 
         for (var i = 0; i < path.length - 1; i++) {

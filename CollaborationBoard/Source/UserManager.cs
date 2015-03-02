@@ -64,7 +64,7 @@ namespace CollaborationBoard
                     if (pair.Value.Contains(user))
                     {
                         pair.Value.Remove(user);
-                        
+
                         users[newBoardId].Add(user);
 
                         return true;
@@ -98,7 +98,17 @@ namespace CollaborationBoard
                 users.Add(user.BoardId, new List<User>());
             }
 
-            UserRandomizer.RandomizeUser(user.BoardId, user);
+            Board board = BoardManager.GetBoard(user.BoardId);
+            var neighbors = board.Users;
+            int amountOfNeighbors = neighbors.Count;
+            string name = "User " + amountOfNeighbors;
+
+            while (neighbors.Where(a => a.DisplayName != (name = "User " + amountOfNeighbors)).Any())
+            {
+                amountOfNeighbors++;
+            }
+
+            user.DisplayName = name;
 
             users[user.BoardId].Add(user);
         }

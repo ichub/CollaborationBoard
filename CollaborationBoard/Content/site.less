@@ -1,0 +1,90 @@
+﻿.checkbox {
+    visibility: hidden;
+    margin-left: -10000px !important;
+    position: absolute;
+}
+
+.checkbox + label, .checkLabel {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+input.checkbox + label {
+    width: 120px;
+    height: 30px;
+    box-sizing: border-box;
+    line-height: 1.5;
+}
+
+input.checkbox + label:before, input.checkbox + label:after {
+    display: block;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    content: "";
+}
+
+input.checkbox + label:after {
+    width: 60px;
+    background-color: #EEE;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+    transition: margin 0.3s;
+}
+
+input.checkbox:checked + label:after {
+    margin-left: 60px;
+}
+
+.nocheck {
+    background-color: #C2C2C2;
+    color: #5E5E5E;
+}
+
+.yescheck {
+    background-color: #009FE3;
+    color: #054B69;
+}
+
+.checktext {
+    box-sizing: border-box;
+    width: 50%;
+    float: left;
+    height: 100%;
+    text-align: center;
+}
+
+.checktext .fa {
+    font-size: 15pt;
+    margin-top: 5px;
+}
+
+#hiddenPasswordInput {
+    display: none;
+}
+
+#hiddenIdInput {
+    display: none;
+}
+
+#passwordFormContainer {
+    width: 500px;
+}
+
+#passwordPage {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #71bade;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

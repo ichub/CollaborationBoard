@@ -17,6 +17,7 @@ namespace CollaborationBoard
             message.Sender = context.Caller.Id;
             message.SenderName = context.Caller.DisplayName;
             message.DateSent = DateTime.Now.ToUniversalTime();
+            message.Text = HttpUtility.HtmlEncode(message.Text);
 
             context.Board.AddMessage(message);
 
@@ -65,6 +66,15 @@ namespace CollaborationBoard
             var context = new RequestContext(this);
 
             context.NeighborClients.onToolChange(context.Caller.Id, toolName);
+        }
+
+        public void OnClear()
+        {
+            var context = new RequestContext(this);
+
+            context.Board.Clear();
+
+            context.NeighborClients.onClear(context.Caller.Id);
         }
 
         public void Handshake(string boardId)

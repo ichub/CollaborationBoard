@@ -23,5 +23,8 @@ namespace CollaborationBoard
 
         [DataMember(Name="toolBehaviorName")]
         public string ToolBehaviorName { get; private set; }
+
+        [DataMember(Name="color")]
+        public string Color { get; private set; }
     }
 }

@@ -11,7 +11,8 @@ enum NotificationType {
 }
 
 class Chat {
-    public enabled = false;
+    public localInputEnabled: boolean = false;
+    public networkInputEnabled: boolean = true;
 
     private $messengerTopBar: JQuery; // the element which rests in the top part of the messenger. used to toggled visibility of the messenger
     private $messageContainer: JQuery; // element into which all messages are placed
@@ -28,13 +29,12 @@ class Chat {
     private $saveNameButton: JQuery;
 
     private previousMessage: Message;
-    private wasPreviousANotification = false;
+    private wasPreviousANotification: boolean = false;
 
     private app: Application;
 
     private defaultMessengerWidth: string;
-    private hidden = false;
-
+    private hidden: boolean = false;
     private newMessageNotSeen = false;
     private messengerFlashLength = 500;
 
@@ -59,126 +59,134 @@ class Chat {
 
         this.previousMessage = null;
 
-        this.inititalizeNetwork();
-        this.startMessageNotificationListener();
-        this.addListeners();
+        this.$messageInput.keydown(e => { this.onMessageKeyDown(e); });
+        this.$messageInput.focus(e => { this.onMessengerFocus(e); });
+        this.$messenger.click(e => { this.onMessengerClick(e); });
+        this.$messengerTopBar.click(e => { this.onTopBarClick(e); });
+        this.$latexModalToggle.click(e => { this.onLatexModalToggle(e); });
+        this.$latexInput.keyup(e => { this.onLatexModalKeyUp(e); });
+        this.$nameChangeToggle.click(e => { this.onNameChangeToggle(e); });
+        this.$saveNameButton.click(e => { this.onSaveNameClick(e); });
+        $("#latexSave").click(e => { this.onLatexSaveClick(e); });
+        setInterval(() => { this.onMessageFlash(); }, this.messengerFlashLength);
+        this.app.hub.client.addMessage = (message: Message) => { this.onMessage(message); };
+        this.app.hub.client.onNameChange = (oldName: string, newName: string) => { this.onNameChange(oldName, newName); };
     }
 
-    private startMessageNotificationListener() {
-        setInterval(() => {
-            if (this.newMessageNotSeen) {
-                this.$messengerTopBar.toggleClass("flashing");
-            }
-            else {
-                this.$messengerTopBar.removeClass("flashing");
-            }
-
-        }, this.messengerFlashLength);
+    private onMessageFlash() {
+        if (this.newMessageNotSeen) {
+            this.$messengerTopBar.toggleClass("flashing");
+        }
+        else {
+            this.$messengerTopBar.removeClass("flashing");
+        }
     }
 
-    private inititalizeNetwork() {
-        this.app.hub.client.addMessage = (message: Message) => {
+    private onMessage(message: Message) {
+        if (this.networkInputEnabled) {
             message = Message.deserialize(message);
 
             this.appendChatMessage(message);
-        };
-
-        this.app.hub.client.onNameChange = (oldName: string, newName: string) => {
-            this.appendNotification(format("User %s changed their name to %s", oldName, newName), NotificationType.Info);
-        };
+        }
     }
 
-    private scrollDown() {
+    private onNameChange(oldName: string, newName: string) {
+        if (this.networkInputEnabled) {
+            this.appendNotification(format("User %s changed their name to %s", oldName, newName), NotificationType.Info);
+        }
+    }
+
+    private scrollDown(): void {
         this.$messageContainer.prop("scrollTop", this.$messageContainer.prop("scrollHeight"));
     }
 
-    private addListeners() {
-        this.$messageInput.keydown(e => {
-            if (this.enabled && e.keyCode == 13) {
-                var text = this.$messageInput.val();
+    private onMessageKeyDown(e: JQueryKeyEventObject): void {
+        if (this.localInputEnabled && e.keyCode == 13) {
+            var text = this.$messageInput.val();
 
-                if (text.length != 0) {
-                    this.$messageInput.val("");
+            text = $("<p></p>").text(text).html(); // escape HTML to prevent injection
 
-                    var newMessage = new Message(text, this.app.user.id, this.app.user.displayName, this.app.user.displayColor, new Date().toString());
+            if (text.length != 0) {
+                this.$messageInput.val("");
 
-                    this.appendChatMessage(newMessage);
+                var newMessage = new Message(text, this.app.user.id, this.app.user.displayName, new Date().toString());
 
-                    this.app.hub.server.addMessage(newMessage.serialize());
-                }
+                this.appendChatMessage(newMessage);
+
+                this.app.hub.server.addMessage(newMessage.serialize());
             }
-        });
-
-        this.$messageInput.focus(e => {
-            this.newMessageNotSeen = false;
-        });
-
-        this.$messenger.click(e => {
-            this.newMessageNotSeen = false;
-        });
-
-        this.$messengerTopBar.click(e => {
-            if (this.enabled) {
-                if (this.hidden) {
-                    this.$messenger.removeClass("in");
-                    this.$messenger.addClass("out");
-                }
-                else {
-                    this.$messenger.removeClass("out");
-                    this.$messenger.addClass("in");
-                }
-
-                this.hidden = !this.hidden;
-            }
-        });
-
-        this.$latexModalToggle.click(e => {
-            this.$latexInput.val(this.$messageInput.val());
-
-            this.updateRenderedLatex();
-
-            this.$latexPreviewModal.modal("show");
-        });
-
-        this.$latexInput.keyup(e => {
-            this.updateRenderedLatex();
-        });
-
-        $("#latexSave").click(e => {
-            this.$messageInput.val(this.$latexInput.val());
-
-            this.$latexPreviewModal.modal("hide");
-
-            this.$latexInput.val("");
-
-            this.updateRenderedLatex();
-        });
-
-        this.$nameChangeToggle.click(e => {
-            this.$nameChangeModal.modal("show");
-
-            e.stopPropagation();
-        });
-
-        this.$saveNameButton.click(e => {
-            var newName = this.$nameChangeInput.val();
-
-            this.app.user.displayName = newName;
-            this.app.hub.server.changeName(newName);
-
-            this.appendNotification(format("You changed your to %s", newName), NotificationType.Info);
-
-            this.$nameChangeModal.modal("hide");
-        });
+        }
     }
 
-    private formatDateForDisplay(dateString: string) {
+    private onMessengerFocus(e: JQueryEventObject) {
+        this.newMessageNotSeen = false;
+    }
+
+    private onMessengerClick(e: JQueryMouseEventObject) {
+        this.newMessageNotSeen = false;
+    }
+
+    private onTopBarClick(e: JQueryMouseEventObject) {
+        if (this.localInputEnabled) {
+            if (this.hidden) {
+                this.$messenger.removeClass("in");
+                this.$messenger.addClass("out");
+            }
+            else {
+                this.$messenger.removeClass("out");
+                this.$messenger.addClass("in");
+            }
+
+            this.hidden = !this.hidden;
+        }
+    }
+
+    private onLatexModalToggle(e: JQueryMouseEventObject) {
+        this.$latexInput.val(this.$messageInput.val());
+
+        this.updateRenderedLatex();
+
+        this.$latexPreviewModal.modal("show");
+    }
+
+    private onLatexModalKeyUp(e: JQueryKeyEventObject) {
+        this.updateRenderedLatex();
+    }
+
+    private onLatexSaveClick(e: JQueryMouseEventObject) {
+        this.$messageInput.val(this.$latexInput.val());
+
+        this.$latexPreviewModal.modal("hide");
+
+        this.$latexInput.val("");
+
+        this.updateRenderedLatex();
+    }
+
+    private onNameChangeToggle(e: JQueryMouseEventObject) {
+        this.$nameChangeModal.modal("show");
+
+        e.stopPropagation();
+    }
+
+    private onSaveNameClick(e: JQueryMouseEventObject) {
+        var newName = this.$nameChangeInput.val();
+
+        this.app.user.displayName = newName;
+        this.app.hub.server.changeName(newName);
+
+        this.appendNotification(format("You changed your to %s", newName), NotificationType.Info);
+
+        this.$nameChangeModal.modal("hide");
+    }
+
+    private formatDateForDisplay(dateString: string): string {
         var date = new Date(dateString);
 
         return date.toLocaleTimeString();
     }
 
-    private appendChatMessage(message: Message) {
+    private appendChatMessage(message: Message): void {
         var element = document.createElement("div");
 
         var header = document.createElement("div");
@@ -217,8 +225,6 @@ class Chat {
         element.appendChild(content);
         element.appendChild(footer);
 
-        //$(header).css("background-color", message.color);
-
         this.$messageContainer.append(element);
         this.scrollDown();
 
@@ -231,7 +237,7 @@ class Chat {
         }
     }
 
-    private appendNotification(message: string, type: NotificationType) {
+    private appendNotification(message: string, type: NotificationType): void {
         var element = document.createElement("div");
         var content = document.createElement("div");
 
@@ -262,7 +268,7 @@ class Chat {
         this.wasPreviousANotification = true;
     }
 
-    private findEquations(text) {
+    private findEquations(text): Array<{ first: number; second: number }> {
         var result = [];
         var first = -1;
 
@@ -285,7 +291,7 @@ class Chat {
         return result;
     }
 
-    private convertStringToHtml(text) {
+    private convertStringToHtml(text): string {
         try {
             var equations = this.findEquations(text);
             var resultHtml = "";
@@ -317,7 +323,7 @@ class Chat {
         }
     }
 
-    public updateRenderedLatex() {
+    public updateRenderedLatex(): void {
         var $input = this.$latexInput;
         var $output = this.$latexOutput;
 
@@ -327,8 +333,8 @@ class Chat {
         $output.html(html);
     }
 
-    public initializeFromSnapshot(snapshot: BoardSnapshot) {
-        this.enabled = true;
+    public initializeFromSnapshot(snapshot: BoardSnapshot): void {
+        this.localInputEnabled = true;
 
         snapshot.messages.forEach(message => {
             message = Message.deserialize(message);

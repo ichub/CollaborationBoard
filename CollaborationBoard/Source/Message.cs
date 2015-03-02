@@ -10,7 +10,7 @@ namespace CollaborationBoard
     public class Message
     {
         [DataMember(Name = "text")]
-        public string Text { get; private set; }
+        public string Text { get; set; }
 
         [DataMember(Name = "sender")]
         public string Sender { get; set; }

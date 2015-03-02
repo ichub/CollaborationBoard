@@ -5,9 +5,10 @@
     public $finalCanvas: JQuery;
     public bufferContext: CanvasRenderingContext2D;
     public finalContext: CanvasRenderingContext2D;
-    public isMouseDown: boolean;
-    public lastMouse: Point;
-    public path: Array<Point>;
+
+    public isMouseDown: boolean = false;
+    public lastMouse: Point = null;
+    public path: Array<Point> = [];
 
     public behavior: ToolBehavior;
 
@@ -21,17 +22,10 @@
         this.$bufferCanvas = this.createBuffer();
         this.bufferContext = (<HTMLCanvasElement> this.$bufferCanvas.get(0)).getContext("2d");
 
-        this.path = [];
-
-        this.isMouseDown = false;
-        this.lastMouse = null;
-
-        this.behavior = new DrawBehavior(this);
-
         this.setBehavior(new DrawBehavior(this));
     }
 
-    public dispose() {
+    public dispose(): void {
         this.$bufferCanvas.remove();
     }
 
@@ -51,7 +45,7 @@
     }
 
     public onMouse(event: DrawEvent): void {
-        this.setToolFromName(event.toolBehaviorName);
+        this.setToolFromSnapshot(event.toolBehaviorName, event.color);
 
         switch (event.type) {
             case DrawEventType.MouseDown:
@@ -66,7 +60,7 @@
         }
     }
 
-    public setToolFromName(toolBehaviorName: string) {
+    public setToolFromSnapshot(toolBehaviorName: string, color: string): void {
         if (toolBehaviorName != this.behavior.name) {
             if (this.userId == this.canvas.app.user.id) {
                 this.canvas.toolBox.setTool(toolBehaviorName, false);
@@ -82,6 +76,9 @@
                 }
             }
         }
+
+        this.behavior.color = color;
+        this.applyStyles(this.bufferContext);
     }
 
     public finalize(path: Array<Point>): void {
@@ -103,7 +100,6 @@
     }
 
     public onMouseUp(event: DrawEvent): void {
-
         this.behavior.onMouseUp(event);
 
         this.bufferContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -114,26 +110,24 @@
         this.behavior.onMouseDrag(event);
     }
 
-    public mouseDownWrapper(event: DrawEvent, sendToServer: boolean) {
-        if (this.canvas.enabled) {
-            this.isMouseDown = true;
+    public mouseDownWrapper(event: DrawEvent, sendToServer: boolean): void {
+        this.isMouseDown = true;
 
-            this.lastMouse = new Point(event.point.x, event.point.y);
+        this.lastMouse = new Point(event.point.x, event.point.y);
 
-            var event = new DrawEvent(DrawEventType.MouseDown, this.lastMouse, this.lastMouse, event.toolBehaviorName);
-            this.onMouseDown(event);
+        var event = this.createEvent(DrawEventType.MouseDown, this.lastMouse, this.lastMouse);
+        this.onMouseDown(event);
 
-            if (sendToServer) {
-                this.canvas.sendDrawEvent(event);
-            }
+        if (sendToServer) {
+            this.canvas.sendDrawEvent(event);
         }
     }
 
-    public mouseUpWrapper(event: DrawEvent, sendToServer: boolean) {
-        if (this.canvas.enabled && this.isMouseDown) {
+    public mouseUpWrapper(event: DrawEvent, sendToServer: boolean): void {
+        if (this.isMouseDown) {
             this.isMouseDown = false;
 
-            var event = new DrawEvent(DrawEventType.MouseUp, new Point(event.point.x, event.point.y), this.lastMouse, event.toolBehaviorName);
+            var event = this.createEvent(DrawEventType.MouseUp, new Point(event.point.x, event.point.y), this.lastMouse);
 
             this.onMouseUp(event);
 
@@ -143,9 +137,9 @@
         }
     }
 
-    public mouseMoveWrapper(event: DrawEvent, sendToServer: boolean) {
-        if (this.canvas.enabled && this.isMouseDown) {
-            var event = new DrawEvent(DrawEventType.MouseDrag, new Point(event.point.x, event.point.y), this.lastMouse, event.toolBehaviorName);
+    public mouseMoveWrapper(event: DrawEvent, sendToServer: boolean): void {
+        if (this.isMouseDown) {
+            var event = this.createEvent(DrawEventType.MouseDrag, new Point(event.point.x, event.point.y), this.lastMouse);
 
             this.path.push(event.point);
 
@@ -159,17 +153,30 @@
         }
     }
 
-    public applyStyles(context: CanvasRenderingContext2D) {
+    public applyStyles(context: CanvasRenderingContext2D): void {
         for (var style in this.behavior.styles) {
             context[style] = this.behavior.styles[style];
         }
+
+        context.fillStyle = this.behavior.color;
+        context.strokeStyle = this.behavior.color;
     }
 
-    public setBehavior(behavior: ToolBehavior) {
+    public setBehavior(behavior: ToolBehavior): void {
         this.behavior = behavior;
 
         this.applyStyles(this.finalContext);
         this.applyStyles(this.bufferContext);
+    }
+
+    public createEvent(type: DrawEventType, point: Point, lastPoint: Point): DrawEvent {
+        return new DrawEvent(type, point, lastPoint, this.behavior.name, this.behavior.color);
+    }
+
+    public release(): void {
+        if (this.lastMouse != null) {
+            this.onMouse(this.createEvent(DrawEventType.MouseUp, this.lastMouse, this.lastMouse));
+        }
     }
 }
 
@@ -180,35 +187,56 @@ class LocalTool extends Tool {
         this.addListeners();
     }
 
-    private addListeners(): void {
-        $("#bufferContainer").mousedown(e => {
-            requestAnimationFrame(() => {
+    private handleUserClick(e: JQueryMouseEventObject): void {
+        requestAnimationFrame(() => {
+            if (this.canvas.localInputEnabled) {
                 this.lastMouse = new Point(e.clientX, e.clientY);
 
-                var event = new DrawEvent(DrawEventType.MouseDown, new Point(e.clientX, e.clientY), this.lastMouse, this.behavior.name);
+                var event = this.createEvent(DrawEventType.MouseDown, new Point(e.offsetX, e.offsetY), this.lastMouse);
 
                 this.mouseDownWrapper(event, true);
-            });
+            }
         });
+    }
 
-        $(document.body).mouseup(e => {
-            requestAnimationFrame(() => {
-                if (this.canvas.enabled && this.isMouseDown) {
-                    var event = new DrawEvent(DrawEventType.MouseUp, new Point(e.clientX, e.clientY), this.lastMouse, this.behavior.name);
+    private handleUserRelease(e: JQueryMouseEventObject): void {
+        requestAnimationFrame(() => {
+            if (this.canvas.localInputEnabled && this.isMouseDown) {
+                var canvasPosition = this.$finalCanvas.offset();
+                var mousePoint = new Point(e.clientX - canvasPosition.left, e.clientY - canvasPosition.top);
 
-                    this.mouseUpWrapper(event, true);
-                }
-            });
+                var event = this.createEvent(DrawEventType.MouseUp, mousePoint, this.lastMouse);
+
+                this.mouseUpWrapper(event, true);
+            }
         });
+    }
 
-        $(document.body).mousemove(e => {
-            requestAnimationFrame(() => {
-                if (this.canvas.enabled && this.isMouseDown) {
-                    var event = new DrawEvent(DrawEventType.MouseDrag, new Point(e.clientX, e.clientY), this.lastMouse, this.behavior.name);
+    private handleUserMove(e: JQueryMouseEventObject): void {
+        requestAnimationFrame(() => {
+            if (this.canvas.localInputEnabled && this.isMouseDown) {
+                var canvasPosition = this.$finalCanvas.offset();
+                var mousePoint = new Point(e.clientX - canvasPosition.left, e.clientY - canvasPosition.top);
 
-                    this.mouseMoveWrapper(event, true);
-                }
-            });
+                var event = this.createEvent(DrawEventType.MouseDrag, mousePoint, this.lastMouse);
+
+                this.mouseMoveWrapper(event, true);
+            }
         });
+    }
+
+    private addListeners(): void {
+        $("#bufferContainer").mousedown(e => this.handleUserClick(e));
+
+        $(document.body).mouseup(e => this.handleUserRelease(e));
+
+        $(document.body).mousemove(e => this.handleUserMove(e));
+    }
+
+    public clear(): void {
+        this.release();
+
+        this.bufferContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.finalContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 }
