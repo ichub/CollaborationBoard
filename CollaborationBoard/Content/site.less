@@ -1,29 +1,19 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
-}
-
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
-}
-
-.checkbox {
+﻿.checkbox {
     visibility: hidden;
     margin-left: -10000px !important;
     position: absolute;
 }
 
-    .checkbox + label, .checkLabel {
-        display: block;
-        position: relative;
-        cursor: pointer;
-        outline: none;
-        user-select: none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-    }
+.checkbox + label, .checkLabel {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
 
 input.checkbox + label {
     width: 120px;
@@ -32,21 +22,21 @@ input.checkbox + label {
     line-height: 1.5;
 }
 
-    input.checkbox + label:before, input.checkbox + label:after {
-        display: block;
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        bottom: 0px;
-        content: "";
-    }
+input.checkbox + label:before, input.checkbox + label:after {
+    display: block;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    content: "";
+}
 
-    input.checkbox + label:after {
-        width: 60px;
-        background-color: #EEE;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
-        transition: margin 0.3s;
-    }
+input.checkbox + label:after {
+    width: 60px;
+    background-color: #EEE;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+    transition: margin 0.3s;
+}
 
 input.checkbox:checked + label:after {
     margin-left: 60px;
@@ -70,13 +60,9 @@ input.checkbox:checked + label:after {
     text-align: center;
 }
 
-    .checktext .fa {
-        font-size: 15pt;
-        padding-top: -10px;
-    }
-
-.checkLabel {
-    margin-top: 10px;
+.checktext .fa {
+    font-size: 15pt;
+    margin-top: 5px;
 }
 
 #hiddenPasswordInput {

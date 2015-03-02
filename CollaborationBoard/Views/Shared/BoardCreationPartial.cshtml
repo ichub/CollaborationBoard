@@ -1,0 +1,84 @@
+﻿@{
+    Layout = null;
+}
+
+
+<form id="createBoardForm" class="form-horizontal" action="/Board/Create" method="post">
+    <div class="form-group">
+        <label class="col-sm-4 control-label">Board Title</label>
+        <div class="col-sm-7">
+            <input type="text" class="form-control" name="Title" placeholder="Board Title" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 control-label">Enable Password?</label>
+        <div class="col-sm-7">
+            <input class="checkbox" type="checkbox" id="passwordEnable">
+            <label class="checkLabel" for="passwordEnable">
+                <span class="yescheck checktext">
+                    <i class="fa fa-check"></i>
+                </span>
+                <span class="nocheck checktext">
+                    <i class="fa fa-times"></i>
+                </span>
+            </label>
+        </div>
+    </div>
+    <div class="form-group" id="hiddenPasswordInput">
+        <label class="col-sm-4 control-label">PasswordEnabled</label>
+        <div class="col-sm-7">
+            <input id="PasswordEnabled" type="text" name="PasswordEnabled" /> @* Hidden input to submit the checkbox value *@
+        </div>
+    </div>
+    <div class="form-group" id="passwordForm">
+        <label class="col-sm-4 control-label">Password</label>
+        <div class="col-sm-7">
+            <input id="passwordInput" type="password" class="form-control" name="Password" placeholder="Password" disabled />
+        </div>
+    </div>
+    <div class="form-group" id="passwordRepeatForm">
+        <label class="col-sm-4 control-label">Repeat Password</label>
+        <div class="col-sm-7">
+            <input id="repeatPasswordInput" type="password" class="form-control" name="PasswordRepeat" placeholder="Repeat Password" disabled />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-3 col-sm-offset-3">
+            <button type="submit" class="btn btn-default">Create</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    window.addEventListener("load", function () {
+        ExtendJQuery();
+
+        $("#PasswordEnabled").val(false);
+        $("#passwordEnable").val("off");
+
+        $("#passwordEnable").on("change", updatePasswordEnabledCheckbox);
+
+        $("#passwordInput, #passwordRepeatForm").keyup(validatePasswords);
+
+        function updatePasswordEnabledCheckbox() {
+            var checked = $("#passwordEnable").is(":checked");
+
+            $("#PasswordEnabled").val(checked);
+
+            $("#passwordInput").prop("disabled", !checked);
+            $("#repeatPasswordInput").prop("disabled", !checked);
+        }
+
+        function validatePasswords() {
+            var password = $("#passwordInput").val();
+            var repeat = $("#repeatPasswordInput").val();
+
+            if (password != repeat) {
+                $("#passwordRepeatForm").addClass("has-error");
+            }
+            else {
+                $("#passwordRepeatForm").removeClass("has-error");
+            }
+        }
+    });
+</script>
