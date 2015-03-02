@@ -26,12 +26,5 @@ namespace CollaborationBoard.Controllers
 
             return View();
         }
-
-        public ActionResult FAQ()
-        {
-            ViewBag.Message = "";
-
-            return View();
-        }
     }
 }

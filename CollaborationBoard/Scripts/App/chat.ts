@@ -262,36 +262,32 @@ class Chat {
         this.wasPreviousANotification = true;
     }
 
+    private findEquations(text) {
+        var result = [];
+        var first = -1;
+
+        for (var i = 0; i < text.length; i++) {
+            if (text[i] == "`") {
+                if (first == -1) {
+                    first = i;
+                }
+                else {
+                    result.push({
+                        first: first,
+                        second: i
+                    });
+
+                    first = -1;
+                }
+            }
+        }
+
+        return result;
+    }
+
     private convertStringToHtml(text) {
         try {
-
-            for (var i = 1; i < text.length; i++) {
-                if (text[i] == "\\" && text[i - 1] == "\\") {
-                    var temp = text.substring(0, i - 1) + text.substring(i, text.length);
-                    text = temp;
-                }
-            }
-
-            var result = [];
-            var first = -1;
-
-            for (var i = 0; i < text.length; i++) {
-                if (text[i] == "`" && (i == 0 || text[i-1] != "\\")) {
-                    if (first == -1) {
-                        first = i;
-                    }
-                    else {
-                        result.push({
-                            first: first,
-                            second: i
-                        });
-
-                        first = -1;
-                    }
-                }
-            }
-
-            var equations = result;
+            var equations = this.findEquations(text);
             var resultHtml = "";
 
             var endOfPreviousEquation = -1;
