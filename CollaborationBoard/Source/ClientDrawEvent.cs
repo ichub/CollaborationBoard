@@ -26,5 +26,8 @@ namespace CollaborationBoard
 
         [DataMember(Name="color")]
         public string Color { get; private set; }
+
+        [DataMember(Name="thickness")]
+        public int Thickness { get; private set; }
     }
 }

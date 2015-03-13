@@ -4,7 +4,9 @@
     public $eraser: JQuery;
     public $drawer: JQuery;
     public $colors: JQuery;
-    public $thickness: JQuery;
+    public $thicknessToggle: JQuery;
+    public $thicknessValue: JQuery;
+    public $thicknessSlider: JQuery;
     public $clear: JQuery;
 
     public currentColor: string;
@@ -46,18 +48,21 @@
         this.$eraser = $("#eraser");
         this.$drawer = $("#drawer");
         this.$colors = $("#colors");
-        this.$thickness = $("#thickness");
+        this.$thicknessToggle = $("#thickness");
         this.$clear = $("#clear");
-
+        this.$thicknessValue = $("#thicknessValue");
+        this.$thicknessSlider = $("#thicknessSlider");
         this.createColors();
+        this.createSizeSlider();
 
         this.$eraser.click(() => { this.setEraseTool(true); });
         this.$drawer.click(() => { this.setDrawTool(true); });
 
         this.$colors.click(() => { this.toggleColorPicker(); });
-        this.$thickness.click(() => { this.toggleThicknessPicker(); });
-
+        this.$thicknessToggle.click(() => { this.toggleThicknessPicker(); });
         this.$clear.click(() => { this.clear(); });
+
+        this.$thicknessSlider.on("input",(e) => { this.onThicknessChange(e); });
     }
 
     public createColors(): void {
@@ -77,6 +82,29 @@
 
             this.addColorPickerListener(color, this.colors[i]);
         }
+    }
+
+    public createSizeSlider(): void {
+        var $size = $("#thicknessPicker");
+
+        $size.offset({
+            left: this.$thicknessToggle.offset().left,
+            top: this.$thicknessToggle.offset().top + this.$thicknessToggle.height() + 2
+        });
+    }
+
+    public onThicknessChange(e: JQueryEventObject): void {
+        var value = e.target["valueAsNumber"];
+
+        this.$thicknessValue.text(e.target["valueAsNumber"]);
+
+        this.app.canvas.userTool.behavior.thickness = value;
+        this.app.canvas.userTool.applyStyles(this.app.canvas.userTool.bufferContext);
+    }
+
+    public setThicknessDisplay(value: number): void {
+        this.$thicknessValue.text(value);
+        this.$thicknessSlider.val(value.toString());
     }
 
     private addColorPickerListener(element: HTMLDivElement, color: string): void {
@@ -102,7 +130,7 @@
     }
 
     private toggleThicknessPicker(): void {
-        this.$thickness.toggleClass("selected");
+        this.$thicknessToggle.toggleClass("selected");
         $("#thicknessPicker").toggleClass("hidden");
     }
 

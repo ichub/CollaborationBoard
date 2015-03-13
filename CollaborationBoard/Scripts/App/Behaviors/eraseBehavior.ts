@@ -1,6 +1,7 @@
 ﻿class EraseBehavior implements ToolBehavior {
     public name = "erase";
     public color = "white";
+    public thickness = 5;
 
     styles = {
         "lineCap": "round",

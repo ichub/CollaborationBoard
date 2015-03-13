@@ -1,6 +1,7 @@
 ﻿class DrawBehavior implements ToolBehavior {
     public name = "draw";
     public color = "black";
+    public thickness = 5;
 
     styles = {
         "lineCap": "round",
@@ -28,7 +29,7 @@
 
     public onMouseDown(event: DrawEvent): void {
         this.bufferContext.beginPath();
-        this.bufferContext.arc(event.point.x, event.point.y, this.styles.lineWidth / 2, 0, 2 * Math.PI, false);
+        this.bufferContext.arc(event.point.x, event.point.y, this.thickness / 2, 0, 2 * Math.PI, false);
         this.bufferContext.fill();
     }
 
@@ -38,7 +39,7 @@
     public finalize(path: Array<Point>): void {
         this.finalContext.beginPath();
 
-        this.finalContext.arc(path[0].x, path[0].y, this.styles.lineWidth / 2, 0, 2 * Math.PI, false);
+        this.finalContext.arc(path[0].x, path[0].y, this.thickness / 2, 0, 2 * Math.PI, false);
         this.finalContext.fill();
 
         this.finalContext.closePath();

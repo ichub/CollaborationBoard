@@ -45,7 +45,7 @@
     }
 
     public onMouse(event: DrawEvent): void {
-        this.setToolFromSnapshot(event.toolBehaviorName, event.color);
+        this.setToolFromSnapshot(event.toolBehaviorName, event.color, event.thickness);
 
         switch (event.type) {
             case DrawEventType.MouseDown:
@@ -60,24 +60,24 @@
         }
     }
 
-    public setToolFromSnapshot(toolBehaviorName: string, color: string): void {
-        if (toolBehaviorName != this.behavior.name) {
-            if (this.userId == this.canvas.app.user.id) {
-                this.canvas.toolBox.setTool(toolBehaviorName, false);
-            }
-            else {
-                switch (toolBehaviorName) {
-                    case "erase":
-                        this.setBehavior(new EraseBehavior(this));
-                        break;
-                    case "draw":
-                        this.setBehavior(new DrawBehavior(this));
-                        break;
-                }
+    public setToolFromSnapshot(toolBehaviorName: string, color: string, thickness: number): void {
+        if (this.userId == this.canvas.app.user.id) {
+            this.canvas.toolBox.setTool(toolBehaviorName, false);
+            this.canvas.toolBox.setThicknessDisplay(thickness);
+        }
+        else {
+            switch (toolBehaviorName) {
+                case "erase":
+                    this.setBehavior(new EraseBehavior(this));
+                    break;
+                case "draw":
+                    this.setBehavior(new DrawBehavior(this));
+                    break;
             }
         }
 
         this.behavior.color = color;
+        this.behavior.thickness = thickness;
         this.applyStyles(this.bufferContext);
     }
 
@@ -160,6 +160,7 @@
 
         context.fillStyle = this.behavior.color;
         context.strokeStyle = this.behavior.color;
+        context.lineWidth = this.behavior.thickness;
     }
 
     public setBehavior(behavior: ToolBehavior): void {
@@ -170,7 +171,7 @@
     }
 
     public createEvent(type: DrawEventType, point: Point, lastPoint: Point): DrawEvent {
-        return new DrawEvent(type, point, lastPoint, this.behavior.name, this.behavior.color);
+        return new DrawEvent(type, point, lastPoint, this.behavior.name, this.behavior.color, this.behavior.thickness);
     }
 
     public release(): void {

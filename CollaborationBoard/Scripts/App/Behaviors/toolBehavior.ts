@@ -1,6 +1,7 @@
 ﻿interface ToolBehavior {
     name: string;
     color: string;
+    thickness: number;
     styles: Object;
     bufferContext: CanvasRenderingContext2D;
     finalContext: CanvasRenderingContext2D;
