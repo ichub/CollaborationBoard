@@ -175,6 +175,8 @@
         if (updateServer) {
             this.app.hub.server.onToolChange("erase");
         }
+
+        this.setThicknessDisplay(this.app.canvas.userTool.behavior.thickness);
     }
 
     public setDrawTool(updateServer: boolean): void {
@@ -186,6 +188,8 @@
         if (updateServer) {
             this.app.hub.server.onToolChange("draw");
         }
+
+        this.setThicknessDisplay(this.app.canvas.userTool.behavior.thickness);
     }
 
     public setTool(toolName: string, updateServer: boolean): void {
