@@ -1,5 +1,6 @@
 ﻿class ToolBox {
     public app: Application;
+    public $optionsBlind: JQuery;
     public $toolBox: JQuery;
     public $eraser: JQuery;
     public $drawer: JQuery;
@@ -44,6 +45,7 @@
 
         this.currentColor = "black";
 
+        this.$optionsBlind = $("#optionsBlind");
         this.$toolBox = $("#toolbox");
         this.$eraser = $("#eraser");
         this.$drawer = $("#drawer");
@@ -61,6 +63,7 @@
         this.$colors.click(() => { this.toggleColorPicker(); });
         this.$thicknessToggle.click(() => { this.toggleThicknessPicker(); });
         this.$clear.click(() => { this.clear(); });
+        this.$optionsBlind.click(() => { this.onBlindClick() });
 
         this.$thicknessSlider.on("input",(e) => { this.onThicknessChange(e); });
     }
@@ -82,6 +85,23 @@
 
             this.addColorPickerListener(color, this.colors[i]);
         }
+    }
+
+    public hideAllOptionsWindows(): void {
+        this.$colors.removeClass("selected");
+        $("#colorPicker").addClass("hidden");
+
+        this.$thicknessToggle.removeClass("selected");
+        $("#thicknessPicker").addClass("hidden");
+    }
+
+    public onBlindClick(): void {
+        this.hideAllOptionsWindows();
+        this.$optionsBlind.css("visibility", "hidden");
+    }
+
+    public showOptionsBlind(): void {
+        this.$optionsBlind.css("visibility", "initial");
     }
 
     public createSizeSlider(): void {
@@ -127,11 +147,15 @@
     private toggleColorPicker(): void {
         this.$colors.toggleClass("selected");
         $("#colorPicker").toggleClass("hidden");
+
+        this.showOptionsBlind();
     }
 
     private toggleThicknessPicker(): void {
         this.$thicknessToggle.toggleClass("selected");
         $("#thicknessPicker").toggleClass("hidden");
+
+        this.showOptionsBlind();
     }
 
     private deselectAllTools(): void {

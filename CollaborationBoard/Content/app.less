@@ -363,6 +363,10 @@ body {
     z-index: 100;
 }
 
+#optionsBlind {
+    visibility: hidden;
+}
+
 #loadingBlind.fadeout {
     transition: background-color 500ms;
     background-color: rgba(0, 0, 0, 0);
@@ -423,6 +427,7 @@ body {
     flex-wrap: wrap;
     overflow: hidden;
     -webkit-box-shadow: 0px 0px 20px 10px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
 }
 
 #colorPicker.hidden {
@@ -445,6 +450,7 @@ body {
     height: 50px;
     -webkit-box-shadow: 0px 0px 20px 10px rgba(0, 0, 0, 0.3);
     padding: 5px;
+    z-index: 9999;
 
     #thicknessValue {
         top: 50%;
