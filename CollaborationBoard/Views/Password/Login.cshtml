@@ -1,11 +1,8 @@
 ﻿@{
-    Layout = "~/Views/Shared/_EmptyLayout.cshtml";
+    ViewBag.Title = "Login";
 }
 
-<!DOCTYPE html>
-
-
-<div id="passwordPage">
+<div id="password" class="page">
     <div id="passwordFormContainer">
         <form role="form" action="/Password/Board/@ViewBag.BoardId/Validate" method="post">
             <div class="form-group">

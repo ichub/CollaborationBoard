@@ -14,63 +14,65 @@
     @Styles.Render("~/katex_css")
 </head>
 <body>
-    <div id="canvasBackground">
-        <div id="canvasContainer">
-            <canvas id="finalDrawCanvas"></canvas>
-            <div id="bufferContainer">
+    <div id="board" class="page">
+        <div id="canvasBackground">
+            <div id="canvasContainer">
+                <canvas id="finalDrawCanvas"></canvas>
+                <div id="bufferContainer">
+                </div>
             </div>
         </div>
-    </div>
 
-    <div id="toolbox">
-        <div id="tools">
-            <div class="buttonGroup" id="drawer"><div class="iconButton"><i class="fa fa-pencil"></i></div> pencil</div>
-            <div class="buttonGroup" id="eraser"><div class="iconButton"><i class="fa fa-eraser"></i></div> eraser</div>
+        <div id="toolbox">
+            <div id="tools">
+                <div class="buttonGroup" id="drawer"><div class="iconButton"><i class="fa fa-pencil"></i></div> pencil</div>
+                <div class="buttonGroup" id="eraser"><div class="iconButton"><i class="fa fa-eraser"></i></div> eraser</div>
+            </div>
+            <div id="options">
+                <div class="buttonGroup" id="colors"><div class="iconButton"><i class="fa fa-tint"></i></div> colors</div>
+                <div class="buttonGroup" id="thickness"> <div class="iconButton"><i class="fa fa-sliders"></i></div>size</div>
+                <div class="buttonGroup" id="clear"><div class="iconButton"><i class="fa fa-times"></i></div>clear</div>
+            </div>
         </div>
-        <div id="options">
-            <div class="buttonGroup" id="colors"><div class="iconButton"><i class="fa fa-tint"></i></div> colors</div>
-            <div class="buttonGroup" id="thickness"> <div class="iconButton"><i class="fa fa-sliders"></i></div>size</div>
-            <div class="buttonGroup" id="clear"><div class="iconButton"><i class="fa fa-times"></i></div>clear</div>
+
+        <div id="colorPicker" class="hidden">
+
         </div>
+
+        <div id="thicknessPicker" class="hidden">
+            <input min="2" max="50" id="thicknessSlider" type="range" data-show-value="true" value="2">
+            <div id="thicknessValue">2</div>
+        </div>
+
+        <div id="optionsBlind" class="blind"></div>
+
+        <div id="loadingBlind" class="blind"></div>
+        <div id="disconnectedBlind" class="blind"><div id="disconnectedText">You were disconnected due to a network error. <br /> Refresh the page to reconnect.</div></div>
+
+        @Html.Partial("LatexMessageModal")
+        @Html.Partial("Messenger")
+
+        <script>
+            var boardId = "@ViewBag.BoardId";
+
+            var preventScroll = function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            };
+
+            document.body.addEventListener("scroll", preventScroll);
+            document.body.addEventListener("touchmove", preventScroll)
+            document.body.addEventListener("mousewheel", preventScroll)
+        </script>
+
+        @Scripts.Render("~/bundles/app_scripts")
+        @Scripts.Render("~/bundles/modernizr")
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/bundles/common_scripts")
+        @Scripts.Render("~/signalr/hubs")
+        @Scripts.Render("~/katex_script")
     </div>
-
-    <div id="colorPicker" class="hidden">
-
-    </div>
-
-    <div id="thicknessPicker" class="hidden">
-        <input min="2" max="50" id="thicknessSlider" type="range" data-show-value="true" value="2">
-        <div id="thicknessValue">2</div>
-    </div>
-
-    <div id="optionsBlind" class="blind"></div>
-
-    <div id="loadingBlind" class="blind"></div>
-    <div id="disconnectedBlind" class="blind"><div id="disconnectedText">You were disconnected due to a network error. <br /> Refresh the page to reconnect.</div></div>
-
-    @Html.Partial("LatexMessageModal")
-    @Html.Partial("Messenger")
-
-    <script>
-        var boardId = "@ViewBag.BoardId";
-
-        var preventScroll = function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
-        };
-
-        document.body.addEventListener("scroll", preventScroll);
-        document.body.addEventListener("touchmove", preventScroll)
-        document.body.addEventListener("mousewheel", preventScroll)
-    </script>
-
-    @Scripts.Render("~/bundles/app_scripts")
-    @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/common_scripts")
-    @Scripts.Render("~/signalr/hubs")
-    @Scripts.Render("~/katex_script")
 </body>
 </html>

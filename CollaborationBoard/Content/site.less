@@ -1,83 +1,4 @@
-﻿.checkbox {
-    visibility: hidden;
-    margin-left: -10000px !important;
-    position: absolute;
-}
-
-.checkbox + label, .checkLabel {
-    display: block;
-    position: relative;
-    cursor: pointer;
-    outline: none;
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-}
-
-input.checkbox + label {
-    width: 120px;
-    height: 30px;
-    box-sizing: border-box;
-    line-height: 1.5;
-}
-
-input.checkbox + label:before, input.checkbox + label:after {
-    display: block;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    bottom: 0px;
-    content: "";
-}
-
-input.checkbox + label:after {
-    width: 60px;
-    background-color: #EEE;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
-    transition: margin 0.3s;
-}
-
-input.checkbox:checked + label:after {
-    margin-left: 60px;
-}
-
-.nocheck {
-    background-color: #C2C2C2;
-    color: #5E5E5E;
-}
-
-.yescheck {
-    background-color: #009FE3;
-    color: #054B69;
-}
-
-.checktext {
-    box-sizing: border-box;
-    width: 50%;
-    float: left;
-    height: 100%;
-    text-align: center;
-}
-
-.checktext .fa {
-    font-size: 15pt;
-    margin-top: 5px;
-}
-
-#hiddenPasswordInput {
-    display: none;
-}
-
-#hiddenIdInput {
-    display: none;
-}
-
-#passwordFormContainer {
-    width: 500px;
-}
-
-#passwordPage {
+﻿#password.page {
     width: 100%;
     height: 100%;
     position: absolute;
@@ -87,30 +8,113 @@ input.checkbox:checked + label:after {
     display: flex;
     align-items: center;
     justify-content: center;
-}
 
-#createContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 500px;
+    #hiddenIdInput {
+        display: none;
+    }
 
-    #createDiv {
+    #passwordFormContainer {
         width: 500px;
-        height: inherit;
-
-        h1 {
-            font-family: 'Droid Sans', sans-serif;
-            font-size: 50pt;
-            text-align: center;
-            margin-bottom: 20px;
-        }
     }
 }
 
-#infoContainer {
-    height: 500px;
-    width: 100%;
-    background-color: #5E5E5E;
+#index.page {
+    overflow-x: hidden;
+
+    #createContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 500px;
+
+        #createDiv {
+            width: 500px;
+            height: inherit;
+
+            h1 {
+                font-family: 'Droid Sans', sans-serif;
+                font-size: 50pt;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+        }
+    }
+
+    #hiddenPasswordInput {
+        display: none;
+    }
+
+    #infoContainer {
+        height: 500px;
+        width: 100%;
+        background-color: #5E5E5E;
+    }
+
+    .checkbox {
+        visibility: hidden;
+        margin-left: -10000px !important;
+        position: absolute;
+    }
+
+    .checkbox + label, .checkLabel {
+        display: block;
+        position: relative;
+        cursor: pointer;
+        outline: none;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+    }
+
+    input.checkbox + label {
+        width: 120px;
+        height: 30px;
+        box-sizing: border-box;
+        line-height: 1.5;
+    }
+
+    input.checkbox + label:before, input.checkbox + label:after {
+        display: block;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        bottom: 0px;
+        content: "";
+    }
+
+    input.checkbox + label:after {
+        width: 60px;
+        background-color: #EEE;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+        transition: margin 0.3s;
+    }
+
+    input.checkbox:checked + label:after {
+        margin-left: 60px;
+    }
+
+    .nocheck {
+        background-color: #C2C2C2;
+        color: #5E5E5E;
+    }
+
+    .yescheck {
+        background-color: #009FE3;
+        color: #054B69;
+    }
+
+    .checktext {
+        box-sizing: border-box;
+        width: 50%;
+        float: left;
+        height: 100%;
+        text-align: center;
+    }
+
+    .checktext .fa {
+        font-size: 15pt;
+        margin-top: 5px;
+    }
 }

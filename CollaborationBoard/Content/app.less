@@ -1,478 +1,482 @@
-﻿@mainColor: #779ecb;
-@darkerMainColor: #698ab1;
-@darkestMainColor: #537198;
-@superDarkMainColor: #2d3640;
-@lighterMainColor: #aecdf2;
-@lightestMainColor: #c9e2ff;
-@accentColor: #ffd800;
-
-.shadow {
-    -webkit-box-shadow: 0px 0px 83px -25px rgba(0,0,0,0.75);
-}
-
-.bigShadow {
-    -webkit-box-shadow: 0px 0px 50px 5px rgba(0,0,0,0.5);
-}
-
-body {
-    margin: 0;
+﻿#board.page {
     overflow: hidden;
-}
 
-#nameChangeModal label {
-    margin-top: 7px !important;
-}
+    @mainColor: #779ecb;
+    @darkerMainColor: #698ab1;
+    @darkestMainColor: #537198;
+    @superDarkMainColor: #2d3640;
+    @lighterMainColor: #aecdf2;
+    @lightestMainColor: #c9e2ff;
+    @accentColor: #ffd800;
 
-.noSelect {
-    cursor: default;
-    -moz-user-select: none;
-    -khtml-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
+    .shadow {
+        -webkit-box-shadow: 0px 0px 83px -25px rgba(0,0,0,0.75);
+    }
 
-.fullSize {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
+    .bigShadow {
+        -webkit-box-shadow: 0px 0px 50px 5px rgba(0,0,0,0.5);
+    }
 
-.flexBox {
-    display: flex;
-}
+    body {
+        margin: 0;
+        overflow: hidden;
+    }
 
-@canvasWidth: 1000px;
-@canvasHeight: 700px;
+    #nameChangeModal label {
+        margin-top: 7px !important;
+    }
 
-.canvasType {
-    cursor: inherit;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: @canvasWidth;
-    height: @canvasHeight;
-}
+    .noSelect {
+        cursor: default;
+        -moz-user-select: none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
 
-#canvasContainer {
-    .bigShadow;
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-left: ~"calc(@{canvasWidth} / -2)";
-    margin-top: ~"calc(@{canvasHeight} / -2)";
-    width: @canvasWidth;
-    height: @canvasHeight;
-    background-color: white;
-}
+    .fullSize {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
 
-#bufferContainer {
-    width: @canvasWidth;
-    height: @canvasHeight;
-    cursor: inherit;
+    .flexBox {
+        display: flex;
+    }
 
-    .buffer {
+    @canvasWidth: 1000px;
+    @canvasHeight: 700px;
+
+    .canvasType {
+        cursor: inherit;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: @canvasWidth;
+        height: @canvasHeight;
+    }
+
+    #canvasContainer {
+        .bigShadow;
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-left: ~"calc(@{canvasWidth} / -2)";
+        margin-top: ~"calc(@{canvasHeight} / -2)";
+        width: @canvasWidth;
+        height: @canvasHeight;
+        background-color: white;
+    }
+
+    #bufferContainer {
+        width: @canvasWidth;
+        height: @canvasHeight;
+        cursor: inherit;
+
+        .buffer {
+            .canvasType;
+        }
+    }
+
+    #finalDrawCanvas, #drawCanvas {
         .canvasType;
     }
-}
 
-#finalDrawCanvas, #drawCanvas {
-    .canvasType;
-}
+    .entity {
+        z-index: 20;
+        top: 0px;
+        left: 0px;
+    }
 
-.entity {
-    z-index: 20;
-    top: 0px;
-    left: 0px;
-}
+    .entityText {
+        height: 20px;
+    }
 
-.entityText {
-    height: 20px;
-}
+    .entityContainer {
+        display: inline-block;
+        background-color: red;
+        padding: 10px;
+    }
 
-.entityContainer {
-    display: inline-block;
-    background-color: red;
-    padding: 10px;
-}
+    .box {
+        width: 100px;
+        height: 100px;
+        position: absolute;
+        background-color: red;
+    }
 
-.box {
-    width: 100px;
-    height: 100px;
-    position: absolute;
-    background-color: red;
-}
+    @toolboxItemWidth: 50px;
+    @toolboxItemHeight: 23px;
+    @toolboxMargin: 2px;
+    @toolboxIconSize: 15pt;
+    @toolTitleSize: 15px;
+    @toolBoxWidth: 5 * @toolboxItemWidth + 2 * @toolboxMargin;
 
-@toolboxItemWidth: 50px;
-@toolboxItemHeight: 23px;
-@toolboxMargin: 2px;
-@toolboxIconSize: 15pt;
-@toolTitleSize: 15px;
-@toolBoxWidth: 5 * @toolboxItemWidth + 2 * @toolboxMargin;
+    #toolbox {
+        .noSelect;
+        .bigShadow;
+        position: absolute;
+        top: 15px;
+        left: ~"calc(50vw - @{toolBoxWidth} / 2)";
+        width: @toolBoxWidth;
+        height: @toolboxItemHeight + 3 * @toolboxMargin + @toolTitleSize;
+        background-color: @mainColor;
+        padding: @toolboxMargin;
 
-#toolbox {
-    .noSelect;
-    .bigShadow;
-    position: absolute;
-    top: 15px;
-    left: ~"calc(50vw - @{toolBoxWidth} / 2)";
-    width: @toolBoxWidth;
-    height: @toolboxItemHeight + 3 * @toolboxMargin + @toolTitleSize;
-    background-color: @mainColor;
-    padding: @toolboxMargin;
+        .toolGroup {
+            height: inherit;
+            float: left;
+        }
 
-    .toolGroup {
-        height: inherit;
+        #tools {
+            .toolGroup;
+        }
+
+        #options {
+            .toolGroup;
+        }
+    }
+
+    .buttonGroup {
+        width: @toolboxItemWidth;
+        height: @toolboxIconSize + @toolTitleSize;
+        float: left;
+        text-align: center;
+        font-size: 8pt;
+        font-family: 'Droid Sans', sans-serif;
+    }
+
+    .iconButton {
+        .flexBox;
+        cursor: pointer;
+        width: @toolboxItemWidth;
+        height: @toolboxItemHeight;
+        align-items: center;
+        justify-content: center;
+        font-size: @toolboxIconSize;
+    }
+
+    .buttonGroup:hover {
+        background-color: @darkerMainColor;
+    }
+
+    .buttonGroup:active {
+        background-color: @darkestMainColor;
+    }
+
+    .buttonGroup.selected {
+        background-color: @superDarkMainColor;
+        color: white;
+    }
+
+    .toolButton {
+        .iconButton;
+    }
+
+    @messageWidth: 300px;
+    @messageMargin: 10px;
+    @sameUserMessageMargin: 0px;
+
+    @inputHeight: 25px;
+    @messengerTopBarHeight: 30px;
+    @messengerMessagesHeight: 500px;
+
+    @messengerBackColor: #e8e8e8;
+    @messageColor: white;
+    @messageShadowColor: #b4b4b4;
+    @messageHeaderColor: white;
+    @messengerMargin: 40px;
+    @messengerSwitchButtonWidth: 50px;
+    @messengerTransitionTime: 500ms;
+    @latexButtonWidth: 25px;
+
+    #messenger {
+        .bigShadow;
+        -webkit-flex: 1 1 auto;
+        justify-content: flex-start;
+        position: absolute;
+        right: @messengerMargin;
+        bottom: 0;
+        width: @messageWidth;
+        transition: margin @messengerTransitionTime;
+        background-color: @messengerBackColor;
+        height: ~"calc(@{inputHeight} + @{messengerTopBarHeight} + @{messengerMessagesHeight})";
+    }
+
+    #messengerTopBar {
+        width: 100%;
+        height: @messengerTopBarHeight;
+        background-color: @mainColor;
+        cursor: pointer;
+    }
+
+    #messengerTopBar.flashing {
+        background-color: @accentColor;
+    }
+
+    #messageContainer {
+        width: 100%;
+        flex-flow: column;
+        overflow-y: scroll;
+        height: @messengerMessagesHeight;
+        padding-bottom: @messageMargin;
+
+        .message {
+            background-color: @messageColor;
+            display: inline-block;
+            margin-left: @messageMargin;
+            margin-right: @messageMargin;
+            margin-top: @messageMargin;
+            width: ~"calc(@{messageWidth} - 2 * @{messageMargin} - 17px)";
+            min-height: 0;
+            min-width: 0;
+
+            .content {
+                white-space: pre-wrap;
+                word-wrap: break-word;
+                padding: 3px;
+            }
+
+            .header {
+                font-family: 'Droid Sans', sans-serif;
+                padding-top: 2px;
+                padding-left: 2px;
+                font-size: 10pt;
+                font-weight: bold;
+                width: 100%;
+                background-color: @messageHeaderColor;
+                color: rgba(0, 0, 0, 0.3);
+
+                .detail {
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    width: 50%;
+                    padding-right: 3px;
+                    padding-left: 3px;
+                }
+
+                .name {
+                    .detail;
+                    text-align: left;
+                    float: left;
+                }
+
+                .date {
+                    .detail;
+                    text-align: right;
+                    float: right;
+                }
+            }
+
+            .emptyHeader {
+                display: none;
+            }
+
+            .footer {
+                height: 0px;
+                width: 100%;
+                background-color: @messageShadowColor;
+            }
+        }
+
+        .notification {
+            width: @messageWidth;
+            margin: @messageMargin;
+            margin-bottom: 0px;
+            width: ~"calc(@{messageWidth} - 2 * @{messageMargin} - 17px)";
+            color: rgba(0, 0, 0, 0.5);
+            font-weight: bold;
+            font-size: 11pt;
+            text-align: center;
+            font-family: 'Droid Sans', sans-serif;
+        }
+
+        .messageUserRepeat {
+            margin-top: @sameUserMessageMargin;
+        }
+    }
+
+    .in > #messageContainer, .in > #inputContainer {
+        display: none;
+    }
+
+    #messenger.in {
+        height: @messengerTopBarHeight;
+    }
+
+    #inputContainer {
+        width: 100%;
+        display: inline-block;
+    }
+
+    #messageInput {
+        float: left;
+        height: @inputHeight;
+        outline: 0;
+        width: ~"calc(100% - @{latexButtonWidth})";
+        border: none;
+        background-color: white;
+        padding-left: 5px;
+        resize: none;
+    }
+
+    #latexInputButton {
+        float: left;
+        width: @latexButtonWidth;
+        font-size: 13pt;
+        text-align: center;
+        background-color: white;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    #latexInputButton:hover {
+        background-color: @lightestMainColor;
+    }
+
+    #latexInputButton:active {
+        background-color: @lighterMainColor;
+    }
+
+    #switchButton {
+        position: absolute;
+        top: 0px;
+        right: -@messengerSwitchButtonWidth;
+        background-color: red;
+        width: @messengerSwitchButtonWidth;
+        border: none;
+        font-size: 20pt;
+        text-align: center;
+        transition: background-color @messengerTransitionTime;
+    }
+
+    #arrowToggle {
+        .noSelect;
+        transition: transform 1s;
+    }
+
+    .blind {
+        .fullSize;
+        .noSelect;
+        background-color: rgba(0, 0, 0, 0.8);
+        z-index: 100;
+    }
+
+    #optionsBlind {
+        visibility: hidden;
+    }
+
+    #loadingBlind.fadeout {
+        transition: background-color 500ms;
+        background-color: rgba(0, 0, 0, 0);
+    }
+
+    #disconnectedBlind {
+        visibility: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #disconnectedText {
+        color: white;
+        font-size: 20pt;
+        text-align: center;
+    }
+
+    #latexBody {
+        width: 100%;
+        height: 300px;
+    }
+
+    #normalText {
+        height: 100%;
+        width: 50%;
         float: left;
     }
 
-    #tools {
-        .toolGroup;
+    #renderedText {
+        height: 100%;
+        width: 50%;
+        float: right;
+        padding: 10px;
+        font-size: 15pt;
+        border-right: 1px solid grey;
+        border-top: 1px solid grey;
+        border-bottom: 1px solid grey;
+        white-space: pre-wrap;
+        word-wrap: break-word;
     }
 
-    #options {
-        .toolGroup;
-    }
-}
-
-.buttonGroup {
-    width: @toolboxItemWidth;
-    height: @toolboxIconSize + @toolTitleSize;
-    float: left;
-    text-align: center;
-    font-size: 8pt;
-    font-family: 'Droid Sans', sans-serif;
-}
-
-.iconButton {
-    .flexBox;
-    cursor: pointer;
-    width: @toolboxItemWidth;
-    height: @toolboxItemHeight;
-    align-items: center;
-    justify-content: center;
-    font-size: @toolboxIconSize;
-}
-
-.buttonGroup:hover {
-    background-color: @darkerMainColor;
-}
-
-.buttonGroup:active {
-    background-color: @darkestMainColor;
-}
-
-.buttonGroup.selected {
-    background-color: @superDarkMainColor;
-    color: white;
-}
-
-.toolButton {
-    .iconButton;
-}
-
-@messageWidth: 300px;
-@messageMargin: 10px;
-@sameUserMessageMargin: 0px;
-
-@inputHeight: 25px;
-@messengerTopBarHeight: 30px;
-@messengerMessagesHeight: 500px;
-
-@messengerBackColor: #e8e8e8;
-@messageColor: white;
-@messageShadowColor: #b4b4b4;
-@messageHeaderColor: white;
-@messengerMargin: 40px;
-@messengerSwitchButtonWidth: 50px;
-@messengerTransitionTime: 500ms;
-@latexButtonWidth: 25px;
-
-#messenger {
-    .bigShadow;
-    -webkit-flex: 1 1 auto;
-    justify-content: flex-start;
-    position: absolute;
-    right: @messengerMargin;
-    bottom: 0;
-    width: @messageWidth;
-    transition: margin @messengerTransitionTime;
-    background-color: @messengerBackColor;
-    height: ~"calc(@{inputHeight} + @{messengerTopBarHeight} + @{messengerMessagesHeight})";
-}
-
-#messengerTopBar {
-    width: 100%;
-    height: @messengerTopBarHeight;
-    background-color: @mainColor;
-    cursor: pointer;
-}
-
-#messengerTopBar.flashing {
-    background-color: @accentColor;
-}
-
-#messageContainer {
-    width: 100%;
-    flex-flow: column;
-    overflow-y: scroll;
-    height: @messengerMessagesHeight;
-    padding-bottom: @messageMargin;
-
-    .message {
-        background-color: @messageColor;
-        display: inline-block;
-        margin-left: @messageMargin;
-        margin-right: @messageMargin;
-        margin-top: @messageMargin;
-        width: ~"calc(@{messageWidth} - 2 * @{messageMargin} - 17px)";
-        min-height: 0;
-        min-width: 0;
-
-        .content {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            padding: 3px;
-        }
-
-        .header {
-            font-family: 'Droid Sans', sans-serif;
-            padding-top: 2px;
-            padding-left: 2px;
-            font-size: 10pt;
-            font-weight: bold;
-            width: 100%;
-            background-color: @messageHeaderColor;
-            color: rgba(0, 0, 0, 0.3);
-
-            .detail {
-                text-overflow: ellipsis;
-                overflow: hidden;
-                width: 50%;
-                padding-right: 3px;
-                padding-left: 3px;
-            }
-
-            .name {
-                .detail;
-                text-align: left;
-                float: left;
-            }
-
-            .date {
-                .detail;
-                text-align: right;
-                float: right;
-            }
-        }
-
-        .emptyHeader {
-            display: none;
-        }
-
-        .footer {
-            height: 0px;
-            width: 100%;
-            background-color: @messageShadowColor;
-        }
-    }
-
-    .notification {
-        width: @messageWidth;
-        margin: @messageMargin;
-        margin-bottom: 0px;
-        width: ~"calc(@{messageWidth} - 2 * @{messageMargin} - 17px)";
-        color: rgba(0, 0, 0, 0.5);
-        font-weight: bold;
-        font-size: 11pt;
-        text-align: center;
-        font-family: 'Droid Sans', sans-serif;
-    }
-
-    .messageUserRepeat {
-        margin-top: @sameUserMessageMargin;
-    }
-}
-
-.in > #messageContainer, .in > #inputContainer {
-    display: none;
-}
-
-#messenger.in {
-    height: @messengerTopBarHeight;
-}
-
-#inputContainer {
-    width: 100%;
-    display: inline-block;
-}
-
-#messageInput {
-    float: left;
-    height: @inputHeight;
-    outline: 0;
-    width: ~"calc(100% - @{latexButtonWidth})";
-    border: none;
-    background-color: white;
-    padding-left: 5px;
-    resize: none;
-}
-
-#latexInputButton {
-    float: left;
-    width: @latexButtonWidth;
-    font-size: 13pt;
-    text-align: center;
-    background-color: white;
-    height: 100%;
-    overflow: hidden;
-}
-
-#latexInputButton:hover {
-    background-color: @lightestMainColor;
-}
-
-#latexInputButton:active {
-    background-color: @lighterMainColor;
-}
-
-#switchButton {
-    position: absolute;
-    top: 0px;
-    right: -@messengerSwitchButtonWidth;
-    background-color: red;
-    width: @messengerSwitchButtonWidth;
-    border: none;
-    font-size: 20pt;
-    text-align: center;
-    transition: background-color @messengerTransitionTime;
-}
-
-#arrowToggle {
-    .noSelect;
-    transition: transform 1s;
-}
-
-.blind {
-    .fullSize;
-    .noSelect;
-    background-color: rgba(0, 0, 0, 0.8);
-    z-index: 100;
-}
-
-#optionsBlind {
-    visibility: hidden;
-}
-
-#loadingBlind.fadeout {
-    transition: background-color 500ms;
-    background-color: rgba(0, 0, 0, 0);
-}
-
-#disconnectedBlind {
-    visibility: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#disconnectedText {
-    color: white;
-    font-size: 20pt;
-    text-align: center;
-}
-
-#latexBody {
-    width: 100%;
-    height: 300px;
-}
-
-#normalText {
-    height: 100%;
-    width: 50%;
-    float: left;
-}
-
-#renderedText {
-    height: 100%;
-    width: 50%;
-    float: right;
-    padding: 10px;
-    font-size: 15pt;
-    border-right: 1px solid grey;
-    border-top: 1px solid grey;
-    border-bottom: 1px solid grey;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-}
-
-#latexInput {
-    width: 100%;
-    height: 100%;
-    resize: none;
-    outline: none;
-    border: 1px solid grey;
-}
-
-#colorPicker {
-    position: absolute;
-    box-sizing: content-box;
-    width: 150px;
-    height: 150px;
-    background-color: #586572;
-    display: flex;
-    flex-wrap: wrap;
-    overflow: hidden;
-    -webkit-box-shadow: 0px 0px 20px 10px rgba(0, 0, 0, 0.3);
-    z-index: 9999;
-}
-
-#colorPicker.hidden {
-    display: none;
-}
-
-.color {
-    width: 20px;
-    height: 20px;
-    margin: 5px;
-    -webkit-box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.15);
-    cursor: pointer;
-}
-
-#thicknessPicker {
-    .noSelect;
-    background-color: #586572;
-    position: absolute;
-    width: 200px;
-    height: 50px;
-    -webkit-box-shadow: 0px 0px 20px 10px rgba(0, 0, 0, 0.3);
-    padding: 5px;
-    z-index: 9999;
-
-    #thicknessValue {
-        top: 50%;
-        left: 0;
+    #latexInput {
         width: 100%;
-        height: 20px;
-        text-align: center;
-        font-family: 'Droid Sans', sans-serif;
-        font-size: 10pt;
-        color: white;
+        height: 100%;
+        resize: none;
+        outline: none;
+        border: 1px solid grey;
     }
-}
 
-#thicknessPicker.hidden {
-    display: none;
-}
+    #colorPicker {
+        position: absolute;
+        box-sizing: content-box;
+        width: 150px;
+        height: 150px;
+        background-color: #586572;
+        display: flex;
+        flex-wrap: wrap;
+        overflow: hidden;
+        -webkit-box-shadow: 0px 0px 20px 10px rgba(0, 0, 0, 0.3);
+        z-index: 9999;
+    }
 
-#canvasBackground {
-    width: 100vw;
-    height: 100vh;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    background-color: #3f4953;
+    #colorPicker.hidden {
+        display: none;
+    }
+
+    .color {
+        width: 20px;
+        height: 20px;
+        margin: 5px;
+        -webkit-box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+    }
+
+    #thicknessPicker {
+        .noSelect;
+        background-color: #586572;
+        position: absolute;
+        width: 200px;
+        height: 50px;
+        -webkit-box-shadow: 0px 0px 20px 10px rgba(0, 0, 0, 0.3);
+        padding: 5px;
+        z-index: 9999;
+
+        #thicknessValue {
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            text-align: center;
+            font-family: 'Droid Sans', sans-serif;
+            font-size: 10pt;
+            color: white;
+        }
+    }
+
+    #thicknessPicker.hidden {
+        display: none;
+    }
+
+    #canvasBackground {
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        background-color: #3f4953;
+    }
 }
