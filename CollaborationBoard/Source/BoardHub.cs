@@ -120,7 +120,16 @@ namespace CollaborationBoard
 
         public override Task OnDisconnected(bool stopCalled)
         {
-            var context = new RequestContext(this);
+            RequestContext context;
+
+            try
+            {
+                context = new RequestContext(this);
+            }
+            catch (Exception)
+            {
+                return base.OnDisconnected(stopCalled);
+            }
 
             context.Caller.RemoveConnection(Context.ConnectionId);
 

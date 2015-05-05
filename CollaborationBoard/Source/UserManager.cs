@@ -103,7 +103,7 @@ namespace CollaborationBoard
             int amountOfNeighbors = neighbors.Count;
             string name = "User " + amountOfNeighbors;
 
-            while (neighbors.Where(a => a.DisplayName != (name = "User " + amountOfNeighbors)).Any())
+            while (neighbors.Where(a => a.DisplayName == (name = "User " + amountOfNeighbors)).Any())
             {
                 amountOfNeighbors++;
             }
