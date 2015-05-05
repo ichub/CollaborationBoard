@@ -305,6 +305,7 @@
     <Content Include="Content\bootstrap\breadcrumbs.less" />
     <Content Include="Content\bootstrap\badges.less" />
     <Content Include="Content\bootstrap\alerts.less" />
+    <None Include="Properties\PublishProfiles\papertogether.com - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="favicon.ico" />
     <Content Include="Scripts\bootstrap.js" />
@@ -323,7 +324,7 @@
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\bootstrapStyle.less" />
-    <None Include="Content\site.less" />
+    <Content Include="Content\site.less" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
@@ -332,7 +333,7 @@
     <Content Include="Views\Shared\BoardCreationPartial.cshtml" />
     <Content Include="Views\Password\Login.cshtml" />
     <Content Include="Views\Paper\Messenger.cshtml" />
-    <None Include="Content\styles.less" />
+    <Content Include="Content\styles.less" />
     <Content Include="Views\Home\Help.cshtml" />
     <TypeScriptCompile Include="Scripts\App\boardSnapshot.ts" />
     <TypeScriptCompile Include="Scripts\App\chat.ts" />
@@ -393,7 +394,7 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Shared\BoardError.cshtml" />
     <Content Include="Views\Paper\Sheet.cshtml" />
-    <None Include="Views\Paper\LatexMessageModal.cshtml" />
+    <Content Include="Views\Paper\LatexMessageModal.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

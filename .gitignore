@@ -166,3 +166,6 @@ $RECYCLE.BIN/
 /CollaborationBoard/Scripts/App/**/*.map
 /CollaborationBoard/Scripts/Common/**/*.js
 /CollaborationBoard/Scripts/Common/**/*.map
+
+*.pubxml
+*.pubxml.user

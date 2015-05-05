@@ -45,7 +45,8 @@ namespace CollaborationBoard
             bundles.Add(new ScriptBundle("~/signalr", "/signalr/hubs"));
             bundles.UseCdn = true;
 
-            BundleTable.EnableOptimizations = true;
+            //BundleTable.EnableOptimizations = true;
+            BundleTable.EnableOptimizations = false;
 
 #if DEBUG
             BundleTable.EnableOptimizations = false;
