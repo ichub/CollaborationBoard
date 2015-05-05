@@ -6,9 +6,9 @@ using System.Web.Mvc;
 
 namespace CollaborationBoard
 {
-    public class BoardController : Controller
+    public class PaperController : Controller
     {
-        [Route("Board/{id}")]
+        [Route("Paper/{id}")]
         [HttpGet]
         public ActionResult Id(string id)
         {
@@ -16,7 +16,7 @@ namespace CollaborationBoard
 
             if (!BoardManager.BoardExists(id))
             {
-                ViewBag.ErrorMessage = "No such board exists";
+                ViewBag.ErrorMessage = "No such sheet exists";
 
                 return View("BoardError");
             }
@@ -27,18 +27,18 @@ namespace CollaborationBoard
             {
                 if (AuthManager.IsUserAuthenticated(Session.SessionID, id))
                 {
-                    return View("Board");
+                    return View("Sheet");
                 }
             }
             else
             {
-                return View("Board");
+                return View("Sheet");
             }
 
-            return new RedirectResult("/password/board/" + id);
+            return new RedirectResult("/password/paper/" + id);
         }
 
-        [Route("Board/Create")]
+        [Route("Paper/Create")]
         [HttpPost]
         public ActionResult NewBoard([Bind(Include = "Title,Password,PasswordEnabled,PasswordRepeat")]BoardModel model)
         {
@@ -48,7 +48,7 @@ namespace CollaborationBoard
 
                 AuthManager.AuthenticateUser(Session.SessionID, id);
 
-                return new RedirectResult("/board/" + id);
+                return new RedirectResult("/paper/" + id);
             }
 
             ViewBag.ErrorMessage = "The parameters for creating the board were incorrect";

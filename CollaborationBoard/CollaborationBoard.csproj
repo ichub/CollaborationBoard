@@ -199,7 +199,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\LessTransform.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\BoardController.cs" />
+    <Compile Include="Controllers\PaperController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PasswordController.cs" />
     <Compile Include="Global.asax.cs">
@@ -331,7 +331,7 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Views\Shared\BoardCreationPartial.cshtml" />
     <Content Include="Views\Password\Login.cshtml" />
-    <Content Include="Views\Board\Messenger.cshtml" />
+    <Content Include="Views\Paper\Messenger.cshtml" />
     <None Include="Content\styles.less" />
     <Content Include="Views\Home\Help.cshtml" />
     <TypeScriptCompile Include="Scripts\App\boardSnapshot.ts" />
@@ -392,8 +392,8 @@
     <Content Include="Scripts\jquery.signalR-2.1.1.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Shared\BoardError.cshtml" />
-    <Content Include="Views\Board\Board.cshtml" />
-    <None Include="Views\Board\LatexMessageModal.cshtml" />
+    <Content Include="Views\Paper\Sheet.cshtml" />
+    <None Include="Views\Paper\LatexMessageModal.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
