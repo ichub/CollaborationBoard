@@ -175,7 +175,7 @@ class Chat {
         this.app.user.displayName = newName;
         this.app.hub.server.changeName(newName);
 
-        this.appendNotification(format("You changed your to %s", newName), NotificationType.Info);
+        this.appendNotification(format("You changed your name to \"%s\"", newName), NotificationType.Info);
 
         this.$nameChangeModal.modal("hide");
     }
