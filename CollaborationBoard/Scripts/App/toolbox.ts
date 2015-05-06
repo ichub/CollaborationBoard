@@ -65,7 +65,10 @@
         this.$clear.click(() => { this.clear(); });
         this.$optionsBlind.click(() => { this.onBlindClick() });
 
-        this.$thicknessSlider.on("input",(e) => { this.onThicknessChange(e); });
+        this.$thicknessSlider.on("input", (e) => { this.onThicknessChange(e); });
+
+        // for internet explorer >.>
+        this.$thicknessSlider[0].addEventListener("input", (e) => { this.onThicknessChange(e); });
     }
 
     public createColors(): void {
@@ -101,7 +104,7 @@
     }
 
     public showOptionsBlind(): void {
-        this.$optionsBlind.css("visibility", "initial");
+        this.$optionsBlind.css("visibility", "visible");
     }
 
     public createSizeSlider(): void {
@@ -113,7 +116,7 @@
         });
     }
 
-    public onThicknessChange(e: JQueryEventObject): void {
+    public onThicknessChange(e: JQueryEventObject | Event): void {
         var value = e.target["valueAsNumber"];
 
         this.$thicknessValue.text(e.target["valueAsNumber"]);

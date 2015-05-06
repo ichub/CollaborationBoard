@@ -201,8 +201,12 @@ class Chat {
 
         content.innerHTML = this.convertStringToHtml(message.text);
 
+        var sameSender = false;
+
         if (this.previousMessage != null && !this.wasPreviousANotification)
             if (message.sender == this.previousMessage.sender) {
+                sameSender = true;
+
                 header.innerText = "";
                 header.classList.add("emptyHeader");
 
@@ -222,6 +226,11 @@ class Chat {
         header.appendChild(date);
 
         element.appendChild(header);
+
+        if (!sameSender) {
+            element.appendChild(document.createElement("br"));
+        }
+
         element.appendChild(content);
         element.appendChild(footer);
 

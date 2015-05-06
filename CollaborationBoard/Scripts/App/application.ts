@@ -16,7 +16,7 @@ class Application {
         this.hub.client.connect = (user: UserInfo) => { this.onConnect(user); };
         this.hub.client.disconnect = (user: UserInfo) => { this.onDisconnect; };
 
-        $("#loadingBlind").on("webkitTransitionEnd", () => {
+        $("#loadingBlind").on("transitionend", () => {
             $("#loadingBlind").hide();
         });
 
