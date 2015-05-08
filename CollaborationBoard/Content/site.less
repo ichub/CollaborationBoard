@@ -162,9 +162,6 @@
 }
 
 #about.page, #help.page {
-    display: flex;
-    justify-content: center;
-    padding: 50px;
     font-family: 'Roboto', sans-serif;
     font-size: 14pt;
     overflow-x: hidden;
@@ -179,7 +176,20 @@
         text-align: center;
     }
 
+    #navBar {
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 50px;
+        padding: 7px;
+    }
+
     #content {
+        position: absolute;
+        left: 50%;
+        margin-left: -400px;
         width: 800px;
+        padding: 20px;
+        padding-bottom: 50px;
     }
 }

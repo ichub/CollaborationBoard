@@ -79,6 +79,15 @@ namespace CollaborationBoard
 
         public void Handshake(string boardId)
         {
+            // Apparently, this can be true if you click "back" from a different page, and this board
+            // has already been deleted. In that case, the HTML is loaded from the cache, so there are
+            // no server-side checks for board existence until the handshake, which is where problems start.
+            if (!BoardManager.BoardExists(boardId))
+            {
+                // TODO: implement a redirecting mechanism to a "this board doesn't exist" page or something.
+                return;
+            }
+
             string sessionId = Context.RequestCookies["ASP.NET_SessionId"].Value;
 
             var user = UserManager.GetUserBySession(sessionId);
