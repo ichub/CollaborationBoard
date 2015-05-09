@@ -228,6 +228,7 @@
     <Content Include="Content\app.less" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\img\oldbackground.jpg" />
     <Content Include="Content\img\background.jpg" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\katex.min.css" />
