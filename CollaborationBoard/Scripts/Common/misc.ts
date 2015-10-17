@@ -8,7 +8,7 @@ var format = (formatString, ...params: any[]): string => {
     var i = 0;
 
     while (/%s/.test(formatString)) {
-        formatString = formatString.replace('%s', arguments[++i])
+        formatString = formatString.replace('%s', params[i++])
 
     }
     return formatString;
