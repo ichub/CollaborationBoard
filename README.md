@@ -1,6 +1,7 @@
 ## Summary
 
 ![](./demo.gif)
+
 This project is a real-time collaborative online whiteboard. Sort of like Google docs, but for drawing. You can find a live demo of this project (renamed to paper together) here: [http://papertogether.com/](http://papertogether.com/).
 
 ### If you want to try it drawing...
